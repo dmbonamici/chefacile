@@ -30,8 +30,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:background="#de1a1a"
-        android:src="@android:drawable/ic_input_add"
-        android:nestedScrollingEnabled="true"
-        android:contextClickable="true" />
+        android:src="@drawable/kitchen_white"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
