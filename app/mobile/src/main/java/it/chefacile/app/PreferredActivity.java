@@ -99,7 +99,7 @@ public class PreferredActivity extends AppCompatActivity {
                 .setDescriptionColor(Color.WHITE)
                 .setSubtitle("Here you can find all the recipes that you have saved")
                 .setSubtitleColor(Color.WHITE)
-                .setBackgroundColor(Color.RED)
+                .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark))
                 .addAction(R.id.ok_button, new WelcomeButtonAction(this)
                         .setText("Okay!")
                         .setTextColor(Color.WHITE)
