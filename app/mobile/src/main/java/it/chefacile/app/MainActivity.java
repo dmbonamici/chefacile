@@ -1,5 +1,6 @@
 package it.chefacile.app;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -44,8 +45,12 @@ public class MainActivity extends AppCompatActivity {
         actionB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Non disponibile", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                    Intent myIntent = new Intent(view.getContext(), PreferredActivity.class);
+                    startActivityForResult(myIntent, 0);
+
+               // Snackbar.make(view, "Non disponibile", Snackbar.LENGTH_LONG)
+               //         .setAction("Action", null).show();
             }
         });
     }
@@ -71,4 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
