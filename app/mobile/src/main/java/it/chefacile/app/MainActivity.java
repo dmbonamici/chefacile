@@ -33,8 +33,11 @@ public class MainActivity extends AppCompatActivity {
         actionA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
+                startActivityForResult(myIntent, 0);
+
+               // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
+               //         .setAction("Action", null).show();
 
             }
         });

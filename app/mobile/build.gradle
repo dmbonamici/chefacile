@@ -29,5 +29,6 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.github.dexafree:materiallist:3.1.2'
     compile 'jp.wasabeef:recyclerview-animators:2.0.0'
+    compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
 
 }
