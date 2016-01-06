@@ -27,7 +27,7 @@ public class SearchActivity extends AppCompatActivity {
 		search = (SearchBox) findViewById(R.id.searchbox);
         search.enableVoiceRecognition(this);
 		for(int x = 0; x < 10; x++){
-			SearchResult option = new SearchResult("Ingredients " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_history));
+			SearchResult option = new SearchResult("Ingredient " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_history));
 			search.addSearchable(option);
 		}
 
