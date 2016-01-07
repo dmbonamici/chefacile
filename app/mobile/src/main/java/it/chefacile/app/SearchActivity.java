@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -35,11 +36,13 @@ public class SearchActivity extends AppCompatActivity {
 
 			@Override
 			public void onSearchOpened() {
-				//Use this to tint the screen
+                Log.d("search","Search open");
+                //Use this to tint the screen
 			}
 
 			@Override
 			public void onSearchClosed() {
+                Log.d("search","Search closed");
 				//Use this to un-tint the screen
 			}
 
