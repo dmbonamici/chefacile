@@ -29,7 +29,7 @@ public class SearchActivity extends AppCompatActivity {
 		//for(int x = 0; x < 10; x++){
 		//	SearchResult option = new SearchResult("Ingredient " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_history));
 		//	search.addSearchable(option);
-		//}
+		// }
 
 		search.setSearchListener(new SearchListener(){
 
