@@ -42,7 +42,6 @@ public class ResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferred);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // Save a reference to the context
         mContext = this;

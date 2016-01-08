@@ -52,7 +52,12 @@ public class MainActivity extends AppCompatActivity {
         actionABC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RetrieveFeedTask().execute();
+
+                        Intent myIntent = new Intent(v.getContext(), ResultsActivity.class);
+                        startActivityForResult(myIntent, 0);
+
+
+                        new RetrieveFeedTask().execute();
             }
 
             // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
