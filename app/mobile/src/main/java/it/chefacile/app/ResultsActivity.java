@@ -47,6 +47,8 @@ public class ResultsActivity extends AppCompatActivity {
         // Save a reference to the context
         mContext = this;
 
+        Log.d("test", getIntent().getStringExtra("mytext"));
+
         // Bind the MaterialListView to a variable
         mListView = (MaterialListView) findViewById(R.id.material_listview);
        // mListView.setItemAnimator(new SlideInLeftAnimator());
