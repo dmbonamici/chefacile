@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import android.view.Menu;
@@ -32,7 +33,7 @@ import java.util.List;
 //import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 
-public class PreferredActivity extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity {
     private Context mContext;
     private MaterialListView mListView;
 
@@ -41,6 +42,7 @@ public class PreferredActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferred);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // Save a reference to the context
         mContext = this;
