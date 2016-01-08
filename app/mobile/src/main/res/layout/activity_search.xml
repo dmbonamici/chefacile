@@ -16,8 +16,40 @@
 
     </android.support.design.widget.AppBarLayout>
 
+<EditText
+    android:id="@+id/emailText"
+    android:layout_marginTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textEmailAddress"
+    android:hint="Enter ingredient"/>  />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/progressBar"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="69dp">
+        <TextView
+            android:id="@+id/responseView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+</RelativeLayout>
+
     <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_ab"
+        android:id="@+id/action_abc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -32,14 +64,5 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
-      />
-
-    
-    <com.quinny898.library.persistentsearch.SearchBox
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:id="@+id/searchbox"
-        android:layout_height="wrap_content"
-         />
-
+        />out>
 </android.support.design.widget.CoordinatorLayout>

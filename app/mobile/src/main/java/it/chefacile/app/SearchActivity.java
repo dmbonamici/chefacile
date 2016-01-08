@@ -1,99 +1,123 @@
 package it.chefacile.app;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.quinny898.library.persistentsearch.SearchBox;
-import com.quinny898.library.persistentsearch.SearchBox.SearchListener;
-import com.quinny898.library.persistentsearch.SearchResult;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 public class SearchActivity extends AppCompatActivity {
-	Boolean isSearch;
-	private SearchBox search;
+
+	EditText emailText;
+	TextView responseView;
+	ProgressBar progressBar;
+
+	String API_ID = "c098d0fb";
+	String API_KEYS = "90b990034f035755978a14d3bc8a72ec";
+	String URLProva = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEYS + "&allowedIngredient[]=";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		search = (SearchBox) findViewById(R.id.searchbox);
-        search.enableVoiceRecognition(this);
-		/*for(int x = 0; x < 10; x++){
-			SearchResult option = new SearchResult("Ingredient " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_history));
-			search.addSearchable(option);
-		}*/
 
-		search.setSearchListener(new SearchListener(){
+		responseView = (TextView) findViewById(R.id.responseView);
+		emailText = (EditText) findViewById(R.id.emailText);
+		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-			@Override
-			public void onSearchOpened() {
-				//Use this to tint the screen
-			}
+        final FloatingActionButton actionABC = (FloatingActionButton) findViewById(R.id.action_abc);
+        actionABC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    new RetrieveFeedTask().execute();
+                }
 
-			@Override
-			public void onSearchClosed() {
-				//Use this to un-tint the screen
-			}
+                // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
+                //         .setAction("Action", null).show();
 
-			@Override
-			public void onSearchTermChanged(String term) {
-				//React to the search term changing
-				//Called after it has updated results
-			}
-
-			@Override
-			public void onSearch(String searchTerm) {
-				Toast.makeText(SearchActivity.this, searchTerm +" Searched", Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-			public void onResultClick(SearchResult result) {
-				//React to a result being clicked
-			}
-
-			@Override
-			public void onSearchCleared() {
-				//Called when the clear button is clicked
-			}
-			
-		});
-
-		final FloatingActionButton actionA = (FloatingActionButton) findViewById(R.id.action_ab);
-		actionA.setSize(FloatingActionButton.SIZE_NORMAL);
-		actionA.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+            });
 
 
-				 Snackbar.make(view, "Non disponibile", Snackbar.LENGTH_LONG)
-				         .setAction("Action", null).show();
-
-			}
-		});
-
-    }
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 1234 && resultCode == RESULT_OK) {
-			ArrayList<String> matches = data
-					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			search.populateEditText(matches.get(0));
-		}
-		super.onActivityResult(requestCode, resultCode, data);
 	}
-	/* Start new activies
-	public void reveal(View v){
-		startActivity(new Intent(this, newActivity.class));
-	}*/
 
-	
+
+
+	class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
+
+		private Exception exception;
+
+		protected void onPreExecute() {
+			progressBar.setVisibility(View.VISIBLE);
+			responseView.setText("");
+		}
+
+		protected String doInBackground(Void... urls) {
+			String email = emailText.getText().toString();
+			// Do some validation here
+
+			try {
+				URL url = new URL(URLProva + email);
+				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+				try {
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+					StringBuilder stringBuilder = new StringBuilder();
+					String line;
+					while ((line = bufferedReader.readLine()) != null) {
+						stringBuilder.append(line).append("\n");
+					}
+					bufferedReader.close();
+					return stringBuilder.toString();
+				}
+				finally{
+					urlConnection.disconnect();
+				}
+			}
+			catch(Exception e) {
+				Log.e("ERROR", e.getMessage(), e);
+				return null;
+			}
+		}
+
+		protected void onPostExecute(String response) {
+			if(response == null) {
+				response = "THERE WAS AN ERROR";
+			}
+			progressBar.setVisibility(View.GONE);
+			Log.i("INFO", response);
+			responseView.setText(response);
+			//  check this.exception
+			//  do something with the feed
+
+//            try {
+//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+//                String requestID = object.getString("requestId");
+//                int likelihood = object.getInt("likelihood");
+//                JSONArray photos = object.getJSONArray("photos");
+//                .
+//                .
+//                .
+//                .
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+		}
+	}
 }
