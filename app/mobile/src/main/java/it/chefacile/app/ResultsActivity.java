@@ -2,6 +2,7 @@ package it.chefacile.app;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -140,7 +141,8 @@ public class ResultsActivity extends AppCompatActivity {
                                     @Override
                                     public void onActionClicked(View view, Card card) {
                                         //Log.d("ADDING", "CARD");
-
+                                        Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
+                                        startActivityForResult(myIntent, 0);
                                         //mListView.getAdapter().add(generateNewCard());
                                         Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
                                     }
