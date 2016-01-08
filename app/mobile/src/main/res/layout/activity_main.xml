@@ -5,20 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
-    <include layout="@layout/content_main" />
+    tools:context=".SearchActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/view">
 
 
     </android.support.design.widget.AppBarLayout>
 
+    <ImageView
+        android:layout_width=""
+        android:layout_height="" />
 
+    <EditText
+        android:id="@+id/emailText"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="Enter ingredient"/>  />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/progressBar"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="300dp">
+            android:layout_marginTop="69dp">
             <TextView
                 android:id="@+id/responseView"
                 android:layout_width="wrap_content"
@@ -55,13 +63,10 @@
         android:layout_alignParentEnd="true"
         fab:fab_colorNormal="@color/colorPrimary"
         fab:fab_title="Preferiti"
-        fab:fab_icon="@drawable/search"
+        fab:fab_icon="@drawable/ic_check"
         fab:fab_colorPressed="@color/colorPrimaryDark"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         />out>
-
-
-
 </android.support.design.widget.CoordinatorLayout>
