@@ -26,6 +26,8 @@ import android.widget.LinearLayout;
 @SuppressLint("InlinedApi")
 public class IntroScreenActivity extends AppCompatActivity{
 
+    //TODO: add welcome screen flag
+
 	static final int TOTAL_PAGES = 4;
 	Button btnSkip, btnDone;
     ImageButton btnNext;
@@ -33,8 +35,7 @@ public class IntroScreenActivity extends AppCompatActivity{
     PagerAdapter pagerAdapter;
     LinearLayout circles;
     boolean isOpaque = true;
-    SharedPreferences mPrefs;
-    final String welcomeScreenShownPref = "welcomeScreenShown";
+
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
