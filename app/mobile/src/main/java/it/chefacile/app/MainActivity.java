@@ -1,27 +1,16 @@
 package it.chefacile.app;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,7 +19,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText emailText;
+    EditText editText;
     TextView responseView;
     ProgressBar progressBar;
 
@@ -45,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         responseView = (TextView) findViewById(R.id.responseView);
-        emailText = (EditText) findViewById(R.id.emailText);
+        editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         final FloatingActionButton actionABC = (FloatingActionButton) findViewById(R.id.action_abc);
@@ -53,13 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent myIntent = new Intent(v.getContext(), ResultsActivity.class);
-                startActivityForResult(myIntent, 0);
-
-
-                new RetrieveFeedTask().execute();
-
-
+                        new RetrieveFeedTask().execute();
 
             }
 
@@ -79,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected String doInBackground(Void... urls) {
-            String email = emailText.getText().toString();
-            // Do some validation here about String email
+            String ingredient = editText.getText().toString();
+            // Do some validation here about String ingredient
 
             try {
-                URL url = new URL(URLProva + email);
+                URL url = new URL(URLProva + ingredient);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -111,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             Log.i("INFO", response);
             responseView.setText(response);
+
+            Intent myIntent1 = new Intent(MainActivity.this,ResultsActivity.class);
+            myIntent1.putExtra("mytext",response);
+            startActivity(myIntent1);
+
             //  check this.exception
             //  do something with the feed
 

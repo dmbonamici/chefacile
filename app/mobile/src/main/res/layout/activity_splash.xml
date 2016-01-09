@@ -3,7 +3,7 @@
     android:id="@+id/splashScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
 
@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/imageView"
-        android:src="@drawable/mr_ic_play_dark"
+        android:src="@drawable/logo"
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true" />
 
@@ -19,10 +19,11 @@
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:text="Topping In"
+        android:text="Benvenuto"
         android:textColor="#A6D6F6"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="98dp" />
 
 </RelativeLayout>

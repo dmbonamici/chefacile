@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_laptop_white_36dp"
+            android:src="@drawable/logo"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:gravity="center"
@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/screen_heading"
-        android:text="Beatrice"
+        android:text="test"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/screen_desc"
-        android:text="Gaia"
+        android:text="ciao"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

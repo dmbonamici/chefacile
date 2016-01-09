@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_phone_white_48dp"
+            android:src="@drawable/ic_action_mic"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_gravity="center"/>
@@ -38,11 +38,11 @@
         android:textSize="24sp"
         android:textColor="#ffffff"
         android:gravity="bottom|center_horizontal"
-        android:text="CIAONE" />
+        android:text="Test" />
 
     <TextView
         android:id="@+id/screen_desc"
-        android:text="A TUTTI"
+        android:text="Test"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

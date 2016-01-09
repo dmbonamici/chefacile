@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class IntroScreenFragment extends Fragment {
-
+ 
     final static String LAYOUT_ID = "layoutId";
-
+ 
     public static IntroScreenFragment newInstance(int layoutId) {
         IntroScreenFragment pane = new IntroScreenFragment();
         Bundle bundle = new Bundle();
@@ -17,7 +17,7 @@ public class IntroScreenFragment extends Fragment {
         pane.setArguments(bundle);
         return pane;
     }
-
+ 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(getArguments().getInt(LAYOUT_ID, -1), container, false);
