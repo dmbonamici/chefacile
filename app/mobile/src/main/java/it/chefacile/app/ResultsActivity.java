@@ -59,7 +59,7 @@ public class ResultsActivity extends AppCompatActivity {
         fillArray();
 
         // Set the dismiss listener
-       /* mListView.setOnDismissCallback(new OnDismissCallback() {
+        /* mListView.setOnDismissCallback(new OnDismissCallback() {
             @Override
             public void onDismiss(@NonNull Card card, int position) {
                 // Show a toast
@@ -176,13 +176,6 @@ public class ResultsActivity extends AppCompatActivity {
                 .build();
     }*/
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.menu_preferred, menu);
 
-        return true;//return true so that the menu pop up is opened
-
-    }
 
 }
