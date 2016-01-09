@@ -1,30 +1,34 @@
 package it.chefacile.app;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
-public class SearchActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     EditText emailText;
     TextView responseView;
@@ -37,7 +41,8 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_main);
+
 
         responseView = (TextView) findViewById(R.id.responseView);
         emailText = (EditText) findViewById(R.id.emailText);
@@ -47,18 +52,22 @@ public class SearchActivity extends AppCompatActivity {
         actionABC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent myIntent = new Intent(v.getContext(), ResultsActivity.class);
+                startActivityForResult(myIntent, 0);
+
+
                 new RetrieveFeedTask().execute();
+
+
+
             }
 
             // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
             //         .setAction("Action", null).show();
 
         });
-
-
     }
-
-
 
     class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
@@ -71,7 +80,7 @@ public class SearchActivity extends AppCompatActivity {
 
         protected String doInBackground(Void... urls) {
             String email = emailText.getText().toString();
-            // Do some validation here
+            // Do some validation here about String email
 
             try {
                 URL url = new URL(URLProva + email);
@@ -95,7 +104,6 @@ public class SearchActivity extends AppCompatActivity {
                 return null;
             }
         }
-
         protected void onPostExecute(String response) {
             if(response == null) {
                 response = "THERE WAS AN ERROR";
@@ -120,4 +128,7 @@ public class SearchActivity extends AppCompatActivity {
 //            }
         }
     }
+
+
+
 }
