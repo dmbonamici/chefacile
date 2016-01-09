@@ -27,11 +27,6 @@ import com.dexafree.materialList.listeners.RecyclerItemClickListener;
 import com.dexafree.materialList.view.MaterialListView;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +37,7 @@ import java.util.List;
 public class ResultsActivity extends AppCompatActivity {
     private Context mContext;
     private MaterialListView mListView;
-    private JSONArray retrievedRecipes = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,34 +46,17 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Save a reference to the context
         mContext = this;
-        Log.d("ON CREATE TEST", "ON CREATE TEST");
-        String recipesString = getIntent().getStringExtra("mytext");
 
-        try {
-            JSONObject object = (JSONObject) new JSONTokener(recipesString).nextValue();
-            retrievedRecipes = object.getJSONArray("matches");
-            Log.d("JSONObject TEST", object.toString());
-            //String recipeList = object.getString("requestId");
-            //int likelihood = object.getInt("likelihood");
-            //JSONArray photos = object.getJSONArray("photos");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+       // Log.d("test", getIntent().getStringExtra("mytext"));
 
-        /*for(int i = 0; i < retrivedRecipes.length(); i++) {
-            JSONObject obj = retrivedRecipes.getJSONObject(i);
-            id = obj.getInt("id");
-            name = obj.getString("name");
-        }*/
-            // Bind the MaterialListView to a variable
-            mListView = (MaterialListView) findViewById(R.id.material_listview);
+        // Bind the MaterialListView to a variable
+        mListView = (MaterialListView) findViewById(R.id.material_listview);
+       // mListView.setItemAnimator(new SlideInLeftAnimator());
+      //  mListView.getItemAnimator().setAddDuration(300);
+      //  mListView.getItemAnimator().setRemoveDuration(300);
 
         // Fill the array withProvider mock content
-        try {
-            fillArray();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        fillArray();
 
         // Set the dismiss listener
         /* mListView.setOnDismissCallback(new OnDismissCallback() {
@@ -104,10 +82,10 @@ public class ResultsActivity extends AppCompatActivity {
 
     }
 
-    private void fillArray() throws JSONException {
+    private void fillArray() {
         List<Card> cards = new ArrayList<>();
         cards.add(getWelcomeCard());
-        for (int i = 0; i < this.retrievedRecipes.length(); i++) {
+        for (int i = 0; i < 7; i++) {
             cards.add(getRandomCard(i));
         }
         mListView.getAdapter().addAll(cards);
@@ -144,15 +122,11 @@ public class ResultsActivity extends AppCompatActivity {
 
 
     }
-    private Card getRandomCard(final int position) throws JSONException {
-        //String title = "Recipe number " + (position + 1);
+    private Card getRandomCard(final int position) {
+        String title = "Recipe number " + (position + 1);
 
-        String title = retrievedRecipes.getJSONObject(position).get("recipeName").toString();
-        //String rating = "Rating: " + retrievedRecipes.getJSONObject(position).get("rating").toString() + "/5";
-        String imageURL = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize").get("90").toString();
-        String totalTime = retrievedRecipes.getJSONObject(position).get("totalTimeInSeconds").toString();
-        final String recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
-        //String smallImageURL = retrievedRecipes.getJSONObject(position).get("smallImageUrls").toString();
+        String description = "Lorem ipsum dolor sit amet";
+
                 final CardProvider provider1 = new Card.Builder(this)
                         .setTag("BIG_IMAGE_BUTTONS_CARD")
                         //.setDismissible()
@@ -160,8 +134,8 @@ public class ResultsActivity extends AppCompatActivity {
                         .setLayout(R.layout.material_image_with_buttons_card)
                         .setTitle(title)
                         .setTitleColor(Color.WHITE)
-                        //.setDescription(rating)
-                        .setDrawable(imageURL)
+                        .setDescription(description)
+                        .setDrawable("http://www.viaggiareusa.it/wp-content/uploads/2015/02/Roasted-thanksgiving-day-turkey-642x336.jpg")
                         .addAction(R.id.left_text_button, new TextViewAction(this)
                                 .setText("Open")
                                 .setTextResourceColor(R.color.black_button)
@@ -170,7 +144,6 @@ public class ResultsActivity extends AppCompatActivity {
                                     public void onActionClicked(View view, Card card) {
                                         //Log.d("ADDING", "CARD");
                                         Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
-                                        myIntent.putExtra("recipeId", recipeId);
                                         startActivityForResult(myIntent, 0);
                                         //mListView.getAdapter().add(generateNewCard());
                                         Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
@@ -202,8 +175,6 @@ public class ResultsActivity extends AppCompatActivity {
                 .endConfig()
                 .build();
     }*/
-
-
 
 
 

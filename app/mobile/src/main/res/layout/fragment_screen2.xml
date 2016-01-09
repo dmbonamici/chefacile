@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    android:background="@color/transparent_tutorial_background"
+    android:background="#00AE76"
     android:orientation="vertical"
     android:layout_weight="6"
     android:paddingTop="48dp">
