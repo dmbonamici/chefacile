@@ -58,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
 
                         new RetrieveFeedTask().execute();
+
+                //Intent
+                String text = "prova";
+
+                Intent myIntent1 = new Intent(v.getContext(),ResultsActivity.class);
+                myIntent1.putExtra("mytext",text);
+                startActivity(myIntent1);
+
+
             }
 
             // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
@@ -108,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             Log.i("INFO", response);
             responseView.setText(response);
+
             //  check this.exception
             //  do something with the feed
 
