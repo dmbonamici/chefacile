@@ -23,6 +23,11 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -54,12 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-
-
-                        new RetrieveFeedTask().execute();
-
-
-
+                new RetrieveFeedTask().execute();
 
 
             }
@@ -95,46 +95,41 @@ public class MainActivity extends AppCompatActivity {
                     }
                     bufferedReader.close();
                     return stringBuilder.toString();
-                }
-                finally{
+                } finally {
                     urlConnection.disconnect();
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
                 return null;
             }
         }
+
         protected void onPostExecute(String response) {
-            if(response == null) {
+            if (response == null) {
                 response = "THERE WAS AN ERROR";
             }
             progressBar.setVisibility(View.GONE);
             Log.i("INFO", response);
             responseView.setText(response);
 
-            Intent myIntent1 = new Intent(MainActivity.this,ResultsActivity.class);
-            myIntent1.putExtra("mytext",response);
-            startActivity(myIntent1);
-
             //  check this.exception
             //  do something with the feed
-
-//            try {
-//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-//                String requestID = object.getString("requestId");
-//                int likelihood = object.getInt("likelihood");
-//                JSONArray photos = object.getJSONArray("photos");
-//                .
-//                .
-//                .
-//                .
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            /*
+            try {
+                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+                JSONArray retrivedRecipes = object.getJSONArray("matches");
+                String recipeList = object.getString("requestId");
+                int likelihood = object.getInt("likelihood");
+                JSONArray photos = object.getJSONArray("photos");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+*/
+            Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
+            myIntent1.putExtra("mytext", response);
+            startActivity(myIntent1);
         }
     }
-
 
 
 }
