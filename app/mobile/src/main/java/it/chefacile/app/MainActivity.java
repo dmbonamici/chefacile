@@ -53,18 +53,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                        Intent myIntent = new Intent(v.getContext(), ResultsActivity.class);
-                        startActivityForResult(myIntent, 0);
+
 
 
                         new RetrieveFeedTask().execute();
 
-                //Intent
-                String text = "prova";
 
-                Intent myIntent1 = new Intent(v.getContext(),ResultsActivity.class);
-                myIntent1.putExtra("mytext",text);
-                startActivity(myIntent1);
+
 
 
             }
@@ -117,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             Log.i("INFO", response);
             responseView.setText(response);
+
+            Intent myIntent1 = new Intent(MainActivity.this,ResultsActivity.class);
+            myIntent1.putExtra("mytext",response);
+            startActivity(myIntent1);
 
             //  check this.exception
             //  do something with the feed
