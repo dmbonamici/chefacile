@@ -198,7 +198,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
                     @Override
                     public void onImageConfigure(@NonNull RequestCreator requestCreator) {
-                        requestCreator.fit().centerCrop();
+                        requestCreator.fit().centerCrop() ;
                     }
                 })
                 .addAction(R.id.left_text_button, new TextViewAction(this)
