@@ -28,6 +28,11 @@ import com.dexafree.materialList.view.MaterialListView;
 import com.squareup.picasso.RequestCreator;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +43,7 @@ import java.util.List;
 public class ResultsActivity extends AppCompatActivity {
     private Context mContext;
     private MaterialListView mListView;
-
+    private JSONArray retrievedRecipes = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +52,19 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Save a reference to the context
         mContext = this;
+        Log.d("ON CREATE TEST", "ON CREATE TEST");
+        String recipesString = getIntent().getStringExtra("mytext");
 
-        // Log.d("test", getIntent().getStringExtra("mytext"));
+        try {
+            JSONObject object = (JSONObject) new JSONTokener(recipesString).nextValue();
+            retrievedRecipes = object.getJSONArray("matches");
+            Log.d("JSONObject TEST", object.toString());
+            //String recipeList = object.getString("requestId");
+            //int likelihood = object.getInt("likelihood");
+            //JSONArray photos = object.getJSONArray("photos");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Bind the MaterialListView to a variable
         mListView = (MaterialListView) findViewById(R.id.material_listview);
@@ -57,7 +73,11 @@ public class ResultsActivity extends AppCompatActivity {
         //  mListView.getItemAnimator().setRemoveDuration(300);
 
         // Fill the array withProvider mock content
-        fillArray();
+        try {
+            fillArray();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Set the dismiss listener
         /* mListView.setOnDismissCallback(new OnDismissCallback() {
@@ -83,10 +103,10 @@ public class ResultsActivity extends AppCompatActivity {
 
     }
 
-    private void fillArray() {
+    private void fillArray() throws JSONException {
         List<Card> cards = new ArrayList<>();
         cards.add(getWelcomeCard());
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < this.retrievedRecipes.length(); i++) {
             cards.add(getRandomCard(i));
         }
         mListView.getAdapter().addAll(cards);
@@ -122,10 +142,17 @@ public class ResultsActivity extends AppCompatActivity {
 
     }
 
-    private Card getRandomCard(final int position) {
-        String title = "Recipe number " + (position + 1);
+    private Card getRandomCard(final int position) throws JSONException {
+        //String title = "Recipe number " + (position + 1);
 
-        String description = "Lorem ipsum dolor sit amet";
+        //String description = "Lorem ipsum dolor sit amet";
+
+        String title = retrievedRecipes.getJSONObject(position).get("recipeName").toString();
+        String rating = "Rating: " + retrievedRecipes.getJSONObject(position).get("rating").toString() + "/5";
+        String imageURL = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize").get("90").toString();
+        String totalTime = retrievedRecipes.getJSONObject(position).get("totalTimeInSeconds").toString();
+        final String recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
+        //String smallImageURL = retrievedRecipes.getJSONObject(position).get("smallImageUrls").toString();
 
              /*   final CardProvider provider1 = new Card.Builder(this)
                         .setTag("BIG_IMAGE_BUTTONS_CARD")
@@ -166,8 +193,8 @@ public class ResultsActivity extends AppCompatActivity {
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.material_basic_image_buttons_card_layout)
                 .setTitle(title)
-                .setDescription(description)
-                .setDrawable("http://www.viaggiareusa.it/wp-content/uploads/2015/02/Roasted-thanksgiving-day-turkey-642x336.jpg")
+                .setDescription(rating)
+                .setDrawable(imageURL)
                 .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
                     @Override
                     public void onImageConfigure(@NonNull RequestCreator requestCreator) {
