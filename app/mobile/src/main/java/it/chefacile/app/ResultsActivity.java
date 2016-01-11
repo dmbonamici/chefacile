@@ -25,6 +25,7 @@ import com.dexafree.materialList.card.action.WelcomeButtonAction;
 import com.dexafree.materialList.listeners.OnDismissCallback;
 import com.dexafree.materialList.listeners.RecyclerItemClickListener;
 import com.dexafree.materialList.view.MaterialListView;
+import com.squareup.picasso.RequestCreator;
 
 
 import java.util.ArrayList;
@@ -47,13 +48,13 @@ public class ResultsActivity extends AppCompatActivity {
         // Save a reference to the context
         mContext = this;
 
-       // Log.d("test", getIntent().getStringExtra("mytext"));
+        // Log.d("test", getIntent().getStringExtra("mytext"));
 
         // Bind the MaterialListView to a variable
         mListView = (MaterialListView) findViewById(R.id.material_listview);
-       // mListView.setItemAnimator(new SlideInLeftAnimator());
-      //  mListView.getItemAnimator().setAddDuration(300);
-      //  mListView.getItemAnimator().setRemoveDuration(300);
+        // mListView.setItemAnimator(new SlideInLeftAnimator());
+        //  mListView.getItemAnimator().setAddDuration(300);
+        //  mListView.getItemAnimator().setRemoveDuration(300);
 
         // Fill the array withProvider mock content
         fillArray();
@@ -91,7 +92,7 @@ public class ResultsActivity extends AppCompatActivity {
         mListView.getAdapter().addAll(cards);
     }
 
-    private Card getWelcomeCard(){
+    private Card getWelcomeCard() {
         final CardProvider provider = new Card.Builder(this)
                 .setTag("WELCOME_CARD")
                 .setDismissible()
@@ -116,18 +117,17 @@ public class ResultsActivity extends AppCompatActivity {
                         }));
 
 
-
         return provider.endConfig().build();
 
 
-
     }
+
     private Card getRandomCard(final int position) {
         String title = "Recipe number " + (position + 1);
 
         String description = "Lorem ipsum dolor sit amet";
 
-                final CardProvider provider1 = new Card.Builder(this)
+             /*   final CardProvider provider1 = new Card.Builder(this)
                         .setTag("BIG_IMAGE_BUTTONS_CARD")
                         //.setDismissible()
                         .withProvider(new CardProvider())
@@ -159,9 +159,48 @@ public class ResultsActivity extends AppCompatActivity {
                                     }
                                 }));
 
-                return provider1.endConfig().build();
+                return provider1.endConfig().build();*/
 
-        }
+        final CardProvider provider = new Card.Builder(this)
+                .setTag("BASIC_IMAGE_BUTTON_CARD")
+                .withProvider(new CardProvider<>())
+                .setLayout(R.layout.material_basic_image_buttons_card_layout)
+                .setTitle(title)
+                .setDescription(description)
+                .setDrawable("http://www.viaggiareusa.it/wp-content/uploads/2015/02/Roasted-thanksgiving-day-turkey-642x336.jpg")
+                .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
+                    @Override
+                    public void onImageConfigure(@NonNull RequestCreator requestCreator) {
+                        requestCreator.fit();
+                    }
+                })
+                .addAction(R.id.left_text_button, new TextViewAction(this)
+                        .setText("Open")
+                        .setTextResourceColor(R.color.black_button)
+                        .setListener(new OnActionClickListener() {
+                            @Override
+                            public void onActionClicked(View view, Card card) {
+                                //Log.d("ADDING", "CARD");
+                                Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
+                                startActivityForResult(myIntent, 0);
+                                //mListView.getAdapter().add(generateNewCard());
+                                Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
+                            }
+                        }))
+                .addAction(R.id.right_text_button, new TextViewAction(this)
+                        .setText("right button")
+                        .setTextResourceColor(R.color.accent_material_dark)
+                        .setListener(new OnActionClickListener() {
+                            @Override
+                            public void onActionClicked(View view, Card card) {
+                                Toast.makeText(mContext, "You have pressed the right button", Toast.LENGTH_SHORT).show();
+                            }
+                        }));
+
+        return provider.endConfig().build();
+    }
+
+
 
 
     /*private Card generateNewCard() {
@@ -175,7 +214,6 @@ public class ResultsActivity extends AppCompatActivity {
                 .endConfig()
                 .build();
     }*/
-
 
 
 }
