@@ -209,6 +209,7 @@ public class ResultsActivity extends AppCompatActivity {
                             public void onActionClicked(View view, Card card) {
                                 //Log.d("ADDING", "CARD");
                                 Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
+                                myIntent.putExtra("recipeId", recipeId);
                                 startActivityForResult(myIntent, 0);
                                 //mListView.getAdapter().add(generateNewCard());
                                 Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
