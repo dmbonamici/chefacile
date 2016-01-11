@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#CC3300</color>
     <color name="colorAccent">#de1a1a</color>
     <color name="white">#FFFFFF</color>
+    <color name="grey">#a7a3a3</color>
+    <color name="transparent_tutorial_background">#b9ff1c1c</color>
 </resources>
