@@ -3,6 +3,7 @@ package it.chefacile.app;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -90,15 +91,19 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             if(response == null) {
                 response = "THERE WAS AN ERROR";
+                Snackbar.make(responseView, "Network connectivity unavailable", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                progressBar.setVisibility(View.GONE);
             }
-            progressBar.setVisibility(View.GONE);
-            Log.i("INFO", response);
-            responseView.setText(response);
+            else {
+                progressBar.setVisibility(View.GONE);
+                Log.i("INFO", response);
+                responseView.setText(response);
 
-            Intent myIntent1 = new Intent(MainActivity.this,ResultsActivity.class);
-            myIntent1.putExtra("mytext",response);
-            startActivity(myIntent1);
-
+                Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
+                myIntent1.putExtra("mytext", response);
+                startActivity(myIntent1);
+            }
             //  check this.exception
             //  do something with the feed
 
