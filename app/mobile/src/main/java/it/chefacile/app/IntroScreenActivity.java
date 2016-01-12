@@ -145,7 +145,7 @@ public class IntroScreenActivity extends AppCompatActivity{
 	            for (int i = 0; i < TOTAL_PAGES - 1; i++) {
 	                ImageView circle = (ImageView) circles.getChildAt(i);
 	                if (i == index) {
-	                    circle.setColorFilter(getResources().getColor(R.color.colorPrimary));
+	                    circle.setColorFilter(getResources().getColor(R.color.circle_tutorial_color));
 	                } else {
 	                    circle.setColorFilter(getResources().getColor(android.R.color.transparent));
 	                }
