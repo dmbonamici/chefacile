@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:clipChildren="false"
-    android:background="#5C6BC0"
+    android:background="@color/transparent_tutorial_background"
     android:weightSum="6"
     android:paddingTop="48dp">
 
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_check"
+            android:src="@drawable/ic_kitchen"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_gravity="center"/>
@@ -38,11 +38,11 @@
         android:textSize="24sp"
         android:textColor="#ffffff"
         android:gravity="bottom|center_horizontal"
-        android:text="Test" />
+        android:text="Select ingredients" />
 
     <TextView
         android:id="@+id/screen_desc"
-        android:text="Test"
+        android:text="you already have"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

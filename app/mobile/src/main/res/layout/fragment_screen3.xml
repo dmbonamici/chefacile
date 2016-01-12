@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    android:background="#00bcd4"
+    android:background="@color/transparent_tutorial_background"
     android:orientation="vertical"
     android:layout_weight="6"
     android:paddingTop="48dp">
@@ -18,36 +18,25 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="152dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="116dp"
             android:scaleType="centerInside"
-            android:src="@drawable/logo"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:gravity="center"
-            android:layout_gravity="center"/>
+            android:src="@drawable/ic_local_dinner"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:layout_gravity="center_horizontal|top"/>
 
     </FrameLayout>
 
+
     <TextView
-        android:id="@+id/screen_heading"
-        android:text="test"
+        android:id="@+id/screen_desc"
+        android:text="Start cooking!"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="24sp"
-        android:textColor="#ffffff"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:gravity="bottom|center_horizontal" />
-
-    <TextView
-        android:id="@+id/screen_desc"
-        android:text="ciao"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:textSize="16sp"
         android:textColor="#ffffff"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
