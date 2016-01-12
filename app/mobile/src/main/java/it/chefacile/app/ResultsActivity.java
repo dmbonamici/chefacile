@@ -9,13 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-
 import android.widget.Toast;
-
 //librerie per implementare cards
 import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.card.CardProvider;
@@ -26,35 +23,26 @@ import com.dexafree.materialList.listeners.OnDismissCallback;
 import com.dexafree.materialList.listeners.RecyclerItemClickListener;
 import com.dexafree.materialList.view.MaterialListView;
 import com.squareup.picasso.RequestCreator;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.util.ArrayList;
 import java.util.List;
-
 //libreria per implementare lo slide to delete non utilizzabile ora
 //import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
-
-
 public class ResultsActivity extends AppCompatActivity {
     private Context mContext;
     private MaterialListView mListView;
     private JSONArray retrievedRecipes = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferred);
-
         // Save a reference to the context
         mContext = this;
         Log.d("ON CREATE TEST", "ON CREATE TEST");
         String recipesString = getIntent().getStringExtra("mytext");
-
         try {
             JSONObject object = (JSONObject) new JSONTokener(recipesString).nextValue();
             retrievedRecipes = object.getJSONArray("matches");
@@ -65,20 +53,17 @@ public class ResultsActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         // Bind the MaterialListView to a variable
         mListView = (MaterialListView) findViewById(R.id.material_listview);
         // mListView.setItemAnimator(new SlideInLeftAnimator());
         //  mListView.getItemAnimator().setAddDuration(300);
         //  mListView.getItemAnimator().setRemoveDuration(300);
-
         // Fill the array withProvider mock content
         try {
             fillArray();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         // Set the dismiss listener
         /* mListView.setOnDismissCallback(new OnDismissCallback() {
             @Override
@@ -87,22 +72,18 @@ public class ResultsActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "You have dismissed a " + card.getTag(), Toast.LENGTH_SHORT).show();
             }
         });*/
-
         // Add the ItemTouchListener
         mListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull Card card, int position) {
                 Log.d("CARD_TYPE", "" + card.getTag());
             }
-
             @Override
             public void onItemLongClick(@NonNull Card card, int position) {
                 Log.d("LONG_CLICK", "" + card.getTag());
             }
         });
-
     }
-
     private void fillArray() throws JSONException {
         List<Card> cards = new ArrayList<>();
         cards.add(getWelcomeCard());
@@ -111,7 +92,6 @@ public class ResultsActivity extends AppCompatActivity {
         }
         mListView.getAdapter().addAll(cards);
     }
-
     private Card getWelcomeCard() {
         final CardProvider provider = new Card.Builder(this)
                 .setTag("WELCOME_CARD")
@@ -135,25 +115,24 @@ public class ResultsActivity extends AppCompatActivity {
                                 card.dismiss();
                             }
                         }));
-
-
         return provider.endConfig().build();
-
-
     }
-
     private Card getRandomCard(final int position) throws JSONException {
         //String title = "Recipe number " + (position + 1);
-
         //String description = "Lorem ipsum dolor sit amet";
-
         String title = retrievedRecipes.getJSONObject(position).get("recipeName").toString();
         String rating = "Rating: " + retrievedRecipes.getJSONObject(position).get("rating").toString() + "/5";
-        String imageURL = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize").get("90").toString();
+        String imageURL;
+        //JSONObject img = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize");
+        if(!retrievedRecipes.getJSONObject(position).has("imageUrlsBySize")){
+            imageURL = "http://i.imgur.com/exqW1px.png";
+        }
+        else {
+            imageURL = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize").get("90").toString();
+        }
         String totalTime = retrievedRecipes.getJSONObject(position).get("totalTimeInSeconds").toString();
         final String recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
         //String smallImageURL = retrievedRecipes.getJSONObject(position).get("smallImageUrls").toString();
-
              /*   final CardProvider provider1 = new Card.Builder(this)
                         .setTag("BIG_IMAGE_BUTTONS_CARD")
                         //.setDismissible()
@@ -185,9 +164,7 @@ public class ResultsActivity extends AppCompatActivity {
                                         Toast.makeText(mContext, "You have pressed the right button", Toast.LENGTH_SHORT).show();
                                     }
                                 }));
-
                 return provider1.endConfig().build();*/
-
         final CardProvider provider = new Card.Builder(this)
                 .setTag("BASIC_IMAGE_BUTTON_CARD")
                 .withProvider(new CardProvider<>())
@@ -224,13 +201,8 @@ public class ResultsActivity extends AppCompatActivity {
                                 Toast.makeText(mContext, "You have pressed the right button", Toast.LENGTH_SHORT).show();
                             }
                         }));
-
         return provider.endConfig().build();
     }
-
-
-
-
     /*private Card generateNewCard() {
         return new Card.Builder(this)
                 .setTag("BASIC_IMAGE_BUTTONS_CARD")
@@ -242,6 +214,4 @@ public class ResultsActivity extends AppCompatActivity {
                 .endConfig()
                 .build();
     }*/
-
-
 }
