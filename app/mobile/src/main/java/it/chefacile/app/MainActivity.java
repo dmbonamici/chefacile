@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 progressBar.setVisibility(View.GONE);
                 Log.i("INFO", response);
-                responseView.setText(response);
+               // responseView.setText(response);
 
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent1.putExtra("mytext", response);
