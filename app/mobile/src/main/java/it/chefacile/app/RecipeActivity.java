@@ -1,6 +1,8 @@
 package it.chefacile.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,9 +50,9 @@ public class RecipeActivity extends AppCompatActivity {
             this.recipeTitle = object.getString("name");
             Log.d("title", recipeTitle);
             setTitle(recipeTitle);
-            /*
-            this.recipeImage = object.getJSONObject("images").get("hostedMediumUrl").toString();
-            Log.d("IMAGE", recipeImage);*/
+
+            this.recipeImage = object.getJSONArray("images").getJSONObject(0).get("hostedLargeUrl").toString();
+            Log.d("IMAGE", recipeImage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -56,8 +62,8 @@ public class RecipeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-
+        ImageView toolbarImage = (ImageView) findViewById(R.id.image_stretch_detail);
+        picassoLoader(this, toolbarImage, recipeImage);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +72,17 @@ public class RecipeActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
 
+        });
+    }
+    public void picassoLoader(Context context, ImageView imageView, String recipeImage){
+        Log.d("PICASSO", "loading image");
+        Picasso.with(context)
+                .load(recipeImage)
+                //.resize(30,30)
+                .placeholder(R.drawable.logo)
+                .error(R.drawable.logo)
+                .into(imageView);
     }
 
     /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
@@ -82,11 +97,4 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }*/
 
-    @Override
-    public void onBackPressed() {
-        Log.d("CDA", "onBackPressed Called");
-        /*Intent setIntent = new Intent(RecipeActivity.this, ResultsActivity.class);
-        setIntent.putExtra("mytext", recipeListString);
-        startActivity(setIntent);*/
-    }
 }
