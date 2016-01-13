@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -83,6 +84,22 @@ public class RecipeActivity extends AppCompatActivity {
                 .placeholder(R.drawable.logo)
                 .error(R.drawable.logo)
                 .into(imageView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, ResultsActivity.class);
+                Log.d("RECIPES", recipeListString);
+                intent.putExtra("mytext", recipeListString);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
