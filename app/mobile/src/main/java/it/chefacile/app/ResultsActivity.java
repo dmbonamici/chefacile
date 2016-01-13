@@ -205,6 +205,11 @@ public class ResultsActivity extends AppCompatActivity {
                                 myIntent.putExtra("recipeId", recipeId);
                                 startActivityForResult(myIntent, 0);*/
                                 //mListView.getAdapter().add(generateNewCard());
+                                try {
+                                    recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 new RetrieveFeedTask().execute();
                                 Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
                             }

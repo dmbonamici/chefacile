@@ -44,9 +44,9 @@ public class RecipeActivity extends AppCompatActivity {
             this.recipeTitle = object.getString("name");
             Log.d("title", recipeTitle);
             setTitle(recipeTitle);
-
+            /*
             this.recipeImage = object.getJSONObject("images").get("hostedMediumUrl").toString();
-            Log.d("IMAGE", recipeImage);
+            Log.d("IMAGE", recipeImage);*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
