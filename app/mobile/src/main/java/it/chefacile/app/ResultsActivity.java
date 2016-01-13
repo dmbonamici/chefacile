@@ -46,6 +46,7 @@ public class ResultsActivity extends AppCompatActivity {
     private String recipeId;
     private String appKey = "90b990034f035755978a14d3bc8a72ec";
     private String appId = "c098d0fb";
+    String recipesString;
     TextView responseView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,8 @@ public class ResultsActivity extends AppCompatActivity {
         // Save a reference to the context
         mContext = this;
         Log.d("ON CREATE TEST", "ON CREATE TEST");
-        String recipesString = getIntent().getStringExtra("mytext");
+
+        this.recipesString = getIntent().getStringExtra("mytext");
         Log.d("RECIPESTRING", recipesString);
         try {
             JSONObject object = (JSONObject) new JSONTokener(recipesString).nextValue();
@@ -275,6 +277,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                 Intent myIntent1 = new Intent(ResultsActivity.this, RecipeActivity.class);
                 myIntent1.putExtra("recipeId", response);
+                myIntent1.putExtra("recipesString", recipesString);
                 startActivity(myIntent1);
             }
             //  check this.exception

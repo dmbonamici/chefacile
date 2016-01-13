@@ -1,5 +1,6 @@
 package it.chefacile.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,8 +23,7 @@ import java.nio.charset.Charset;
 public class RecipeActivity extends AppCompatActivity {
 
     private String recipeString;
-    private String appKey = "90b990034f035755978a14d3bc8a72ec";
-    private String appId = "c098d0fb";
+    private String recipeListString;
     private String recipeTitle;
     private String recipeImage;
 
@@ -33,6 +33,7 @@ public class RecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
         this.recipeString = getIntent().getStringExtra("recipeId");
+        this.recipeListString = getIntent().getStringExtra("recipesString");
         Log.d("RECIPEID FROM RECIPEACT", recipeString);
 
         Log.d("RECIPE STRING", recipeString);
@@ -41,9 +42,10 @@ public class RecipeActivity extends AppCompatActivity {
         try {
             object = (JSONObject) new JSONTokener(recipeString).nextValue();
             this.recipeTitle = object.getString("name");
-            this.recipeImage = object.getJSONObject("images").get("hostedMediumUrl").toString();
-
             Log.d("title", recipeTitle);
+            setTitle(recipeTitle);
+
+            this.recipeImage = object.getJSONObject("images").get("hostedMediumUrl").toString();
             Log.d("IMAGE", recipeImage);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -54,6 +56,8 @@ public class RecipeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,5 +82,11 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }*/
 
-
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        /*Intent setIntent = new Intent(RecipeActivity.this, ResultsActivity.class);
+        setIntent.putExtra("mytext", recipeListString);
+        startActivity(setIntent);*/
+    }
 }
