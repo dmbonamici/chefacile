@@ -4,14 +4,17 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 //librerie per implementare cards
 import com.dexafree.materialList.card.Card;
@@ -27,6 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 //libreria per implementare lo slide to delete non utilizzabile ora
@@ -35,6 +43,10 @@ public class ResultsActivity extends AppCompatActivity {
     private Context mContext;
     private MaterialListView mListView;
     private JSONArray retrievedRecipes = null;
+    private String recipeId;
+    private String appKey = "90b990034f035755978a14d3bc8a72ec";
+    private String appId = "c098d0fb";
+    TextView responseView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +55,7 @@ public class ResultsActivity extends AppCompatActivity {
         mContext = this;
         Log.d("ON CREATE TEST", "ON CREATE TEST");
         String recipesString = getIntent().getStringExtra("mytext");
+        Log.d("RECIPESTRING", recipesString);
         try {
             JSONObject object = (JSONObject) new JSONTokener(recipesString).nextValue();
             retrievedRecipes = object.getJSONArray("matches");
@@ -131,7 +144,7 @@ public class ResultsActivity extends AppCompatActivity {
             imageURL = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize").get("90").toString();
         }
         String totalTime = retrievedRecipes.getJSONObject(position).get("totalTimeInSeconds").toString();
-        final String recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
+        recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
         //String smallImageURL = retrievedRecipes.getJSONObject(position).get("smallImageUrls").toString();
              /*   final CardProvider provider1 = new Card.Builder(this)
                         .setTag("BIG_IMAGE_BUTTONS_CARD")
@@ -185,10 +198,12 @@ public class ResultsActivity extends AppCompatActivity {
                             @Override
                             public void onActionClicked(View view, Card card) {
                                 //Log.d("ADDING", "CARD");
-                                Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
+                                /*Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
+                                Log.d("RESULT ACT RECIPE ID", recipeId);
                                 myIntent.putExtra("recipeId", recipeId);
-                                startActivityForResult(myIntent, 0);
+                                startActivityForResult(myIntent, 0);*/
                                 //mListView.getAdapter().add(generateNewCard());
+                                new RetrieveFeedTask().execute();
                                 Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
                             }
                         }))
@@ -214,4 +229,70 @@ public class ResultsActivity extends AppCompatActivity {
                 .endConfig()
                 .build();
     }*/
+
+    class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
+
+        private Exception exception;
+
+        protected void onPreExecute() {
+
+        }
+
+        protected String doInBackground(Void... urls) {
+            String recipeURL = recipeId;
+            // Do some validation here about String ingredient
+
+            try {
+                URL url = new URL("http://api.yummly.com/v1/api/recipe/" + recipeId + "?_app_id=" + appId + "&_app_key=" + appKey);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                } finally {
+                    urlConnection.disconnect();
+                }
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+            if(response == null) {
+                response = "THERE WAS AN ERROR";
+                Snackbar.make(responseView, "Network connectivity unavailable", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+            else {
+                Log.i("INFO", response);
+                // responseView.setText(response);
+
+                Intent myIntent1 = new Intent(ResultsActivity.this, RecipeActivity.class);
+                myIntent1.putExtra("recipeId", response);
+                startActivity(myIntent1);
+            }
+            //  check this.exception
+            //  do something with the feed
+
+//            try {
+//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+//                String requestID = object.getString("requestId");
+//                int likelihood = object.getInt("likelihood");
+//                JSONArray photos = object.getJSONArray("photos");
+//                .
+//                .
+//                .
+//                .
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }*/
+
+        }
+    }
 }

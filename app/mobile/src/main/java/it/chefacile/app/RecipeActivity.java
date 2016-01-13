@@ -12,28 +12,44 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.Charset;
+
 public class RecipeActivity extends AppCompatActivity {
 
-    private String recipeId;
+    private String recipeString;
     private String appKey = "90b990034f035755978a14d3bc8a72ec";
     private String appId = "c098d0fb";
     private String recipeTitle;
-    private String recipeGET;
-    private JSONObject recipeJSON;
+    private String recipeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        /*
-        this.recipeId = getIntent().getStringExtra("recipeId");
-        this.recipeGET = "http://api.yummly.com/v1/api/recipe/"+ recipeId +"?_app_id="+ this.appId +"&_app_key=" + this.appKey;
+
+        this.recipeString = getIntent().getStringExtra("recipeId");
+        Log.d("RECIPEID FROM RECIPEACT", recipeString);
+
+        Log.d("RECIPE STRING", recipeString);
+
+        JSONObject object = null;
         try {
-            recipeJSON = (JSONObject) new JSONTokener(recipeGET).nextValue();
+            object = (JSONObject) new JSONTokener(recipeString).nextValue();
+            this.recipeTitle = object.getString("name");
+            this.recipeImage = object.getJSONObject("images").get("hostedMediumUrl").toString();
+
+            Log.d("title", recipeTitle);
+            Log.d("IMAGE", recipeImage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    */
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -49,4 +65,18 @@ public class RecipeActivity extends AppCompatActivity {
         });
 
     }
+
+    /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+        InputStream is = new URL(url).openStream();
+        try {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            String jsonText = recipeURL;
+            JSONObject json = new JSONObject(jsonText);
+            return json;
+        } finally {
+            is.close();
+        }
+    }*/
+
+
 }
