@@ -8,10 +8,38 @@
     tools:context="it.chefacile.app.RecipeActivity"
     tools:showIn="@layout/activity_recipe">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <TableLayout
+        android:id="@+id/recipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/set_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="servings" />
+
+        <TextView
+            android:id="@+id/set_total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="total time" />
+
+        <TextView
+            android:id="@+id/set_recipe_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="recipe url" />
+
+        <TextView
+            android:id="@+id/set_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="ingredients" />
+    </TableLayout>
 
 </android.support.v4.widget.NestedScrollView>

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -33,6 +34,15 @@ public class RecipeActivity extends AppCompatActivity {
     private String recipeListString;
     private String recipeTitle;
     private String recipeImage;
+    private String totalTime;
+    private String[] recipeIngredients;
+    private String stringIngredients;
+    private int recipeServings;
+    private String recipeURL;
+    private TextView servingsTextView;
+    private TextView timeTextView;
+    private TextView urlTextView;
+    private TextView ingredientsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +64,39 @@ public class RecipeActivity extends AppCompatActivity {
 
             this.recipeImage = object.getJSONArray("images").getJSONObject(0).get("hostedLargeUrl").toString();
             Log.d("IMAGE", recipeImage);
+
+            this.totalTime = object.getString("totalTime");
+            Log.d("TIME", object.getString("totalTime"));
+            timeTextView = (TextView) findViewById(R.id.set_total_time);
+            timeTextView.setText("Total time: " + totalTime);
+
+            this.recipeIngredients = new String[object.getJSONArray("ingredientLines").length()];
+
+            for(int i = 0; i < object.getJSONArray("ingredientLines").length(); i++){
+                this.recipeIngredients[i] = (String) object.getJSONArray("ingredientLines").get(i);
+                Log.d("ING", recipeIngredients[i]);
+            }
+            stringIngredients = java.util.Arrays.toString(recipeIngredients);
+
+            ingredientsTextView = (TextView) findViewById(R.id.set_ingredients);
+            stringIngredients = stringIngredients.replaceAll(",","\n");
+            stringIngredients = stringIngredients.replaceAll("\\[","");
+            stringIngredients = stringIngredients.replaceAll("]","");
+            ingredientsTextView.setText("Ingredients:\n" + String.valueOf(stringIngredients));
+
+            this.recipeServings = object.getInt("numberOfServings");
+            Log.d("SERVINGS", String.valueOf(recipeServings));
+            servingsTextView = (TextView) findViewById(R.id.set_servings);
+            servingsTextView.setText("Number of servings: " + String.valueOf(recipeServings));
+
+            this.recipeURL = object.getJSONObject("source").getString("sourceRecipeUrl");
+            Log.d("URL", recipeURL);
+            urlTextView = (TextView) findViewById(R.id.set_recipe_url);
+            urlTextView.setText(recipeURL);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,7 +105,7 @@ public class RecipeActivity extends AppCompatActivity {
         ImageView toolbarImage = (ImageView) findViewById(R.id.image_stretch_detail);
         picassoLoader(this, toolbarImage, recipeImage);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+     /*   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +113,7 @@ public class RecipeActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
 
-        });
+        }); */
     }
     public void picassoLoader(Context context, ImageView imageView, String recipeImage){
         Log.d("PICASSO", "loading image");
