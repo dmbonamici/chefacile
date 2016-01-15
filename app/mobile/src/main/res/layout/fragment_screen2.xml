@@ -18,11 +18,11 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_margin="70dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_loving"
+            android:src="@drawable/ic_twohearts"
             android:paddingLeft="18dp"
             android:paddingRight="18dp"
             android:layout_gravity="center"/>
