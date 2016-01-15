@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             // Do some validation here about String ingredient
 
             try {
-                URL url = new URL(URLProva + ingredient);
+                URL url = new URL(URLProva + ingredient + "&maxResult=25");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
