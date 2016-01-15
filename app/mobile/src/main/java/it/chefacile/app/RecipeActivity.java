@@ -81,8 +81,8 @@ public class RecipeActivity extends AppCompatActivity {
         Picasso.with(context)
                 .load(recipeImage)
                 //.resize(30,30)
-                .placeholder(R.drawable.logo)
-                .error(R.drawable.logo)
+                .placeholder(R.color.colorPrimary)
+                .error(R.color.colorPrimaryDark)
                 .into(imageView);
     }
 
