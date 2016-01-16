@@ -117,7 +117,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .setTitleColor(Color.WHITE)
                 .setDescription("Find what you like")
                 .setDescriptionColor(Color.WHITE)
-                .setSubtitle("Here you can find all the recipes that you have saved")
+                .setSubtitle("Here you can find all the recipes that you can cook")
                 .setSubtitleColor(Color.WHITE)
                 .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark))
                 .addAction(R.id.ok_button, new WelcomeButtonAction(this)
