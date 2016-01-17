@@ -3,6 +3,7 @@ package it.chefacile.app;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,11 @@ import com.squareup.picasso.RequestCreator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -94,6 +100,8 @@ public class RecipeActivity extends AppCompatActivity {
             urlTextView = (TextView) findViewById(R.id.set_recipe_url);
             urlTextView.setText(recipeURL);
 
+            (new ParseURL()).execute(new String[]{recipeURL});
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -138,6 +146,63 @@ public class RecipeActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class ParseURL extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            StringBuffer buffer = new StringBuffer();
+            try {
+                Log.d("JSwa", "Connecting to ["+strings[0]+"]");
+                Document doc  = Jsoup.connect(strings[0]).get();
+                Log.d("JSwa", "Connected to ["+strings[0]+"]");
+                //Instructions to deselect dome div
+                //doc.select("div").remove();
+                // Get document (HTML page) title
+                String title = doc.title();
+                Log.d("JSwA", "Title ["+title+"]");
+                Elements instructions = doc.select("div.ERSInstructions");
+                instructions.html();
+
+                buffer.append(instructions);
+                buffer.append("Title: " + title + "\r\n");
+                Log.d("BEFORE", instructions.toString());
+                String clean = Jsoup.clean(instructions.html(), Whitelist.simpleText());
+                Log.d("AFTER", clean);
+
+                // Get meta info
+//                Elements metaElems = doc.select("meta");
+//                buffer.append("META DATA\r\n");
+//                for (Element metaElem : metaElems) {
+//                    String name = metaElem.attr("name");
+//                    String content = metaElem.attr("content");
+//                    buffer.append("name ["+name+"] - content ["+content+"] \r\n");
+//                }
+
+
+            }
+            catch(Throwable t) {
+                t.printStackTrace();
+            }
+
+            return buffer.toString();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            // TODO: Clean ouput
+
+            super.onPostExecute(s);
+            Log.d("INSTRUCTIONS", s);
+            urlTextView.setText(s);
         }
     }
 

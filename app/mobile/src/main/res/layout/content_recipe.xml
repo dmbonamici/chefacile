@@ -27,12 +27,7 @@
             android:layout_margin="@dimen/text_margin"
             android:text="total time" />
 
-        <TextView
-            android:id="@+id/set_recipe_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="recipe url" />
+
 
         <TextView
             android:id="@+id/set_ingredients"
@@ -40,6 +35,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="ingredients" />
+
+        <TextView
+            android:id="@+id/set_recipe_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="recipe url" />
     </TableLayout>
 
 </android.support.v4.widget.NestedScrollView>
