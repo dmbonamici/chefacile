@@ -20,6 +20,8 @@ Milestone 1 - Proof of Concept (January 18th)
 
 [Demo](https://youtu.be/k9cADfh3Boc)
 
+[Summary Document](https://docs.google.com/document/d/1QTiA4b_IPm1uGKxoHOO3XFvm7b4-HfZuwvF7n75-u8E/edit?usp=sharing)
+
 
 Milestone 2 - Release Candidate
 ==============
