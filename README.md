@@ -9,13 +9,16 @@ Project Presentation
 ==============
 [Our Presentation](https://drive.google.com/file/d/0B9evljug-_nSQjZ6aFBQcmI0X1U/view?usp=sharing)
 
-Milestone 1 - Proof of Concept
+Milestone 1 - Proof of Concept (January 18th)
 ==============
-_Work in progress_
 
  - UI implementation 
  - Server-Client interation establishment 
  - Ingredient search and recipe retrival implementation 
+ 
+[Milestone 1 Presentation](https://drive.google.com/file/d/0B0hoAFPxDfD8czEyMDJSQllEc0E/view?usp=sharing)
+
+[Demo](https://youtu.be/k9cADfh3Boc)
 
 
 Milestone 2 - Release Candidate
