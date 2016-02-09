@@ -44,8 +44,6 @@ public class ResultsActivity extends AppCompatActivity {
     private MaterialListView mListView;
     private JSONArray retrievedRecipes = null;
     private String recipeId;
-    private String appKey = "90b990034f035755978a14d3bc8a72ec";
-    private String appId = "c098d0fb";
     String recipesString;
     TextView responseView;
     @Override
@@ -59,9 +57,9 @@ public class ResultsActivity extends AppCompatActivity {
         this.recipesString = getIntent().getStringExtra("mytext");
         Log.d("RECIPESTRING", recipesString);
         try {
-            JSONObject object = (JSONObject) new JSONTokener(recipesString).nextValue();
-            retrievedRecipes = object.getJSONArray("matches");
-            Log.d("JSONObject TEST", object.toString());
+            retrievedRecipes = (JSONArray) new JSONTokener(recipesString).nextValue();
+           // retrievedRecipes = object.getJSONArray(recipesString);
+            Log.d("JSONObject TEST", retrievedRecipes.toString());
             //String recipeList = object.getString("requestId");
             //int likelihood = object.getInt("likelihood");
             //JSONArray photos = object.getJSONArray("photos");
@@ -135,17 +133,17 @@ public class ResultsActivity extends AppCompatActivity {
     private Card getRandomCard(final int position) throws JSONException {
         //String title = "Recipe number " + (position + 1);
         //String description = "Lorem ipsum dolor sit amet";
-        String title = retrievedRecipes.getJSONObject(position).get("recipeName").toString();
-        String rating = "Rating: " + retrievedRecipes.getJSONObject(position).get("rating").toString() + "/5";
+        String title = retrievedRecipes.getJSONObject(position).get("title").toString();
+        String rating = "Likes: " + retrievedRecipes.getJSONObject(position).get("likes").toString();
         String imageURL;
         //JSONObject img = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize");
-        if(!retrievedRecipes.getJSONObject(position).has("imageUrlsBySize")){
+        if(!retrievedRecipes.getJSONObject(position).has("image")){
             imageURL = "http://i.imgur.com/exqW1px.png";
         }
         else {
-            imageURL = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize").get("90").toString();
+            imageURL = retrievedRecipes.getJSONObject(position).get("image").toString();
         }
-        String totalTime = retrievedRecipes.getJSONObject(position).get("totalTimeInSeconds").toString();
+        //String totalTime = retrievedRecipes.getJSONObject(position).get("readyInMinutes").toString();
         recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
         //String smallImageURL = retrievedRecipes.getJSONObject(position).get("smallImageUrls").toString();
              /*   final CardProvider provider1 = new Card.Builder(this)
@@ -246,12 +244,14 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         protected String doInBackground(Void... urls) {
-            String recipeURL = recipeId;
+            String idrecipe = recipeId;
             // Do some validation here about String ingredient
 
             try {
-                URL url = new URL("http://api.yummly.com/v1/api/recipe/" + recipeId + "?_app_id=" + appId + "&_app_key=" + appKey);
+                URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/"+ idrecipe +"/information");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("KEY", "KEY");
+                Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder stringBuilder = new StringBuilder();

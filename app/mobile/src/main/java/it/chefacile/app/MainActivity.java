@@ -24,9 +24,8 @@ public class MainActivity extends AppCompatActivity {
     TextView responseView;
     ProgressBar progressBar;
 
-    String API_ID = "c098d0fb";
-    String API_KEYS = "90b990034f035755978a14d3bc8a72ec";
-    String URLProva = "http://api.yummly.com/v1/api/recipes?_app_id=" + API_ID + "&_app_key=" + API_KEYS + "&allowedIngredient[]=";
+
+    String urlSpo = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
             // Do some validation here about String ingredient
 
             try {
-                URL url = new URL(URLProva + ingredient + "&maxResult=25");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                URL urlSpoo = new URL(urlSpo + ingredient + "&number=30");
+                HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
+                urlConnection.setRequestProperty("KEY", "KEY");
+
+
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder stringBuilder = new StringBuilder();
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 progressBar.setVisibility(View.GONE);
                 Log.i("INFO", response);
-               // responseView.setText(response);
+                responseView.setText(response);
 
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent1.putExtra("mytext", response);

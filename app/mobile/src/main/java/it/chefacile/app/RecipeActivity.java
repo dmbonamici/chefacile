@@ -43,7 +43,7 @@ public class RecipeActivity extends AppCompatActivity {
     private String totalTime;
     private String[] recipeIngredients;
     private String stringIngredients;
-    private int recipeServings;
+    private String recipeServings;
     private String recipeURL;
     private TextView servingsTextView;
     private TextView timeTextView;
@@ -64,25 +64,35 @@ public class RecipeActivity extends AppCompatActivity {
         JSONObject object = null;
         try {
             object = (JSONObject) new JSONTokener(recipeString).nextValue();
-            this.recipeTitle = object.getString("name");
+            this.recipeTitle = object.getString("title");
             Log.d("title", recipeTitle);
             setTitle(recipeTitle);
 
-            this.recipeImage = object.getJSONArray("images").getJSONObject(0).get("hostedLargeUrl").toString();
+            this.recipeImage = object.get("image").toString();
+            //retrievedRecipes.getJSONObject(position).get("image").toString();
             Log.d("IMAGE", recipeImage);
 
-            this.totalTime = object.getString("totalTime");
-            Log.d("TIME", object.getString("totalTime"));
+            this.totalTime = object.getString("readyInMinutes");
+            Log.d("TIME", object.getString("readyInMinutes"));
             timeTextView = (TextView) findViewById(R.id.set_total_time);
-            timeTextView.setText("Total time: " + totalTime);
+            timeTextView.setText("Total time: " + totalTime + " minutes");
 
-            this.recipeIngredients = new String[object.getJSONArray("ingredientLines").length()];
+            this.recipeServings = object.getString("servings");
+            Log.d("SERVINGS", String.valueOf(recipeServings));
+            servingsTextView = (TextView) findViewById(R.id.set_servings);
+            servingsTextView.setText("Number of servings: " + recipeServings);
 
-            for(int i = 0; i < object.getJSONArray("ingredientLines").length(); i++){
-                this.recipeIngredients[i] = (String) object.getJSONArray("ingredientLines").get(i);
+
+            this.recipeIngredients = new String[object.getJSONArray("extendedIngredients").length()];
+            JSONObject ingre;
+            String ingredi;
+            for(int i = 0; i < object.getJSONArray("extendedIngredients").length(); i++){
+                ingre = (JSONObject) object.getJSONArray("extendedIngredients").get(i);
+                ingredi = ingre.getString("originalString");
+                this.recipeIngredients[i] = ingredi;
                 Log.d("ING", recipeIngredients[i]);
             }
-            stringIngredients = java.util.Arrays.toString(recipeIngredients);
+           stringIngredients = java.util.Arrays.toString(recipeIngredients);
 
             ingredientsTextView = (TextView) findViewById(R.id.set_ingredients);
             stringIngredients = stringIngredients.replaceAll(",","\n");
@@ -90,15 +100,11 @@ public class RecipeActivity extends AppCompatActivity {
             stringIngredients = stringIngredients.replaceAll("]","");
             ingredientsTextView.setText("Ingredients:\n" + String.valueOf(stringIngredients));
 
-            this.recipeServings = object.getInt("numberOfServings");
-            Log.d("SERVINGS", String.valueOf(recipeServings));
-            servingsTextView = (TextView) findViewById(R.id.set_servings);
-            servingsTextView.setText("Number of servings: " + String.valueOf(recipeServings));
 
-            this.recipeURL = object.getJSONObject("source").getString("sourceRecipeUrl");
+            this.recipeURL = object.getString("spoonacularSourceUrl");
             Log.d("URL", recipeURL);
             urlTextView = (TextView) findViewById(R.id.set_recipe_url);
-            urlTextView.setText(recipeURL);
+            urlTextView.setText("Loading...");
 
             (new ParseURL()).execute(new String[]{recipeURL});
 
@@ -149,11 +155,12 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    private class ParseURL extends AsyncTask<String, Void, String> {
+     private class ParseURL extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
             StringBuffer buffer = new StringBuffer();
+            String clean = null;
             try {
                 Log.d("JSwa", "Connecting to ["+strings[0]+"]");
                 Document doc  = Jsoup.connect(strings[0]).get();
@@ -163,13 +170,13 @@ public class RecipeActivity extends AppCompatActivity {
                 // Get document (HTML page) title
                 String title = doc.title();
                 Log.d("JSwA", "Title ["+title+"]");
-                Elements instructions = doc.select("div.ERSInstructions");
+                Elements instructions = doc.select("div.recipeInstructions");
                 instructions.html();
 
                 buffer.append(instructions);
-                buffer.append("Title: " + title + "\r\n");
+               // buffer.append("Title: " + title + "\r\n");
                 Log.d("BEFORE", instructions.toString());
-                String clean = Jsoup.clean(instructions.html(), Whitelist.simpleText());
+                clean = Jsoup.clean(instructions.html(), Whitelist.simpleText());
                 Log.d("AFTER", clean);
 
                 // Get meta info
@@ -186,8 +193,7 @@ public class RecipeActivity extends AppCompatActivity {
             catch(Throwable t) {
                 t.printStackTrace();
             }
-
-            return buffer.toString();
+            return "Procedure: \n\n" + clean.replaceAll("\\.","\\.\n\n");
         }
 
         @Override
@@ -198,7 +204,6 @@ public class RecipeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
 
-            // TODO: Clean ouput
 
             super.onPostExecute(s);
             Log.d("INSTRUCTIONS", s);
