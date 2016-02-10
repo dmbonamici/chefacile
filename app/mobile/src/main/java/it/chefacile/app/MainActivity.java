@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,12 +64,14 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(Void... urls) {
             String ingredient = editText.getText().toString();
+
             // Do some validation here about String ingredient
 
             try {
 
                 URL urlSpoo = new URL(urlSpo + ingredient + "&number=30");
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
+                //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY", "KEY");
 
 

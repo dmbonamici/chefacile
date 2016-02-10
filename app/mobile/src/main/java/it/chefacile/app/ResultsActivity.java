@@ -250,6 +250,7 @@ public class ResultsActivity extends AppCompatActivity {
             try {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/"+ idrecipe +"/information");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
