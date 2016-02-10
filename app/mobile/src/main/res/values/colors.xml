@@ -7,5 +7,6 @@
     <color name="grey">#bebebe</color>
     <color name="transparent_tutorial_background">#c0ff5555</color>
     <color name="circle_tutorial_color">#ae062b</color>
+    <color name="toolbarTransparent">#00FFFFFF</color>
 
 </resources>

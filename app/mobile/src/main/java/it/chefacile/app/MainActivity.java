@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     TextView responseView;
     ProgressBar progressBar;
-
+    Button b1;
 
     String urlSpo = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
 
@@ -32,7 +34,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        b1 = (Button) findViewById(R.id.button);
 
+        b1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, IntroScreenActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            }
+        });
 
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
@@ -127,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
         }
     }
-
 
 
 }
