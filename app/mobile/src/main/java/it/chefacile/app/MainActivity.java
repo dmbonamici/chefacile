@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
 
-                URL urlSpoo = new URL(urlSpo + ingredient + "&number=30");
+                URL urlSpoo = new URL(urlSpo + ingredient + "&number=20");
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY", "KEY");
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 progressBar.setVisibility(View.GONE);
                 Log.i("INFO", response);
-                responseView.setText(response);
+               // responseView.setText(response);
 
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent1.putExtra("mytext", response);

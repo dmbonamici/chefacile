@@ -135,6 +135,8 @@ public class ResultsActivity extends AppCompatActivity {
         //String description = "Lorem ipsum dolor sit amet";
         String title = retrievedRecipes.getJSONObject(position).get("title").toString();
         String rating = "Likes: " + retrievedRecipes.getJSONObject(position).get("likes").toString();
+        String missing = "Missing ingredients: " + retrievedRecipes.getJSONObject(position).get("missedIngredientCount").toString();
+        String used = "Used ingredients: " + retrievedRecipes.getJSONObject(position).get("usedIngredientCount").toString();
         String imageURL;
         //JSONObject img = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize");
         if(!retrievedRecipes.getJSONObject(position).has("image")){
@@ -183,7 +185,8 @@ public class ResultsActivity extends AppCompatActivity {
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.material_basic_image_buttons_card_layout)
                 .setTitle(title)
-                .setDescription(rating)
+                .setDescription(rating + "\n" + missing + "\n" + used)
+               // .setDescription(missing)
                 .setDrawable(imageURL)
                 .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
                     @Override
