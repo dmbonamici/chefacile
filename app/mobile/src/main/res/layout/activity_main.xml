@@ -52,12 +52,15 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/progressBar"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="300dp">
+            android:layout_marginTop="300dp"
+            android:id="@+id/scrollView">
             <TextView
                 android:id="@+id/responseView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </ScrollView>
+
+
     </RelativeLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionButton

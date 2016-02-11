@@ -5,11 +5,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     TextView responseView;
     ProgressBar progressBar;
     Button b1;
+    String ingredients = "";
 
     String urlSpo = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
 
@@ -35,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         b1 = (Button) findViewById(R.id.button);
+        responseView = (TextView) findViewById(R.id.responseView);
+        editText = (EditText) findViewById(R.id.ingredientText);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+
 
         b1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -53,7 +61,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                        new RetrieveFeedTask().execute();
+                if(editText.getText().toString().equals("")){
+                    ingredients += editText.getText().toString().trim() + "";
+
+                }
+                else {
+                    ingredients += editText.getText().toString().trim() + ",";
+                }
+                responseView.setText(ingredients);
+                //ingredients += editText.getText().toString().trim() + ",";
+
+                        //new RetrieveFeedTask().execute();
 
             }
 
