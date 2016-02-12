@@ -28,8 +28,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textAutoCorrect"
-        android:hint="Enter ingredients separeted by comma"
+        android:hint="Enter ingredients"
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="69dp" />  />
+        android:layout_marginTop="69dp" />
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="Add"
+        android:background="@color/toolbarTransparent"
+        android:onClick="buttonHandler"
+        android:layout_alignBottom="@+id/ingredientText"
+        android:layout_alignParentEnd="true" />
+    />
 </RelativeLayout>

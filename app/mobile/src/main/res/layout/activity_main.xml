@@ -23,7 +23,10 @@
             android:layout_gravity="right"
             android:text="Help"
             android:background="@color/toolbarTransparent"
-            android:onClick="buttonHandler"/>
+            android:onClick="buttonHandler"
+            />
+
+
 
     </android.support.v7.widget.Toolbar>
 
@@ -38,8 +41,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="match_parent">
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -58,29 +60,24 @@
                 android:id="@+id/responseView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
         </ScrollView>
 
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_abc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_title="Preferiti"
+            fab:fab_icon="@drawable/search"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
-
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_abc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        fab:fab_colorNormal="@color/colorPrimary"
-        fab:fab_title="Preferiti"
-        fab:fab_icon="@drawable/search"
-        fab:fab_colorPressed="@color/colorPrimaryDark"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        />out>
-
-
 
 </android.support.design.widget.CoordinatorLayout>

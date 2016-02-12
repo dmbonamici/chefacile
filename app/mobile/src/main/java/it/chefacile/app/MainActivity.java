@@ -28,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     TextView responseView;
     ProgressBar progressBar;
-    Button b1;
-    String ingredients = "";
+    Button TutorialButton;
+    Button AddButton;
+    String ingredients = ",";
 
     String urlSpo = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
 
@@ -37,17 +38,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        b1 = (Button) findViewById(R.id.button);
+        TutorialButton = (Button) findViewById(R.id.button);
+        AddButton = (Button) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
 
-        b1.setOnClickListener(new View.OnClickListener() {
+        TutorialButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, IntroScreenActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            }
+        });
+
+        AddButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(editText.getText().toString().equals("")){
+                    ingredients += editText.getText().toString().trim() + "";
+                    editText.getText().clear();
+
+                }
+                else {
+                    ingredients += editText.getText().toString().trim() + ",";
+                    editText.getText().clear();
+                }
+                responseView.setText(ingredients);
+                //ingredients += editText.getText().toString().trim() + ",";
+
 
             }
         });
@@ -61,17 +81,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(editText.getText().toString().equals("")){
-                    ingredients += editText.getText().toString().trim() + "";
 
-                }
-                else {
-                    ingredients += editText.getText().toString().trim() + ",";
-                }
-                responseView.setText(ingredients);
-                //ingredients += editText.getText().toString().trim() + ",";
+                        new RetrieveFeedTask().execute();
 
-                        //new RetrieveFeedTask().execute();
 
             }
 
@@ -86,12 +98,13 @@ public class MainActivity extends AppCompatActivity {
         private Exception exception;
 
         protected void onPreExecute() {
+            Log.d("Tect",responseView.getText().toString());
             progressBar.setVisibility(View.VISIBLE);
-            responseView.setText("");
+           // responseView.setText("");
         }
 
         protected String doInBackground(Void... urls) {
-            String ingredient = editText.getText().toString();
+            String ingredient = responseView.getText().toString();
 
             // Do some validation here about String ingredient
 
@@ -137,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent1.putExtra("mytext", response);
                 startActivity(myIntent1);
+                responseView.setText(null);
+                ingredients = "";
             }
             //  check this.exception
             //  do something with the feed

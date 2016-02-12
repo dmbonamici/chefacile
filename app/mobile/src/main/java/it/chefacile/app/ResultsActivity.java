@@ -238,6 +238,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .build();
     }*/
 
+
     class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
         private Exception exception;
