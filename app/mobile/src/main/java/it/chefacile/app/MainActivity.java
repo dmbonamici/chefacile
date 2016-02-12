@@ -1,5 +1,6 @@
 package it.chefacile.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,21 +10,32 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.dexafree.materialList.card.Card;
+import com.dexafree.materialList.card.provider.ListCardProvider;
+import com.dexafree.materialList.view.MaterialListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Context mContext;
+    private MaterialListView mListView;
 
     EditText editText;
     TextView responseView;
@@ -31,19 +43,30 @@ public class MainActivity extends AppCompatActivity {
     Button TutorialButton;
     Button AddButton;
     String ingredients = ",";
-
+    ArrayAdapter<String> adapter;
     String urlSpo = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
+
         TutorialButton = (Button) findViewById(R.id.button);
         AddButton = (Button) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+
+        mListView = (MaterialListView) findViewById(R.id.material_listview);
+        try {
+            fillArray();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
 
         TutorialButton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 responseView.setText(ingredients);
                 //ingredients += editText.getText().toString().trim() + ",";
-
 
             }
         });
@@ -170,6 +192,25 @@ public class MainActivity extends AppCompatActivity {
 //            }
         }
     }
+    private void fillArray() throws JSONException {
+        List<Card> cards = new ArrayList<>();
+        cards.add(generateNewCard());
+        mListView.getAdapter().addAll(cards);
+    }
 
+
+
+    private Card generateNewCard() {
+        return new Card.Builder(this)
+                .setTag("LIST_CARD")
+                .setDismissible()
+                .withProvider(new ListCardProvider())
+                .setLayout(R.layout.material_list_card_layout)
+                .setTitle("Ingredients")
+                .setDescription("Take a list")
+                .setAdapter(adapter)
+                .endConfig()
+                .build();
+    }
 
 }
