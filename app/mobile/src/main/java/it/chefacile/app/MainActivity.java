@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,11 +19,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dexafree.materialList.card.Card;
+import com.dexafree.materialList.card.CardProvider;
+import com.dexafree.materialList.card.OnActionClickListener;
+import com.dexafree.materialList.card.action.TextViewAction;
 import com.dexafree.materialList.card.provider.ListCardProvider;
 import com.dexafree.materialList.view.MaterialListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.RequestCreator;
 
 import org.json.JSONException;
 
@@ -82,9 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else {
-                    ingredients += editText.getText().toString().trim() + ",";
+                    ingredients += editText.getText().toString().replaceAll(" ","+").trim().toLowerCase() + ",";
                     String singleIngredient = editText.getText().toString().trim();
-                    adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                    //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                    try {
+                        fillArray(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     editText.getText().clear();
                     Log.d("INGREDIENTS ,", ingredients);
                 }
@@ -94,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        try {
+      /*  try {
             fillArray();
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
@@ -203,23 +215,51 @@ public class MainActivity extends AppCompatActivity {
 //            }
         }
     }
-    private void fillArray() throws JSONException {
+    private void fillArray(String ingredient) throws JSONException {
         List<Card> cards = new ArrayList<>();
-        cards.add(generateNewCard());
+        cards.add(generateNewCard(ingredient));
         mListView.getAdapter().addAll(cards);
     }
 
-    private Card generateNewCard() {
-        return new Card.Builder(this)
-                .setTag("LIST_CARD")
-                .withProvider(new ListCardProvider())
-                .setLayout(R.layout.material_list_card_layout)
-                .setTitle("Ingredients")
-                .setDescription("Take a list")
-                .setAdapter(adapter)
-                .endConfig()
-                .build();
+    private Card generateNewCard(final String ingredient) {
+        mListView.smoothScrollToPosition(0);
+        final CardProvider provider = new Card.Builder(this)
+                .setTag("BASIC_IMAGE_BUTTON_CARD")
+                .setDismissible()
+                .withProvider(new CardProvider<>())
+                .setLayout(R.layout.card_layout)
+                .setTitle(ingredient)
+                .setDrawable("https://spoonacular.com/cdn/ingredients_100x100/" + ingredient.trim().toLowerCase() +".jpg")
+                .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
+                    @Override
+                    public void onImageConfigure(@NonNull RequestCreator requestCreator) {
+                        requestCreator.fit();
+                    }
+                })
+                .addAction(R.id.left_text_button, new TextViewAction(this)
+                        .setText("Delete")
+                        .setTextResourceColor(R.color.black_button)
+                        .setListener(new OnActionClickListener() {
+                            @Override
+                            public void onActionClicked(View view, Card card) {
+                                Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
+                                ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
+                                Log.d("ingredients_card", ingredients);
+                                card.dismiss();
+                            }
+                        }))
+                .addAction(R.id.right_text_button, new TextViewAction(this)
+                        .setText("Save")
+                        .setTextResourceColor(R.color.orange_button)
+                        .setListener(new OnActionClickListener() {
+                            @Override
+                            public void onActionClicked(View view, Card card) {
+                                Toast.makeText(mContext, "Saved, maybe " + card.getProvider().getTitle(), Toast.LENGTH_SHORT).show();
+                                //card.dismiss();
+                            }
+                        }));
 
+        return provider.endConfig().build();
     }
 
 
