@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -211,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
     private Card generateNewCard() {
         return new Card.Builder(this)
                 .setTag("LIST_CARD")
-                .setDismissible()
                 .withProvider(new ListCardProvider())
                 .setLayout(R.layout.material_list_card_layout)
                 .setTitle("Ingredients")
@@ -219,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
                 .setAdapter(adapter)
                 .endConfig()
                 .build();
+
     }
+
 
 }
