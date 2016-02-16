@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                         .setListener(new OnActionClickListener() {
                             @Override
                             public void onActionClicked(View view, Card card) {
-                                Toast.makeText(mContext, "Saved, maybe " + card.getProvider().getTitle(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "Saved, maybe", Toast.LENGTH_SHORT).show();
                                 //card.dismiss();
                             }
                         }));
