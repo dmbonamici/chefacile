@@ -26,6 +26,15 @@
             android:onClick="buttonHandler"
             />
 
+        <Button
+            android:id="@+id/buttonfilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="FIlter"
+            android:background="@color/toolbarTransparent"
+            android:onClick="buttonHandler"
+            />
 
 
     </android.support.v7.widget.Toolbar>

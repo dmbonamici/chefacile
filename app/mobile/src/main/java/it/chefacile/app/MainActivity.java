@@ -1,12 +1,14 @@
 package it.chefacile.app;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView iv;
     private ProgressBar progressBar;
     private Button TutorialButton;
+    private Button FilterButton;
     private Button AddButton;
     private String ingredients = ",";
     private ArrayAdapter<String> adapter;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private String responseJSON = "";
     private String singleIngredient;
     private int clicks = 0;
+    private AlertDialog alert;
+    private int ranking = 1;
     private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
     private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
 
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
 
+        FilterButton = (Button) findViewById(R.id.buttonfilter);
         TutorialButton = (Button) findViewById(R.id.button);
         AddButton = (Button) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
@@ -77,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         mListView = (MaterialListView) findViewById(R.id.material_listview);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+
 
         TutorialButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -99,8 +106,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        final CharSequence[] items = {"Maximize used ingredients", "Minimize missing ingredients"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Filter mode");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                if(items[item].toString().trim().equals("Maximize used ingredients")){
+                    ranking = 1;
+                }
+                else{
+                    ranking = 2;
+                }
+                Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                Log.d("ranking", String.valueOf(ranking));
+            }
+        });
+        alert = builder.create();
 
 
+        FilterButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                alert.show();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+            }
+        });
 
         AddButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -168,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
 
-                URL urlSpoo = new URL(urlFindByIngredient + ingredients + "&number=20&ranking=1");
+                URL urlSpoo = new URL(urlFindByIngredient + ingredients + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY","KEY");
