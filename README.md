@@ -23,12 +23,14 @@ Milestone 1 - Proof of Concept (January 18th)
 [Summary Document](https://docs.google.com/document/d/1QTiA4b_IPm1uGKxoHOO3XFvm7b4-HfZuwvF7n75-u8E/edit?usp=sharing)
 
 
-Milestone 2 - Release Candidate
+Milestone 2 - Release Candidate (February 19th)
 ==============
 _Work in progress_
 
- - Recipe selection based on user preferences (difficulty, time, specific ingredient, nutritional facts, ...) 
+ - Recipe selection based on user preferences (maximize used ingredients and minimize missing ingredients) 
  - Local persistence implementation (favourite ingredients and recipes) 
+ - Recipes retrival with more than one ingredients
+ - Improving UI
 
 
 Milestone 3 - Final
