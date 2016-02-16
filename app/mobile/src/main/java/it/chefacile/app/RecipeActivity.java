@@ -119,15 +119,15 @@ public class RecipeActivity extends AppCompatActivity {
         ImageView toolbarImage = (ImageView) findViewById(R.id.image_stretch_detail);
         picassoLoader(this, toolbarImage, recipeImage);
 
-     /*   FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
 
-        }); */
+        });
     }
     public void picassoLoader(Context context, ImageView imageView, String recipeImage){
         Log.d("PICASSO", "loading image");
