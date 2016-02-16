@@ -2,21 +2,17 @@ package it.chefacile.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,35 +21,44 @@ import com.dexafree.materialList.card.Card;
 import com.dexafree.materialList.card.CardProvider;
 import com.dexafree.materialList.card.OnActionClickListener;
 import com.dexafree.materialList.card.action.TextViewAction;
-import com.dexafree.materialList.card.provider.ListCardProvider;
 import com.dexafree.materialList.view.MaterialListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.RequestCreator;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
     private MaterialListView mListView;
-
-    EditText editText;
-    TextView responseView;
-    ProgressBar progressBar;
-    Button TutorialButton;
-    Button AddButton;
-    String ingredients = ",";
-    ArrayAdapter<String> adapter;
-    String urlSpo = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
+    private EditText editText;
+    private TextView responseView;
+    private ProgressBar progressBar;
+    private Button TutorialButton;
+    private Button AddButton;
+    private String ingredients = ",";
+    private ArrayAdapter<String> adapter;
+    private String currentIngredient = "";
+    private String currentImageUrl = "";
+    private String responseJSON = "";
+    private String singleIngredient;
+    private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
+    private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +95,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     ingredients += editText.getText().toString().replaceAll(" ","+").trim().toLowerCase() + ",";
-                    String singleIngredient = editText.getText().toString().trim();
+                    singleIngredient = editText.getText().toString().trim();
+                    currentIngredient = singleIngredient;
+                    new RetrieveIngredientTask().execute();
+
                     //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
-                    try {
-                        fillArray(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    editText.getText().clear();
-                    Log.d("INGREDIENTS ,", ingredients);
                 }
                 //responseView.setText(ingredients);
 
@@ -123,9 +124,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 new RetrieveFeedTask().execute();
-
 
             }
 
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         private Exception exception;
 
         protected void onPreExecute() {
-            Log.d("Tect",responseView.getText().toString());
+            Log.d("Tect", responseView.getText().toString());
             progressBar.setVisibility(View.VISIBLE);
             // responseView.setText("");
         }
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
 
-                URL urlSpoo = new URL(urlSpo + ingredients + "&number=20&ranking=1");
+                URL urlSpoo = new URL(urlFindByIngredient + ingredients + "&number=20&ranking=1");
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY","KEY");
@@ -167,30 +166,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                     bufferedReader.close();
                     return stringBuilder.toString();
-                }
-                finally{
+                } finally {
                     urlConnection.disconnect();
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
                 return null;
             }
         }
+
         protected void onPostExecute(String response) {
 
-            if(response == null) {
+            if (response == null) {
                 response = "THERE WAS AN ERROR";
                 Snackbar.make(responseView, "Network connectivity unavailable", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 progressBar.setVisibility(View.GONE);
-            }
-            else if(response.toString().trim().equals("[]") || response.toString().trim().equals("")){
+            } else if (response.toString().trim().equals("[]") || response.toString().trim().equals("")) {
                 Snackbar.make(responseView, "No recipes for these ingredients", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 progressBar.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 progressBar.setVisibility(View.GONE);
                 // responseView.setText(response);
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
@@ -216,6 +212,109 @@ public class MainActivity extends AppCompatActivity {
 //            }
         }
     }
+
+    class RetrieveIngredientTask extends AsyncTask<Void, Void, String> {
+
+        private Exception exception;
+
+        protected void onPreExecute() {
+            Log.d("Tect", responseView.getText().toString());
+            progressBar.setVisibility(View.VISIBLE);
+            // responseView.setText("");
+        }
+
+        protected String doInBackground(Void... urls) {
+            //String ingredient = responseView.getText().toString();
+
+            // Do some validation here about String ingredient
+
+            try {
+                URL urlIngredientRetriver = new URL(urlIngredientDetais);
+                HttpURLConnection urlConnection = (HttpURLConnection) urlIngredientRetriver.openConnection();
+                urlConnection.setReadTimeout(1000);
+                urlConnection.setConnectTimeout(2000);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+                //TODO: Changing key values
+                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("ingredientList", currentIngredient)
+                        .appendQueryParameter("servings", "1");
+                String query = builder.build().getEncodedQuery();
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                } finally {
+                    Log.d("DISCONNECT", "");
+                    urlConnection.disconnect();
+                }
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+
+            if (response == null) {
+                response = "THERE WAS AN ERROR";
+                Snackbar.make(responseView, "Network connectivity unavailable", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                progressBar.setVisibility(View.GONE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+                // responseView.setText(response);
+                   /* Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
+                    myIntent1.putExtra("mytext", response);
+                    startActivity(myIntent1);
+                    responseView.setText(null);
+                    ingredients = "";*/
+                responseJSON = response;
+                Log.d("RESPONSE", response);
+                Log.d("RESPONSEJSON", responseJSON);
+                JSONArray object;
+                try {
+                    object = (JSONArray) new JSONTokener(responseJSON).nextValue();
+                    //currentImageUrl = object.get(0).toString();
+                    currentImageUrl = object.getJSONObject(0).get("image").toString();
+                    Log.d("IMAGEURL", currentImageUrl);
+                    if((object.getJSONObject(0).has("image"))) {
+                        Log.d("IF","NOT Image");
+                        currentImageUrl = object.getJSONObject(0).get("image").toString();
+                    }
+                    else{
+                        currentImageUrl = "https://spoonacular.com/cdn/ingredients_100x100/appe.jpg1";
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fillArray(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                    currentImageUrl = "https://spoonacular.com/cdn/ingredients_100x100/appe.jpg1";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                editText.getText().clear();
+                Log.d("INGREDIENTS ,", ingredients);
+            }
+        }
+    }
     private void fillArray(String ingredient) throws JSONException {
         List<Card> cards = new ArrayList<>();
         cards.add(generateNewCard(ingredient));
@@ -224,13 +323,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Card generateNewCard(final String ingredient) {
         mListView.smoothScrollToPosition(0);
-        final CardProvider provider = new Card.Builder(this)
+        Log.d("IMGURL", currentImageUrl );
+        CardProvider provider = new Card.Builder(this)
                 .setTag("BASIC_IMAGE_BUTTON_CARD")
                 .setDismissible()
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.card_layout)
                 .setTitle(ingredient)
-                .setDrawable("https://spoonacular.com/cdn/ingredients_100x100/" + ingredient.trim().toLowerCase() +".jpg")
+                .setDrawable(currentImageUrl)
                 .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
                     @Override
                     public void onImageConfigure(@NonNull RequestCreator requestCreator) {
@@ -243,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
                         .setListener(new OnActionClickListener() {
                             @Override
                             public void onActionClicked(View view, Card card) {
+
                                 Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
                                 ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
                                 Log.d("ingredients_card", ingredients);
