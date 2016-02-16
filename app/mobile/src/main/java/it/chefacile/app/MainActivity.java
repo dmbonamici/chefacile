@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,6 @@ import com.squareup.picasso.RequestCreator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.BufferedReader;
@@ -35,7 +35,6 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialListView mListView;
     private EditText editText;
     private TextView responseView;
+    private ImageView iv;
     private ProgressBar progressBar;
     private Button TutorialButton;
     private Button AddButton;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentImageUrl = "";
     private String responseJSON = "";
     private String singleIngredient;
+    private int clicks = 0;
     private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
     private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
 
@@ -85,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        iv = (ImageView) findViewById(R.id.imageView);
+        iv.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                clicks++;
+                Log.d("CLICKS", String.valueOf(clicks));
+                if(clicks == 15){
+                    Log.d("IMAGE SHOWN", "mai vero");
+                    setBackground(iv);
+                }
+            }
+        });
+
+
+
+
+
         AddButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -95,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     ingredients += editText.getText().toString().replaceAll(" ","+").trim().toLowerCase() + ",";
-                    singleIngredient = editText.getText().toString().trim();
+                    singleIngredient = editText.getText().toString().trim().toLowerCase();
                     currentIngredient = singleIngredient;
                     new RetrieveIngredientTask().execute();
 
@@ -363,5 +380,9 @@ public class MainActivity extends AppCompatActivity {
                         }));
 
         return provider.endConfig().build();
+    }
+
+    private void setBackground(ImageView iv){
+        iv.setImageResource(R.drawable.egg);
     }
 }
