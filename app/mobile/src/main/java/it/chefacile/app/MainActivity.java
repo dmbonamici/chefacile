@@ -231,8 +231,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 URL urlIngredientRetriver = new URL(urlIngredientDetais);
                 HttpURLConnection urlConnection = (HttpURLConnection) urlIngredientRetriver.openConnection();
-                urlConnection.setReadTimeout(1000);
-                urlConnection.setConnectTimeout(2000);
+                urlConnection.setReadTimeout(10000);
+                urlConnection.setConnectTimeout(15000);
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("IMGURL", currentImageUrl );
         CardProvider provider = new Card.Builder(this)
                 .setTag("BASIC_IMAGE_BUTTON_CARD")
-                .setDismissible()
+                //.setDismissible()
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.card_layout)
                 .setTitle(ingredient)
@@ -347,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
                                 ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
                                 Log.d("ingredients_card", ingredients);
+                                card.setDismissible(true);
                                 card.dismiss();
                             }
                         }))
@@ -363,6 +364,4 @@ public class MainActivity extends AppCompatActivity {
 
         return provider.endConfig().build();
     }
-
-
 }
