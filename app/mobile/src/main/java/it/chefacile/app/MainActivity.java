@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("INGREDIENTS ,", ingredients);
                 }
                 //responseView.setText(ingredients);
+
                 //ingredients += editText.getText().toString().trim() + ",";
 
             }
