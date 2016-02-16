@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textAutoCorrect"
-        android:hint="Enter ingredients"
+        android:hint="What's in your fridge?"
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_marginTop="69dp" />

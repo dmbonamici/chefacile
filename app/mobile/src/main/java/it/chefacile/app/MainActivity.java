@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView responseView;
     private ImageView iv;
     private ProgressBar progressBar;
-    private Button TutorialButton;
-    private Button FilterButton;
+    private ImageButton TutorialButton;
+    private ImageButton FilterButton;
     private Button AddButton;
     private String ingredients = ",";
     private ArrayAdapter<String> adapter;
@@ -72,12 +73,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
 
-        FilterButton = (Button) findViewById(R.id.buttonfilter);
-        TutorialButton = (Button) findViewById(R.id.button);
+        FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
+        TutorialButton = (ImageButton) findViewById(R.id.button);
         AddButton = (Button) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
 
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
