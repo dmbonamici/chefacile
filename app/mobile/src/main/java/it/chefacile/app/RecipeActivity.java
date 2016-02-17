@@ -125,8 +125,10 @@ public class RecipeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-
-                startActivity(new Intent(RecipeActivity.this, TimerActivity.class));
+                Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
+                myIntent.putExtra("recipeId", recipeString);
+                myIntent.putExtra("recipesString", recipeListString);
+                startActivity(myIntent);
 
             }
 

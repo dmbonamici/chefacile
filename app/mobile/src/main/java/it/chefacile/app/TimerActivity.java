@@ -1,5 +1,6 @@
 package it.chefacile.app;
 import android.app.Notification;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +20,8 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private CircleTimerView mTimer;
-
+    private String recipeString;
+    private String recipeListString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,6 +30,10 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
         setContentView(R.layout.activity_timer);
         mTimer = (CircleTimerView) findViewById(R.id.ctv);
         mTimer.setCircleTimerListener(this);
+
+        this.recipeString = getIntent().getStringExtra("recipeId");
+        Log.d("RECIPEID FROM RECIPEACT", recipeString);
+        this.recipeListString = getIntent().getStringExtra("recipesString");
 
     }
 
@@ -46,14 +52,26 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, RecipeActivity.class);
+                Log.d("RECIPES", recipeString);
+                intent.putExtra("recipeId", recipeString);
+                intent.putExtra("recipesString", recipeListString);
+                Log.d("RECIPELIST", recipeListString);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-        {
-            return true;
+                //noinspection SimplifiableIfStatement
+                if (id == R.id.action_settings) {
+                    return true;
+                }
+
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void start(View v)
@@ -108,4 +126,20 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
         }
         });
     }
+/*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, RecipeActivity.class);
+                Log.d("RECIPES", this.recipeString);
+                intent.putExtra("recipeId", recipeString);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 }
