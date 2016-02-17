@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <it.chefacile.app.CircleTimerView
+        android:id="@+id/ctv"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp">
+    </it.chefacile.app.CircleTimerView>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START TIMER"
+        android:onClick="start"
+        android:id="@+id/button4"
+        android:background="@color/toolbarTransparent"
+        android:layout_below="@+id/ctv"
+        android:layout_alignStart="@+id/ctv"
+        android:layout_marginTop="49dp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PAUSE TIMER"
+        android:onClick="pause"
+        android:id="@+id/button3"
+        android:background="@color/toolbarTransparent"
+        android:layout_alignTop="@+id/button4"
+        android:layout_alignEnd="@+id/ctv" />
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:text="STOP TIMER"-->
+    <!--android:onClick="stop"/>-->
+</RelativeLayout>

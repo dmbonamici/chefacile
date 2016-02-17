@@ -123,8 +123,11 @@ public class RecipeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+
+                startActivity(new Intent(RecipeActivity.this, TimerActivity.class));
+
             }
 
         });
