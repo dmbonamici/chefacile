@@ -185,7 +185,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.material_basic_image_buttons_card_layout)
                 .setTitle(title)
-                .setDescription(rating + "\n" + missing + "\n" + used)
+                .setDescription(missing + "\n" + used)
                // .setDescription(missing)
                 .setDrawable(imageURL)
                 .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
@@ -255,7 +255,7 @@ public class ResultsActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/"+ idrecipe +"/information");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

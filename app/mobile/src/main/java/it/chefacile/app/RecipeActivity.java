@@ -3,8 +3,10 @@ package it.chefacile.app;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dexafree.materialList.card.Card;
+import com.dexafree.materialList.card.CardProvider;
+import com.dexafree.materialList.card.OnActionClickListener;
+import com.dexafree.materialList.card.action.TextViewAction;
+import com.dexafree.materialList.card.action.WelcomeButtonAction;
+import com.dexafree.materialList.view.MaterialListView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -33,6 +42,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -45,21 +56,29 @@ public class RecipeActivity extends AppCompatActivity {
     private String stringIngredients;
     private String recipeServings;
     private String recipeURL;
-    private TextView servingsTextView;
-    private TextView timeTextView;
-    private TextView urlTextView;
-    private TextView ingredientsTextView;
+    private String proc;
+
+    private Context mContext;
+    private MaterialListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        mContext = this;
+
 
         this.recipeString = getIntent().getStringExtra("recipeId");
         this.recipeListString = getIntent().getStringExtra("recipesString");
         Log.d("RECIPEID FROM RECIPEACT", recipeString);
 
         Log.d("RECIPE STRING", recipeString);
+
+        mListView = (MaterialListView) findViewById(R.id.material_listview1);
+        // mListView.setItemAnimator(new SlideInLeftAnimator());
+        //  mListView.getItemAnimator().setAddDuration(300);
+        //  mListView.getItemAnimator().setRemoveDuration(300);
+        // Fill the array withProvider mock content
 
         JSONObject object = null;
         try {
@@ -74,13 +93,11 @@ public class RecipeActivity extends AppCompatActivity {
 
             this.totalTime = object.getString("readyInMinutes");
             Log.d("TIME", object.getString("readyInMinutes"));
-            timeTextView = (TextView) findViewById(R.id.set_total_time);
-            timeTextView.setText("Total time: " + totalTime + " minutes");
+
 
             this.recipeServings = object.getString("servings");
             Log.d("SERVINGS", String.valueOf(recipeServings));
-            servingsTextView = (TextView) findViewById(R.id.set_servings);
-            servingsTextView.setText("Number of servings: " + recipeServings);
+
 
 
             this.recipeIngredients = new String[object.getJSONArray("extendedIngredients").length()];
@@ -94,23 +111,24 @@ public class RecipeActivity extends AppCompatActivity {
             }
            stringIngredients = java.util.Arrays.toString(recipeIngredients);
 
-            ingredientsTextView = (TextView) findViewById(R.id.set_ingredients);
             stringIngredients = stringIngredients.replaceAll(",","\n");
             stringIngredients = stringIngredients.replaceAll("\\[","");
             stringIngredients = stringIngredients.replaceAll("]","");
-            ingredientsTextView.setText("Ingredients:\n" + String.valueOf(stringIngredients));
 
 
             this.recipeURL = object.getString("spoonacularSourceUrl");
             Log.d("URL", recipeURL);
-            urlTextView = (TextView) findViewById(R.id.set_recipe_url);
-            urlTextView.setText("Loading...");
+
 
             (new ParseURL()).execute(new String[]{recipeURL});
+
+
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -134,6 +152,69 @@ public class RecipeActivity extends AppCompatActivity {
 
         });
     }
+
+    private void fillArray(String proc) throws JSONException {
+        List<Card> cards = new ArrayList<>();
+        cards.add(generateServingCard());
+        cards.add(generateTimeCard());
+        cards.add(generateIngredientCard());
+        cards.add(generateProcedureCard(proc));
+        mListView.getAdapter().addAll(cards);
+    }
+
+    private Card generateServingCard() {
+        Log.d("Servings", this.recipeServings);
+        CardProvider provider = new Card.Builder(this)
+                .setTag("BASIC_IMAGE_BUTTON_CARD")
+                //.setDismissible()
+                .withProvider(new CardProvider<>())
+                .setLayout(R.layout.recipe_card_layout)
+                .setTitle("Servings: " + recipeServings);
+
+
+        return provider.endConfig().build();
+    }
+
+    private Card generateTimeCard() {
+        Log.d("Servings", this.recipeServings);
+        CardProvider provider = new Card.Builder(this)
+                .setTag("BASIC_IMAGE_BUTTON_CARD")
+                //.setDismissible()
+                .withProvider(new CardProvider<>())
+                .setLayout(R.layout.recipe_card_layout)
+                .setTitle("Time: " + totalTime + " minutes");
+
+
+        return provider.endConfig().build();
+    }
+
+    private Card generateIngredientCard() {
+        Log.d("Servings", this.recipeServings);
+        CardProvider provider = new Card.Builder(this)
+                .setTag("BASIC_IMAGE_BUTTON_CARD")
+                //.setDismissible()
+                .withProvider(new CardProvider<>())
+                .setLayout(R.layout.recipe_card_layout)
+                .setTitle("Ingredients: \n\n" + stringIngredients);
+
+
+        return provider.endConfig().build();
+    }
+
+    private Card generateProcedureCard(String proc) {
+        Log.d("Servings", this.recipeServings);
+        CardProvider provider = new Card.Builder(this)
+                .setTag("BASIC_IMAGE_BUTTON_CARD")
+                //.setDismissible()
+                .withProvider(new CardProvider<>())
+                .setLayout(R.layout.recipe_card_layout)
+                .setTitle(proc);
+
+
+        return provider.endConfig().build();
+    }
+
+
     public void picassoLoader(Context context, ImageView imageView, String recipeImage){
         Log.d("PICASSO", "loading image");
         Picasso.with(context)
@@ -212,9 +293,16 @@ public class RecipeActivity extends AppCompatActivity {
 
             super.onPostExecute(s);
             Log.d("INSTRUCTIONS", s);
-            urlTextView.setText(s);
+            proc = s;
+            try {
+                fillArray(proc);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+
 
     /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();

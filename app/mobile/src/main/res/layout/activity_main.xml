@@ -24,7 +24,7 @@
             android:src="@android:drawable/ic_menu_help"
             android:background="@color/toolbarTransparent"
             android:onClick="buttonHandler"
-            />
+            android:foregroundGravity="right" />
 
         <ImageButton
             android:id="@+id/buttonfilter"

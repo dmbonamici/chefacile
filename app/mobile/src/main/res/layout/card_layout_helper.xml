@@ -9,7 +9,4 @@
         style="@style/Material_Card_Title"
         tools:text="Title"/>
 
-    <TextView android:id="@+id/subtitle"
-        style="@style/Material_Card_Subtitle_16dp"
-        tools:text="Subtitle"/>
 </LinearLayout><!-- From: file:/Users/Carlos/Home/Projects/MaterialList/materialList/src/main/res/layout/headline_16dp.xml -->
