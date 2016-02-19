@@ -31,6 +31,8 @@ Milestone 2 - Release Candidate (February 19th)
  - Recipes retrival with more than one ingredients
  - Improving UI
 
+[Milestone 2 Presentation](https://drive.google.com/file/d/0B0hoAFPxDfD8UUs3aGZlb19tY3c/view?usp=sharing)
+
 [Demo](https://www.youtube.com/watch?v=bm_YXZJuBcA)
 
 [How to install APK file](https://docs.google.com/document/d/1EpddWhj_oxli7d4z6F_LENTE5ODiDaLthk1a3vVGGGo/edit?usp=sharing)
