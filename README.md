@@ -44,5 +44,7 @@ Milestone 3 - Final
 _Work in progress_
 
  - Local persistence implementation (favourite ingredients and recipes) 
+ - Recommended recipes and ingredients based on user history
+ - New filter options
  - Cooking tools improvement (timers, gestures, ...)
  - Social sharing
