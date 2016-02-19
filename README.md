@@ -33,7 +33,9 @@ _Work in progress_
  - Improving UI
 
 [Demo](https://www.youtube.com/watch?v=bm_YXZJuBcA)
+
 [How to install APK file](https://docs.google.com/document/d/1EpddWhj_oxli7d4z6F_LENTE5ODiDaLthk1a3vVGGGo/edit?usp=sharing)
+
 [APK](https://drive.google.com/file/d/0B0hoAFPxDfD8Ym5XeGlXa2x2WnM/view?usp=sharing)
 
 Milestone 3 - Final
