@@ -25,7 +25,6 @@ Milestone 1 - Proof of Concept (January 18th)
 
 Milestone 2 - Release Candidate (February 19th)
 ==============
-_Work in progress_
 
  - Recipe selection based on user preferences (maximize used ingredients and minimize missing ingredients) 
  - Cooking tools first implementation (timer)
