@@ -73,7 +73,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-  /*  public long insertTermList(String ing, int c) {
+
+    /*  public long insertTermList(String ing, int c) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues initialValues = new ContentValues();
 
