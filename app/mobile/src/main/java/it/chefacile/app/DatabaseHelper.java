@@ -66,6 +66,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Integer deleteData(String test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_NAME1, "INGREDIENT_PREF = ?", new String[] {test});
+
+    }
+
+
   /*  public long insertTermList(String ing, int c) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues initialValues = new ContentValues();
