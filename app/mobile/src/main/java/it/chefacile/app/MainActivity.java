@@ -3,6 +3,7 @@ package it.chefacile.app;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private DatabaseHelper chefacileDb;
     private Context mContext;
     private MaterialListView mListView;
     private EditText editText;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton TutorialButton;
     private ImageButton FilterButton;
     private Button AddButton;
+    private Button Show;
     private String ingredients = ",";
     private ArrayAdapter<String> adapter;
     private String currentIngredient = "";
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+        chefacileDb = new DatabaseHelper(this);
+
 
         FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
         TutorialButton = (ImageButton) findViewById(R.id.button);
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
+        Show = (Button) findViewById(R.id.buttonShow);
 
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
@@ -94,6 +99,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Show.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Cursor res = chefacileDb.getAllData();
+
+                if (res.getCount() == 0){
+                    showMessage("Error","Nothing found");
+                    return;
+                }
+
+                StringBuffer buffer = new StringBuffer();
+                while (res.moveToNext()){
+                    buffer.append("INGREDIENT: " +res.getString(0)+ "\n");
+                    buffer.append("COUNT: " +res.getString(1)+ "\n\n");
+
+                }
+
+                showMessage("Data", buffer.toString());
+            }
+        });
+
+
 
         iv = (ImageView) findViewById(R.id.imageView);
         iv.setOnClickListener(new View.OnClickListener(){
@@ -182,7 +209,21 @@ public class MainActivity extends AppCompatActivity {
             //         .setAction("Action", null).show();
 
         });
+
     }
+
+
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+
+    }
+
+
 
     class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
@@ -261,6 +302,8 @@ public class MainActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
         }
+
+
     }
 
     class RetrieveIngredientTask extends AsyncTask<Void, Void, String> {
@@ -407,7 +450,13 @@ public class MainActivity extends AppCompatActivity {
                         .setListener(new OnActionClickListener() {
                             @Override
                             public void onActionClicked(View view, Card card) {
-                                Toast.makeText(mContext, "MAYBE maybe", Toast.LENGTH_SHORT).show();
+
+                                boolean isInserted = chefacileDb.insertData(ingredient);
+
+                                if (isInserted == true)
+                                    Toast.makeText(mContext, "Ingredient is added to favorited",Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(mContext, "Ingredient NOT ADDED!",Toast.LENGTH_LONG).show();
                                 //card.dismiss();
                             }
                         }));

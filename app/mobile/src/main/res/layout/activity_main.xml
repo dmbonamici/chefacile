@@ -94,6 +94,15 @@
             android:layout_toEndOf="@+id/progressBar"
             android:layout_alignTop="@+id/scrollView" />
 
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SHOW"
+            android:id="@+id/buttonShow"
+            android:layout_below="@+id/progressBar"
+            android:layout_alignStart="@+id/action_abc" />
+
     </RelativeLayout>
 
 
