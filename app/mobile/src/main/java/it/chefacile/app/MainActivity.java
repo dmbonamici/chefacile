@@ -417,51 +417,88 @@ public class MainActivity extends AppCompatActivity {
     private Card generateNewCard(final String ingredient) {
         mListView.smoothScrollToPosition(0);
         Log.d("IMGURL", currentImageUrl );
-        CardProvider provider = new Card.Builder(this)
-                .setTag("BASIC_IMAGE_BUTTON_CARD")
-                //.setDismissible()
-                .withProvider(new CardProvider<>())
-                .setLayout(R.layout.card_layout)
-                .setTitle(ingredient)
-                .setDrawable(currentImageUrl)
-                .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
-                    @Override
-                    public void onImageConfigure(@NonNull RequestCreator requestCreator) {
-                        requestCreator.fit();
-                    }
-                })
-                .addAction(R.id.left_text_button, new TextViewAction(this)
-                        .setText("Delete")
-                        .setTextResourceColor(R.color.black_button)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
 
-                                Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
-                                ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
-                                Log.d("ingredients_card", ingredients);
-                                card.setDismissible(true);
-                                card.dismiss();
-                            }
-                        }))
-                .addAction(R.id.right_text_button, new TextViewAction(this)
-                        .setText("Save")
-                        .setTextResourceColor(R.color.orange_button)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
+        if(!chefacileDb.findIngredient(ingredient)) {
 
-                                boolean isInserted = chefacileDb.insertData(ingredient);
+            CardProvider provider = new Card.Builder(this)
+                    .setTag("BASIC_IMAGE_BUTTON_CARD")
+                    //.setDismissible()
+                    .withProvider(new CardProvider<>())
+                    .setLayout(R.layout.card_layout)
+                    .setTitle(ingredient)
+                    .setDrawable(currentImageUrl)
+                    .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
+                        @Override
+                        public void onImageConfigure(@NonNull RequestCreator requestCreator) {
+                            requestCreator.fit();
+                        }
+                    })
+                    .addAction(R.id.left_text_button, new TextViewAction(this)
+                            .setText("Delete")
+                            .setTextResourceColor(R.color.black_button)
+                            .setListener(new OnActionClickListener() {
+                                @Override
+                                public void onActionClicked(View view, Card card) {
 
-                                if (isInserted == true)
-                                    Toast.makeText(mContext, "Ingredient is added to favorited",Toast.LENGTH_LONG).show();
-                                else
-                                    Toast.makeText(mContext, "Ingredient NOT ADDED!",Toast.LENGTH_LONG).show();
-                                //card.dismiss();
-                            }
-                        }));
+                                    Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
+                                    ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
+                                    Log.d("ingredients_card", ingredients);
+                                    card.setDismissible(true);
+                                    card.dismiss();
+                                }
+                            }))
+                    .addAction(R.id.right_text_button, new TextViewAction(this)
+                            .setText("Save")
+                            .setTextResourceColor(R.color.orange_button)
+                            .setListener(new OnActionClickListener() {
+                                @Override
+                                public void onActionClicked(View view, Card card) {
 
-        return provider.endConfig().build();
+                                    boolean isInserted = chefacileDb.insertData(ingredient);
+
+                                    if (isInserted == true)
+                                        Toast.makeText(mContext, "Ingredient is added to favorited", Toast.LENGTH_LONG).show();
+                                    else
+                                        Toast.makeText(mContext, "Ingredient NOT ADDED!", Toast.LENGTH_LONG).show();
+                                    //card.dismiss();
+                                }
+                            }));
+
+            return provider.endConfig().build();
+        }
+
+        else {
+            CardProvider provider = new Card.Builder(this)
+                    .setTag("BASIC_IMAGE_BUTTON_CARD")
+                    //.setDismissible()
+                    .withProvider(new CardProvider<>())
+                    .setLayout(R.layout.card_layout)
+                    .setTitle(ingredient)
+                    .setDrawable(currentImageUrl)
+                    .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
+                        @Override
+                        public void onImageConfigure(@NonNull RequestCreator requestCreator) {
+                            requestCreator.fit();
+                        }
+                    })
+                    .addAction(R.id.left_text_button, new TextViewAction(this)
+                            .setText("Delete")
+                            .setTextResourceColor(R.color.black_button)
+                            .setListener(new OnActionClickListener() {
+                                @Override
+                                public void onActionClicked(View view, Card card) {
+
+                                    Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
+                                    ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
+                                    Log.d("ingredients_card", ingredients);
+                                    card.setDismissible(true);
+                                    card.dismiss();
+                                }
+                            }));
+
+            return provider.endConfig().build();
+        }
+
     }
 
     private void setBackground(ImageView iv){

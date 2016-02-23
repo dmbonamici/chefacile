@@ -54,4 +54,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("select * from " +TABLE_NAME1, null);
         return res;
     }
+
+
+    public boolean findIngredient(String test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor ing = db.rawQuery("select * from "+TABLE_NAME1+ " where "+COL_1+ " = '"+test+"'",null);
+        if (ing.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+
+  /*  public long insertTermList(String ing, int c) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues initialValues = new ContentValues();
+
+        initialValues.put(COL_1, ing);
+        initialValues.put(COL_2, c);
+
+        return db.insert(TABLE_NAME, null, initialValues);
+    }
+
+
+    public Cursor getTermValues(String test) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String from[] = { COL_1, COL_2 };
+        String where = COL_1 + "=?";
+        String[] whereArgs = new String[]{test+""};
+        Cursor cursor = db.query(TABLE_NAME, from, where, whereArgs, null, null, null, null);
+        return cursor;
+    }
+
+    private void getData(String test) {
+
+        Cursor c = getTermValues(test);
+
+        if(c != null)
+        {
+            while(c.moveToNext()){
+                String ingredients_pref  = c.getString(c.getColumnIndex(COL_1));
+                int count = c.getColumnIndex(COL_2);
+
+            }
+        }
+    }
+
+
+    public Map<String,Integer> putIngredientsInMap(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Map<String,Integer> map = new HashMap<String, Integer>();
+        Cursor cursor = db.rawQuery("select * from "+TABLE_NAME,null);
+
+        String array[] = new String[cursor.getCount()];
+        int i = 0;
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            array[i] = cursor.getString(0);
+            i++;
+            cursor.moveToNext();
+        }
+    }*/
+
 }
