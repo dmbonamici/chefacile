@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
         mListView.smoothScrollToPosition(0);
         Log.d("IMGURL", currentImageUrl );
 
-        if(!chefacileDb.findIngredient(ingredient)) {
+        if(!chefacileDb.findIngredient(ingredient.trim().replaceAll(",",""))) {
 
             CardProvider provider = new Card.Builder(this)
                     .setTag("BASIC_IMAGE_BUTTON_CARD")

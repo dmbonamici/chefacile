@@ -58,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean findIngredient(String test){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor ing = db.rawQuery("select * from "+TABLE_NAME1+ " where "+COL_1+ " = '"+test+"'",null);
+        Cursor ing = db.rawQuery("select * from "+TABLE_NAME1+ " where "+COL_1+ " = '"+test+"'", null);
         if (ing.getCount() > 0)
             return true;
         else
