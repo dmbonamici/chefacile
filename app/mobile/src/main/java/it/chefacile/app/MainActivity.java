@@ -165,6 +165,17 @@ public class MainActivity extends AppCompatActivity {
         AddButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                String input;
+                String s1 = editText.getText().toString().substring(0,1).toUpperCase();
+                String s2 = editText.getText().toString().substring(1);
+                input = s1+s2;
+                Log.d("INPUT: ", input);
+
+
+                if (chefacileDb.findIngredient(input))
+                    chefacileDb.updateCount(input);
+
+
                 if(editText.getText().toString().equals("")){
                     ingredients += editText.getText().toString().trim() + "";
                     editText.getText().clear();

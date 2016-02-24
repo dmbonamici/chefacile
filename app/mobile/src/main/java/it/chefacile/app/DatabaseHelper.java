@@ -73,6 +73,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void updateCount(String test) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " +TABLE_NAME1+ " SET " +COL_2+ " = " +COL_2+ " +1 WHERE "+COL_1+ " = '"+test+"'");
+        db.close();
+    }
+
+
 
     /*  public long insertTermList(String ing, int c) {
         SQLiteDatabase db = this.getWritableDatabase();
