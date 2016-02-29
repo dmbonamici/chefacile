@@ -15,8 +15,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME1 = "ingredients_table";
     public static final String COL_1= "INGREDIENT_PREF";
     public static final String COL_2= "COUNT";
-    public static final String TABLE_NAME2 = "recepies_table";
-    public static final String COL_A= "RECEPIE_PREF";
+    public static final String TABLE_NAME2 = "recipes_table";
+    public static final String COL_A= "RECIPE_PREF";
     public static final String COL_B= "IMAGE"; // BHO POI VEDIAMO!
 
 
@@ -67,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertDataRecepie(String rec, String image) {
+    public boolean insertDataRecipe(String rec, String image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_A, rec);
@@ -89,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor getAllDataRecepies(){
+    public Cursor getAllDataRecipes(){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from " +TABLE_NAME2, null);
         return res;
@@ -114,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public Integer deleteDataRecepie(String test){
+    public Integer deleteDataRecipe(String test){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME2, "INGREDIENT_PREF = ?", new String[] {test});
 
