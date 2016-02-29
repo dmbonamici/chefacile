@@ -74,10 +74,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mContext = this;
         chefacileDb = new DatabaseHelper(this);
-
-
         FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
         TutorialButton = (ImageButton) findViewById(R.id.button);
         AddButton = (Button) findViewById(R.id.button2);
@@ -100,9 +99,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         Show.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Cursor res = chefacileDb.getAllData();
+                Cursor res = chefacileDb.getAllDataIngredients();
 
                 if (res.getCount() == 0){
                     showMessage("Error","Nothing found");
@@ -465,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onActionClicked(View view, Card card) {
 
-                                    boolean isInserted = chefacileDb.insertData(ingredient);
+                                    boolean isInserted = chefacileDb.insertDataIngredient(ingredient);
 
                                     if (isInserted == true)
                                         Toast.makeText(mContext, "Ingredient is added to favorited", Toast.LENGTH_LONG).show();
