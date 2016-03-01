@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_2= "COUNT";
     public static final String TABLE_NAME2 = "recipes_table";
     public static final String COL_A= "RECIPE_PREF";
-    public static final String COL_B= "IMAGE"; // BHO POI VEDIAMO!
+    public static final String COL_B= "IMAGE";
 
 
 

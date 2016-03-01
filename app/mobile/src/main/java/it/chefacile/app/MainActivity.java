@@ -166,35 +166,36 @@ public class MainActivity extends AppCompatActivity {
         AddButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                String input;
-                String s1 = editText.getText().toString().substring(0,1).toUpperCase();
-                String s2 = editText.getText().toString().substring(1);
-                input = s1+s2;
-                Log.d("INPUT: ", input);
+                if(!(editText.getText().toString().trim().equals(""))) {
+
+                    String input;
+                    String s1 = editText.getText().toString().substring(0, 1).toUpperCase();
+                    String s2 = editText.getText().toString().substring(1);
+                    input = s1 + s2;
+                    Log.d("INPUT: ", input);
 
 
-                if (chefacileDb.findIngredient(input))
-                    chefacileDb.updateCount(input);
-
-
-                if(editText.getText().toString().equals("")){
-                    ingredients += editText.getText().toString().trim() + "";
-                    editText.getText().clear();
-
+                    if (chefacileDb.findIngredient(input))
+                        chefacileDb.updateCount(input);
                 }
-                else {
-                    ingredients += editText.getText().toString().replaceAll(" ","+").trim().toLowerCase() + ",";
-                    singleIngredient = editText.getText().toString().trim().toLowerCase();
-                    currentIngredient = singleIngredient;
-                    new RetrieveIngredientTask().execute();
 
-                    //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                    if (editText.getText().toString().equals("")) {
+                        ingredients += editText.getText().toString().trim() + "";
+                        editText.getText().clear();
+
+                    } else {
+                        ingredients += editText.getText().toString().replaceAll(" ", "+").trim().toLowerCase() + ",";
+                        singleIngredient = editText.getText().toString().trim().toLowerCase();
+                        currentIngredient = singleIngredient;
+                        new RetrieveIngredientTask().execute();
+
+                        //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                    }
+                    //responseView.setText(ingredients);
+
+                    //ingredients += editText.getText().toString().trim() + ",";
                 }
-                //responseView.setText(ingredients);
 
-                //ingredients += editText.getText().toString().trim() + ",";
-
-            }
         });
 
       /*  try {
