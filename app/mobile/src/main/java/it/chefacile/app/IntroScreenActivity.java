@@ -28,7 +28,7 @@ public class IntroScreenActivity extends AppCompatActivity{
 
     //TODO: add welcome screen flag
 
-	static final int TOTAL_PAGES = 4;
+	static final int TOTAL_PAGES = 5;
 	Button btnSkip, btnDone;
     ImageButton btnNext;
     ViewPager viewpager;
@@ -76,7 +76,7 @@ public class IntroScreenActivity extends AppCompatActivity{
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == TOTAL_PAGES - 2 && positionOffset > 0) {
+                if (position == TOTAL_PAGES -3 && positionOffset > 0) {
                     if (isOpaque) {
                     	viewpager.setBackgroundColor(Color.TRANSPARENT);
                         isOpaque = false;
@@ -88,7 +88,6 @@ public class IntroScreenActivity extends AppCompatActivity{
                     }
                 }
             }
-
             @Override
             public void onPageSelected(int position) {
                 setIndicator(position);
@@ -100,8 +99,8 @@ public class IntroScreenActivity extends AppCompatActivity{
                     btnSkip.setVisibility(View.VISIBLE);
                     btnNext.setVisibility(View.VISIBLE);
                     btnDone.setVisibility(View.GONE);
-                } else if (position == TOTAL_PAGES - 1) {
-                	endIntroduction();
+                } else if (position == TOTAL_PAGES -1) {
+                    endIntroduction();
                 }
             }
 
@@ -190,6 +189,9 @@ public class IntroScreenActivity extends AppCompatActivity{
 				case 3:
 					introScreenFragment = new IntroScreenFragment().newInstance(R.layout.fragment_screen4);
 					break;
+                case 4:
+                    introScreenFragment = new IntroScreenFragment().newInstance(R.layout.fragment_screen5);
+                    break;
 			}
 			return introScreenFragment;
 		}

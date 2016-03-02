@@ -32,6 +32,7 @@
 
     <TextView
         android:id="@+id/screen_heading"
+        android:text="Start cooking."
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -40,7 +41,7 @@
         android:textSize="24sp"
         android:textColor="@color/white"
         android:gravity="bottom|center_horizontal"
-        android:text="Start cooking." />
+        />
 
     <TextView
         android:id="@+id/screen_desc"

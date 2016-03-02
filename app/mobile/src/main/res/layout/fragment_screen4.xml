@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@android:color/transparent" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/welcome_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_weight="6"
+    android:paddingTop="48dp">
+
+    <FrameLayout
+        android:id="@+id/image_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:clipChildren="false">
+
+       <!-- <ImageView
+            android:id="@+id/img"
+            android:layout_margin="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src=""
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:layout_gravity="center_horizontal|top"/> -->
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/screen_heading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:textSize="24sp"
+        android:textColor="@color/transparent_tutorial_background"
+        android:gravity="bottom|center_horizontal"
+        android:text="Maximize usage ingredients" />
+
+    <TextView
+        android:id="@+id/screen_desc"
+        android:text="minimize missing ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:textSize="16sp"
+        android:textColor="@color/transparent_tutorial_background"
+        android:gravity="top|center_horizontal"
+        android:minHeight="@dimen/welcome_content_min_height"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"/>
+
+</LinearLayout>
