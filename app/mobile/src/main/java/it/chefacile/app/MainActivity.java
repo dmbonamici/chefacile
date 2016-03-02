@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageButton TutorialButton;
     private ImageButton FilterButton;
-    private Button AddButton;
+    private ImageButton AddButton;
     private Button Show;
     private String ingredients = ",";
     private ArrayAdapter<String> adapter;
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         chefacileDb = new DatabaseHelper(this);
         FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
         TutorialButton = (ImageButton) findViewById(R.id.button);
-        AddButton = (Button) findViewById(R.id.button2);
+        AddButton = (ImageButton) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -543,13 +544,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private  void checkFieldsForEmptyValues(){
-        Button b = (Button) findViewById(R.id.button2);
+        ImageButton b = (ImageButton) findViewById(R.id.button2);
 
         String s1 = editText.getText().toString();
 
         if (s1.length() > 0) {
+            b.setImageResource(R.drawable.addplusg);
             b.setEnabled(true);
         } else {
+            b.setImageResource(R.drawable.addpluslg);
             b.setEnabled(false);
         }
 

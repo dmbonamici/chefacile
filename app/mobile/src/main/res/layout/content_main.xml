@@ -32,15 +32,17 @@
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_marginTop="69dp" />
-    <Button
+    <ImageButton
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:text="Add"
+        android:src = "@drawable/addpluslg"
         android:background="@color/toolbarTransparent"
         android:onClick="buttonHandler"
         android:layout_alignBottom="@+id/ingredientText"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/ingredientText"
+        android:layout_marginBottom="8dp" />
     />
 </RelativeLayout>
