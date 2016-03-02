@@ -85,7 +85,8 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/fab_margin" />
 
         <com.dexafree.materialList.view.MaterialListView
             android:layout_width="fill_parent"

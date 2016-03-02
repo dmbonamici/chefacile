@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -69,6 +71,28 @@ public class MainActivity extends AppCompatActivity {
     private int ranking = 1;
     private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
     private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextWatcher tw = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                checkFieldsForEmptyValues();
+            }
+        };
+
+        editText.addTextChangedListener(tw);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        checkFieldsForEmptyValues();
+
         AddButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -179,22 +205,22 @@ public class MainActivity extends AppCompatActivity {
                         chefacileDb.updateCount(input);
                 }
 
-                    if (editText.getText().toString().equals("")) {
-                        ingredients += editText.getText().toString().trim() + "";
-                        editText.getText().clear();
+                if (editText.getText().toString().equals("")) {
+                    ingredients += editText.getText().toString().trim() + "";
+                    editText.getText().clear();
 
-                    } else {
-                        ingredients += editText.getText().toString().replaceAll(" ", "+").trim().toLowerCase() + ",";
-                        singleIngredient = editText.getText().toString().trim().toLowerCase();
-                        currentIngredient = singleIngredient;
-                        new RetrieveIngredientTask().execute();
+                } else {
+                    ingredients += editText.getText().toString().replaceAll(" ", "+").trim().toLowerCase() + ",";
+                    singleIngredient = editText.getText().toString().trim().toLowerCase();
+                    currentIngredient = singleIngredient;
+                    new RetrieveIngredientTask().execute();
 
-                        //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
-                    }
-                    //responseView.setText(ingredients);
-
-                    //ingredients += editText.getText().toString().trim() + ",";
+                    //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
                 }
+                //responseView.setText(ingredients);
+
+                //ingredients += editText.getText().toString().trim() + ",";
+            }
 
         });
 
@@ -398,15 +424,13 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     object = (JSONArray) new JSONTokener(responseJSON).nextValue();
                     //currentImageUrl = object.get(0).toString();
-                    currentImageUrl = object.getJSONObject(0).get("image").toString();
+                    currentImageUrl = "https://spoonacular.com/cdn/ingredients_100x100/appe.jpg1";
                     Log.d("IMAGEURL", currentImageUrl);
                     if((object.getJSONObject(0).has("image"))) {
                         Log.d("IF","NOT Image");
                         currentImageUrl = object.getJSONObject(0).get("image").toString();
                     }
-                    else{
-                        currentImageUrl = "https://spoonacular.com/cdn/ingredients_100x100/appe.jpg1";
-                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -516,5 +540,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void setBackground(ImageView iv){
         iv.setImageResource(R.drawable.egg);
+    }
+
+    private  void checkFieldsForEmptyValues(){
+        Button b = (Button) findViewById(R.id.button2);
+
+        String s1 = editText.getText().toString();
+
+        if (s1.length() > 0) {
+            b.setEnabled(true);
+        } else {
+            b.setEnabled(false);
+        }
+
     }
 }
