@@ -55,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private MaterialListView mListView;
     private EditText editText;
     private TextView responseView;
+    private MaterialAnimatedSwitch materialAnimatedSwitch;
     private ImageView iv;
     private ProgressBar progressBar;
     private ImageButton TutorialButton;
-    private ImageButton FilterButton;
+    //private ImageButton FilterButton;
     private ImageButton AddButton;
     private Button Show;
     private String ingredients = ",";
@@ -102,13 +103,14 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
         chefacileDb = new DatabaseHelper(this);
-        FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
+       // FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
         TutorialButton = (ImageButton) findViewById(R.id.button);
         AddButton = (ImageButton) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Show = (Button) findViewById(R.id.buttonShow);
+        materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
 
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
@@ -160,10 +162,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        materialAnimatedSwitch.setOnCheckedChangeListener(
+                new MaterialAnimatedSwitch.OnCheckedChangeListener() {
+                    @Override public void onCheckedChanged(boolean isChecked) {
+                       if(isChecked == true){
+                           ranking = 2;
+                           Toast.makeText(getApplicationContext(), "Minimize missing ingredients", Toast.LENGTH_SHORT).show();
+                       }else{
+                           ranking = 1;
+                           Toast.makeText(getApplicationContext(), "Maximize used ingredients", Toast.LENGTH_SHORT).show();
+                       }
+                        Log.d("Ranking", String.valueOf(ranking));
+                    }
+                });
+
 
         final CharSequence[] items = {"Maximize used ingredients", "Minimize missing ingredients"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      /*  AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Filter mode");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
@@ -186,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
             }
-        });
+        });*/
 
         checkFieldsForEmptyValues();
 

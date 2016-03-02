@@ -26,7 +26,7 @@
             android:onClick="buttonHandler"
             android:foregroundGravity="right" />
 
-        <ImageButton
+       <!--  <ImageButton
             android:id="@+id/buttonfilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:src="@android:drawable/ic_menu_manage"
             android:background="@color/toolbarTransparent"
             android:onClick="buttonHandler"
-            />
+            /> -->
 
 
     </android.support.v7.widget.Toolbar>
@@ -64,7 +64,8 @@
             android:layout_below="@+id/progressBar"
             android:layout_alignParentStart="true"
             android:layout_marginTop="300dp"
-            android:id="@+id/scrollView">
+            android:id="@+id/scrollView"
+            android:layout_above="@+id/action_abc">
             <TextView
                 android:id="@+id/responseView"
                 android:layout_width="wrap_content"
@@ -93,7 +94,8 @@
             android:layout_height="fill_parent"
             android:id="@+id/material_listview"
             android:layout_toEndOf="@+id/progressBar"
-            android:layout_alignTop="@+id/scrollView" />
+            android:layout_alignTop="@+id/scrollView"
+            android:layout_above="@+id/action_abc" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -104,7 +106,22 @@
             android:layout_below="@+id/progressBar"
             android:layout_alignStart="@+id/action_abc" />
 
-    </RelativeLayout>
+        <it.chefacile.app.MaterialAnimatedSwitch
+            android:id="@+id/pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:base_release_color="@color/colorPrimary"
+            fab:base_press_color="@color/colorPrimary"
+            fab:ball_release_color="@color/white"
+            fab:ball_press_color="@color/white"
+            fab:icon_release="@drawable/checkr"
+            fab:icon_press="@drawable/cart"
+            android:layout_alignBottom="@+id/action_abc"
+            android:layout_toEndOf="@+id/progressBar"
+            android:layout_marginStart="30dp"
+            android:layout_below="@+id/scrollView" />
 
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
