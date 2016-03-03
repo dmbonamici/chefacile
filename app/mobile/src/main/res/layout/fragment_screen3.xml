@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    android:background="@color/transparent_tutorial_background"
+    android:background="@color/white"
     android:orientation="vertical"
     android:layout_weight="6"
     android:paddingTop="48dp">
@@ -16,43 +16,42 @@
         android:layout_weight="4"
         android:clipChildren="false">
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/img"
             android:layout_margin="70dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_cook"
+            android:src=""
             android:paddingLeft="18dp"
             android:paddingRight="18dp"
-            android:layout_gravity="center_horizontal|top"/>
+            android:layout_gravity="center_horizontal|top"/> -->
 
     </FrameLayout>
 
 
     <TextView
         android:id="@+id/screen_heading"
-        android:text="Start cooking."
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:textSize="24sp"
-        android:textColor="@color/white"
+        android:textColor="@color/transparent_tutorial_background"
         android:gravity="bottom|center_horizontal"
-        />
+        android:text="Maximize useded ingredients" />
 
     <TextView
         android:id="@+id/screen_desc"
-        android:text="Let's go!"
+        android:text="minimize missing ingredients"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/transparent_tutorial_background"
         android:gravity="top|center_horizontal"
         android:minHeight="@dimen/welcome_content_min_height"/>
 
