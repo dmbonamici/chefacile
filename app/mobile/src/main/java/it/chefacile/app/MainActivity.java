@@ -374,7 +374,8 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPreExecute() {
             Log.d("Tect", responseView.getText().toString());
-            progressBar.setVisibility(View.VISIBLE);
+            String s = SentenceGenerator.generateTip();
+            progressDialog = progressDialog.show(MainActivity.this,"Loading", s, true);
             // responseView.setText("");
         }
 
@@ -431,9 +432,9 @@ public class MainActivity extends AppCompatActivity {
                 response = "THERE WAS AN ERROR";
                 Snackbar.make(responseView, "Network connectivity unavailable", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
             } else {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 // responseView.setText(response);
                    /* Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                     myIntent1.putExtra("mytext", response);
