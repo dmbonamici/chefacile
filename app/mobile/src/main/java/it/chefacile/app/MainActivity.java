@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private String responseJSON = "";
     private String singleIngredient;
     private int clicks = 0;
+    private Button multiChoiceDiaog;
     private AlertDialog alert;
+    private AlertDialog.Builder builder;
     private int ranking = 1;
     private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
     private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
@@ -113,11 +115,20 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Show = (Button) findViewById(R.id.buttonShow);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
+        multiChoiceDiaog= (Button) findViewById(R.id.btn_multi_choice_dialog);
 
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+
+        multiChoiceDiaog.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showMultiChoiceDialog(v);
+            }
+        });
+
+
 
 
         TutorialButton.setOnClickListener(new View.OnClickListener() {
@@ -578,6 +589,26 @@ public class MainActivity extends AppCompatActivity {
             b.setImageResource(R.drawable.addpluslg);
             b.setEnabled(false);
         }
+
+    }
+
+    private void showMultiChoiceDialog(View view) {
+        builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo);
+        builder.setTitle("Select option");
+
+        final String[] items={"Items_one","Items_two","Items_three"};
+        builder.setMultiChoiceItems(items, new boolean[]{true, false, true}, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                Toast.makeText(getApplicationContext(),"You clicked "+items[i]+" "+b,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        builder.setCancelable(true);
+        AlertDialog dialog=builder.create();
+        dialog.show();
 
     }
 }
