@@ -1,5 +1,6 @@
 package it.chefacile.app;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialAnimatedSwitch materialAnimatedSwitch;
     private ImageView iv;
     private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
     private ImageButton TutorialButton;
     //private ImageButton FilterButton;
     private ImageButton AddButton;
@@ -287,7 +289,8 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPreExecute() {
             Log.d("Tect", responseView.getText().toString());
-            progressBar.setVisibility(View.VISIBLE);
+            progressDialog = ProgressDialog.show(MainActivity.this, "Loading", "Consulting the chefs", true);
+            //progressBar.setVisibility(View.VISIBLE);
             // responseView.setText("");
         }
 
@@ -328,13 +331,16 @@ public class MainActivity extends AppCompatActivity {
                 response = "THERE WAS AN ERROR";
                 Snackbar.make(responseView, "Network connectivity unavailable", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
+                //progressBar.setVisibility(View.GONE);
             } else if (response.toString().trim().equals("[]") || response.toString().trim().equals("")) {
                 Snackbar.make(responseView, "No recipes for these ingredients", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
+                //progressBar.setVisibility(View.GONE);
             } else {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
+                //progressBar.setVisibility(View.GONE);
                 // responseView.setText(response);
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent1.putExtra("mytext", response);

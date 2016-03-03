@@ -10,41 +10,42 @@
     android:paddingTop="48dp">
 
     <FrameLayout
-        android:id="@id/image_container"
+        android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
         android:clipChildren="false">
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/img"
             android:layout_margin="70dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_loving"
+            android:src=""
             android:paddingLeft="18dp"
             android:paddingRight="18dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center_horizontal|top"/> -->
 
     </FrameLayout>
 
+
     <TextView
-        android:id="@id/screen_heading"
-        android:text="Select the recipe"
+        android:id="@+id/screen_heading"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize="24sp"
-        android:textColor="@color/transparent_tutorial_background"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:gravity="bottom|center_horizontal"/>
+        android:textSize="24sp"
+        android:textColor="@color/transparent_tutorial_background"
+        android:gravity="bottom|center_horizontal"
+        android:text="Maximize useded ingredients" />
 
     <TextView
-        android:id="@id/screen_desc"
-        android:text="you like"
-        android:layout_width="fill_parent"
+        android:id="@+id/screen_desc"
+        android:text="minimize missing ingredients"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingLeft="24dp"
@@ -52,7 +53,7 @@
         android:textSize="16sp"
         android:textColor="@color/transparent_tutorial_background"
         android:gravity="top|center_horizontal"
-        android:minHeight="@dimen/welcome_content_min_height" />
+        android:minHeight="@dimen/welcome_content_min_height"/>
 
     <View
         android:layout_width="match_parent"
