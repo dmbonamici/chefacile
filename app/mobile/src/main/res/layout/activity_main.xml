@@ -20,11 +20,22 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="right"
+            android:paddingRight="20dp"
             android:src="@android:drawable/ic_menu_help"
             android:background="@color/toolbarTransparent"
             android:onClick="buttonHandler"
             android:foregroundGravity="right" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="SHOW"
+            android:id="@+id/buttonShow"
+            android:layout_below="@+id/progressBar"
+            android:layout_alignStart="@+id/action_abc" />
 
        <!--  <ImageButton
             android:id="@+id/buttonfilter"
@@ -97,14 +108,7 @@
             android:layout_alignTop="@+id/scrollView"
             android:layout_above="@+id/action_abc" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SHOW"
-            android:id="@+id/buttonShow"
-            android:layout_below="@+id/progressBar"
-            android:layout_alignStart="@+id/action_abc" />
+
 
         <it.chefacile.app.MaterialAnimatedSwitch
             android:id="@+id/pin"
