@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private String responseJSON = "";
     private String singleIngredient;
     private int clicks = 0;
-    private Button multiChoiceDiaog;
+    private ImageButton multiChoiceDiaog;
     private AlertDialog alert;
     private AlertDialog.Builder builder;
     private int ranking = 1;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Show = (Button) findViewById(R.id.buttonShow);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
-        multiChoiceDiaog= (Button) findViewById(R.id.btn_multi_choice_dialog);
+        multiChoiceDiaog= (ImageButton) findViewById(R.id.btn_multi_choice_dialog);
 
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);

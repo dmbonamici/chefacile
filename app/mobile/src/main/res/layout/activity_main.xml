@@ -122,20 +122,17 @@
             fab:icon_press="@drawable/cart"
             android:layout_alignBottom="@+id/action_abc"
             android:layout_toEndOf="@+id/progressBar"
-            android:layout_marginStart="30dp"
-            android:layout_below="@+id/scrollView" />
+            android:layout_marginStart="40dp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_multi_choice_dialog"
             android:text="Test"
-            android:textColor="#ffffff"
             android:textSize="18sp"
-            android:background="@color/colorPrimary"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:src="@drawable/cook12"
+            android:background="@color/toolbarTransparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/action_abc"
+            android:layout_alignBottom="@+id/pin"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
