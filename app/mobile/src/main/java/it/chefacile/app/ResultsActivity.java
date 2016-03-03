@@ -135,8 +135,8 @@ public class ResultsActivity extends AppCompatActivity {
         //String description = "Lorem ipsum dolor sit amet";
         String title = retrievedRecipes.getJSONObject(position).get("title").toString();
         String rating = "Likes: " + retrievedRecipes.getJSONObject(position).get("likes").toString();
-        String missing = "Missing ingredients: " + retrievedRecipes.getJSONObject(position).get("missedIngredientCount").toString();
-        String used = "Used ingredients: " + retrievedRecipes.getJSONObject(position).get("usedIngredientCount").toString();
+        String missing = "✘ " + retrievedRecipes.getJSONObject(position).get("missedIngredientCount").toString();
+        String used = "✓ " + retrievedRecipes.getJSONObject(position).get("usedIngredientCount").toString();
         String imageURL;
         //JSONObject img = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize");
         if(!retrievedRecipes.getJSONObject(position).has("image")){
@@ -183,9 +183,9 @@ public class ResultsActivity extends AppCompatActivity {
         final CardProvider provider = new Card.Builder(this)
                 .setTag("BASIC_IMAGE_BUTTON_CARD")
                 .withProvider(new CardProvider<>())
-                .setLayout(R.layout.material_basic_image_buttons_card_layout)
+                .setLayout(R.layout.result_card_layout)
                 .setTitle(title)
-                .setDescription(missing + "\n" + used)
+                .setDescription(missing + "   " + used)
                // .setDescription(missing)
                 .setDrawable(imageURL)
                 .setDrawableConfiguration(new CardProvider.OnImageConfigListener() {
@@ -215,7 +215,7 @@ public class ResultsActivity extends AppCompatActivity {
                                 Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
                             }
                         }))
-                .addAction(R.id.right_text_button, new TextViewAction(this)
+              /*  .addAction(R.id.right_text_button, new TextViewAction(this)
                         .setText("right button")
                         .setTextResourceColor(R.color.accent_material_dark)
                         .setListener(new OnActionClickListener() {
@@ -223,7 +223,7 @@ public class ResultsActivity extends AppCompatActivity {
                             public void onActionClicked(View view, Card card) {
                                 Toast.makeText(mContext, "You have pressed the right button", Toast.LENGTH_SHORT).show();
                             }
-                        }));
+                        }))*/;
         return provider.endConfig().build();
     }
     /*private Card generateNewCard() {
