@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class RecipeActivity extends AppCompatActivity {
     private String recipeServings;
     private String recipeURL;
     private String proc;
+    private String responseJSON = "";
+    private String procedure = "Loading";
 
     private Context mContext;
     private MaterialListView mListView;
@@ -116,11 +119,11 @@ public class RecipeActivity extends AppCompatActivity {
             stringIngredients = stringIngredients.replaceAll("]","");
 
 
-            this.recipeURL = object.getString("spoonacularSourceUrl");
+            this.recipeURL = object.getString("sourceUrl");
             Log.d("URL", recipeURL);
 
-
-            (new ParseURL()).execute(new String[]{recipeURL});
+            new RetrieveInstructionTask().execute();
+           // (new ParseURL()).execute(new String[]{recipeURL});
 
 
 
@@ -208,7 +211,7 @@ public class RecipeActivity extends AppCompatActivity {
                 //.setDismissible()
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.recipe_card_layout)
-                .setTitle(proc);
+                .setTitle(procedure);
 
 
         return provider.endConfig().build();
@@ -241,7 +244,7 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-     private class ParseURL extends AsyncTask<String, Void, String> {
+   /*  private class ParseURL extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -300,8 +303,77 @@ public class RecipeActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
+    } */
 
+
+    class RetrieveInstructionTask extends AsyncTask<Void, Void, String> {
+
+        private Exception exception;
+
+        protected void onPreExecute() {
+
+        }
+
+        protected String doInBackground(Void... urls) {
+
+            // Do some validation here about String ingredient
+
+            try {
+                URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                //TODO: Changing key values
+                urlConnection.setRequestProperty("KEY", "KEY");
+                Log.d("URLCONNECTION", url.toString());
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                } finally {
+                    urlConnection.disconnect();
+                }
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+            responseJSON = response;
+            Log.d("RESPONSE", response);
+            Log.d("RESPONSEJSON", responseJSON);
+            try {
+                JSONObject object = (JSONObject) new JSONTokener(responseJSON).nextValue();
+                Log.d("proce before", procedure);
+                procedure = object.get("text").toString();
+                Log.d("proce after", procedure);
+                fillArray(procedure);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //  check this.exception
+            //  do something with the feed
+
+//            try {
+//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
+//                String requestID = object.getString("requestId");
+//                int likelihood = object.getInt("likelihood");
+//                JSONArray photos = object.getJSONArray("photos");
+//                .
+//                .
+//                .
+//                .
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }*/
+
+        }
+    }
 
 
     /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {

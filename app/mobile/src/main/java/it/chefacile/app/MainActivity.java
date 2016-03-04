@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private String singleIngredient;
     private boolean[] cuisineBool = new boolean[24];
     final String[] cuisineItems ={"african", "chinese", "japanese", "korean", "vietnamese", "thai", "indian", "british",
-            "irish", "french", "italian", "mexican", "spanish", "middle+eastern", "jewish",
-            "american", "cajun", "southern", "greek", "german", "nordic", "eastern+european", "caribbean", "latin+american"};
+            "irish", "french", "italian", "mexican", "spanish", "middle eastern", "jewish",
+            "american", "cajun", "southern", "greek", "german", "nordic", "eastern european", "caribbean", "latin american"};
     private String cuisineString = ",";
     private int clicks = 0;
     private ImageButton multiChoiceDiaog;
@@ -122,6 +122,11 @@ public class MainActivity extends AppCompatActivity {
         Show = (Button) findViewById(R.id.buttonShow);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
         multiChoiceDiaog= (ImageButton) findViewById(R.id.btn_multi_choice_dialog);
+
+        for(int j = 0; j < cuisineItems.length; j++){
+            cuisineItems[j] = cuisineItems[j].substring(0,1).toUpperCase() + cuisineItems[j].substring(1);
+        }
+        java.util.Arrays.sort(cuisineItems);
 
         for(int i = 0; i< 24; i++){
             cuisineBool[i] = false;
@@ -327,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&includeIngredients=" + ingredients + "&limitLicense=false" + "&query=" + singleIngredient + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
 
 
                 try {
@@ -416,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -615,7 +620,8 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),"You clicked "+ cuisineItems[i]+" "+b,Toast.LENGTH_SHORT).show();
                 cuisineBool[i] = b;
                 if(b) {
-                    cuisineString += cuisineItems[i] + ",";
+                    String s = cuisineItems[i].trim().replaceAll(" ", "+");
+                    cuisineString += s + ",";
                     Log.d("CUISINE STRING", cuisineString);
                 }
                 else{
