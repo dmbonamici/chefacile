@@ -57,9 +57,12 @@ public class ResultsActivity extends AppCompatActivity {
         this.recipesString = getIntent().getStringExtra("mytext");
         Log.d("RECIPESTRING", recipesString);
         try {
-            retrievedRecipes = (JSONArray) new JSONTokener(recipesString).nextValue();
+            //retrievedRecipes = (JSONArray) new JSONTokener(recipesString).nextValue();
+            JSONObject JSONob = (JSONObject) new JSONTokener(recipesString).nextValue();
+            Log.d("JSONOB MOMENT", JSONob.toString());
+            retrievedRecipes = JSONob.getJSONArray("results");
            // retrievedRecipes = object.getJSONArray(recipesString);
-            Log.d("JSONObject TEST", retrievedRecipes.toString());
+            //Log.d("JSONObject TEST", retrievedRecipes.toString());
             //String recipeList = object.getString("requestId");
             //int likelihood = object.getInt("likelihood");
             //JSONArray photos = object.getJSONArray("photos");
@@ -133,6 +136,7 @@ public class ResultsActivity extends AppCompatActivity {
     private Card getRandomCard(final int position) throws JSONException {
         //String title = "Recipe number " + (position + 1);
         //String description = "Lorem ipsum dolor sit amet";
+
         String title = retrievedRecipes.getJSONObject(position).get("title").toString();
         String rating = "Likes: " + retrievedRecipes.getJSONObject(position).get("likes").toString();
         String missing = "✘ " + retrievedRecipes.getJSONObject(position).get("missedIngredientCount").toString();
