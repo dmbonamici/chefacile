@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
     private String currentImageUrl = "";
     private String responseJSON = "";
     private String singleIngredient;
+    private boolean[] cuisineBool = new boolean[24];
+    final String[] cuisineItems ={"african", "chinese", "japanese", "korean", "vietnamese", "thai", "indian", "british",
+            "irish", "french", "italian", "mexican", "spanish", "middle+eastern", "jewish",
+            "american", "cajun", "southern", "greek", "german", "nordic", "eastern+european", "caribbean", "latin+american"};
+    private String cuisineString = ",";
     private int clicks = 0;
     private ImageButton multiChoiceDiaog;
     private AlertDialog alert;
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private int ranking = 1;
     private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
     private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
+    private String urlSearchComplex = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?";
 
     @Override
     protected void onResume() {
@@ -116,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         Show = (Button) findViewById(R.id.buttonShow);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
         multiChoiceDiaog= (ImageButton) findViewById(R.id.btn_multi_choice_dialog);
+
+        for(int i = 0; i< 24; i++){
+            cuisineBool[i] = false;
+        }
 
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
@@ -313,6 +323,8 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 URL urlSpoo = new URL(urlFindByIngredient + ingredients + "&number=20&ranking=" + String.valueOf(ranking));
+                //URL urlSpoo = new URL(urlSearchComplex + "cuisine=" + cuisineString + "&query=<required>&includeIngredients=" + ingredients + "&number=20&ranking=" + String.valueOf(ranking));
+                //Log.d("URL SPOO", urlSearchComplex + "cuisine=" + cuisineString + "&query=<required>&includeIngredients=" + ingredients + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY", "KEY");
@@ -404,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -597,11 +609,18 @@ public class MainActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Select option");
 
-        final String[] items={"Items_one","Items_two","Items_three"};
-        builder.setMultiChoiceItems(items, new boolean[]{true, false, true}, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(cuisineItems, cuisineBool, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                Toast.makeText(getApplicationContext(),"You clicked "+items[i]+" "+b,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"You clicked "+ cuisineItems[i]+" "+b,Toast.LENGTH_SHORT).show();
+                cuisineBool[i] = b;
+                if(b) {
+                    cuisineString += cuisineItems[i] + ",";
+                    Log.d("CUISINE STRING", cuisineString);
+                }
+                else{
+                    cuisineString = cuisineString.replace(cuisineItems[i] + ",", ",");
+                }
             }
         });
 
