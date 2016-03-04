@@ -134,6 +134,28 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/pin"
             android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@+id/btn_diet"
+            android:text="Test"
+            android:textSize="18sp"
+            android:src="@drawable/diet"
+            android:background="@color/toolbarTransparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/btn_multi_choice_dialog"
+            android:layout_toEndOf="@+id/btn_multi_choice_dialog" />
+
+        <ImageButton
+            android:id="@+id/btn_intoll"
+            android:text="Test"
+            android:textSize="18sp"
+            android:src="@drawable/intoll"
+            android:background="@color/toolbarTransparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/btn_multi_choice_dialog"
+            android:layout_toStartOf="@+id/btn_multi_choice_dialog" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

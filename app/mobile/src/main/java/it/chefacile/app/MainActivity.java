@@ -71,12 +71,20 @@ public class MainActivity extends AppCompatActivity {
     private String responseJSON = "";
     private String singleIngredient;
     private boolean[] cuisineBool = new boolean[24];
-    final String[] cuisineItems ={"african", "chinese", "japanese", "korean", "vietnamese", "thai", "indian", "british",
-            "irish", "french", "italian", "mexican", "spanish", "middle eastern", "jewish",
-            "american", "cajun", "southern", "greek", "german", "nordic", "eastern european", "caribbean", "latin american"};
+    private final String[] cuisineItems ={"african", "chinese", "japanese", "korean", "vietnamese", "thai", "indian", "british",
+            "irish", "french", "italian", "mexican", "spanish", "middle Eastern", "jewish",
+            "american", "cajun", "southern", "greek", "german", "nordic", "eastern European", "caribbean", "latin American"};
+    private final String[] intolItems ={"Dairy", "Egg", "Gluten", "Peanut", "Sesame", "Seafood", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"};
+    private boolean[] dietBool = new boolean[8];
+    private boolean[] intolBool = new boolean[11];
+    private final String[] dietItems = {"None","Pescetarian", "Lacto Vegetarian", "Ovo Vegeterian", "Vegan", "Paleo", "Primal", "Vegetarian"};
     private String cuisineString = ",";
+    private String dietString = ",";
+    private String intolString = ",";
     private int clicks = 0;
     private ImageButton multiChoiceDiaog;
+    private ImageButton buttondiet;
+    private ImageButton buttonintol;
     private AlertDialog alert;
     private AlertDialog.Builder builder;
     private int ranking = 1;
@@ -122,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         Show = (Button) findViewById(R.id.buttonShow);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
         multiChoiceDiaog= (ImageButton) findViewById(R.id.btn_multi_choice_dialog);
+        buttondiet= (ImageButton) findViewById(R.id.btn_diet);
+        buttonintol= (ImageButton) findViewById(R.id.btn_intoll);
 
         for(int j = 0; j < cuisineItems.length; j++){
             cuisineItems[j] = cuisineItems[j].substring(0,1).toUpperCase() + cuisineItems[j].substring(1);
@@ -132,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
             cuisineBool[i] = false;
         }
 
+        java.util.Arrays.sort(intolItems);
+
+        for(int i = 0; i< 11; i++){
+            intolBool[i] = false;
+        }
+
+        dietBool[0] = true;
+        for(int i = 1; i< 8; i++){
+            dietBool[i] = false;
+        }
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
 
@@ -140,6 +160,18 @@ public class MainActivity extends AppCompatActivity {
         multiChoiceDiaog.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showMultiChoiceDialog(v);
+            }
+        });
+
+        buttonintol.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showMultiChoiceDialogIntol(v);
+            }
+        });
+
+        buttondiet.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showSingleChoiceDialog(v);
             }
         });
 
@@ -328,8 +360,8 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                // URL urlSpoo = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?cuisine=american&includeIngredients=apples%2Cflour%2Csugar%2Cchicken&limitLicense=false&number=5&offset=0&query=apples%2Cflour%2Csugar&ranking=1");
-                URL urlSpoo = new URL(urlSearchComplex + "?cuisine=" + cuisineString + "&includeIngredients=" + ingredients + "&limitLicense=false" + "&query=" + singleIngredient + "&number=20&ranking=" + String.valueOf(ranking));
-                Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&includeIngredients=" + ingredients + "&limitLicense=false" + "&query=" + singleIngredient + "&number=20&ranking=" + String.valueOf(ranking));
+                URL urlSpoo = new URL(urlSearchComplex + "?cuisine=" + cuisineString +"&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=false" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
+                Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&includeIngredients=" + ingredients + "&limitLicense=false" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY", "KEY");
@@ -362,7 +394,7 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 //progressBar.setVisibility(View.GONE);
             } else if (response.toString().trim().equals("[]") || response.toString().trim().equals("")) {
-                Snackbar.make(responseView, "No recipes for these ingredients", Snackbar.LENGTH_LONG)
+                Snackbar.make(responseView, "No recipes for these parameters", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 progressDialog.dismiss();
                 //progressBar.setVisibility(View.GONE);
@@ -612,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
     private void showMultiChoiceDialog(View view) {
         builder=new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
-        builder.setTitle("Select option");
+        builder.setTitle("Select cuisines");
 
         builder.setMultiChoiceItems(cuisineItems, cuisineBool, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
@@ -625,7 +657,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("CUISINE STRING", cuisineString);
                 }
                 else{
-                    cuisineString = cuisineString.replace(cuisineItems[i] + ",", ",");
+                    cuisineString = cuisineString.replaceAll(cuisineItems[i] + ",", ",");
                 }
             }
         });
@@ -636,4 +668,55 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
 
     }
+
+    private void showMultiChoiceDialogIntol(View view) {
+        builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo);
+        builder.setTitle("Select intolerances");
+
+        builder.setMultiChoiceItems(intolItems, intolBool, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                //Toast.makeText(getApplicationContext(),"You clicked "+ cuisineItems[i]+" "+b,Toast.LENGTH_SHORT).show();
+                intolBool[i] = b;
+                if(b) {
+                    String s = intolItems[i].trim().replaceAll(" ", "+");
+                    intolString += s + ",";
+                    Log.d("Intol STRING", intolString);
+                }
+                else{
+                    intolString = intolString.replaceAll(intolItems[i] + ",", ",");
+                }
+            }
+        });
+
+
+        builder.setCancelable(true);
+        AlertDialog dialog=builder.create();
+        dialog.show();
+
+    }
+    private void showSingleChoiceDialog(View view) {
+        builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo);
+        builder.setTitle("Select diet");
+
+        builder.setSingleChoiceItems(dietItems, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if( i == 0)
+                    dietString = "";
+                dietBool[i] = true;
+                dietString = dietItems[i].trim().replaceAll(" ", "+");
+                Log.d("Diet", dietString);
+                //Toast.makeText(getApplicationContext(), "You clicked "+dietItems[i], Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setCancelable(true);
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
+
+
 }
