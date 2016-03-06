@@ -313,9 +313,12 @@ public class MainActivity extends AppCompatActivity {
         actionABC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new RetrieveFeedTask().execute();
-
+                if(ingredients.length() < 2){
+                    Snackbar.make(responseView, "Insert at least one ingredient", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    new RetrieveFeedTask().execute();
+                }
             }
 
             // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
@@ -360,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=false" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
 
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -454,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
