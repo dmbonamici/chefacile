@@ -133,16 +133,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Map<String,Integer> getDataInMapIngredient(){
         Map<String,Integer> map = new HashMap<String, Integer>();
-        Cursor c = getReadableDatabase().rawQuery("Select * from " +TABLE_NAME1,null);
+        Cursor c = getReadableDatabase().rawQuery("Select * from " +TABLE_NAME1, null);
 
         c.moveToFirst();
 
         do{
-            if(c!=null) {
+            if(c!=null && c.getCount()>0) {
                 String s1 = c.getString(c.getColumnIndex(COL_1));
                 int i1 = c.getInt(c.getColumnIndex(COL_2));
 
                 map.put(s1, i1);
+
             }
         }
         while (c.moveToNext());
