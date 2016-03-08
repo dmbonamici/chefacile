@@ -15,11 +15,14 @@ import java.util.Map;
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chefacile.db";
     public static final String TABLE_NAME1 = "ingredients_table";
-    public static final String COL_1= "INGREDIENT_PREF";
+    public static final String COL_1= "INGREDIENT";
     public static final String COL_2= "COUNT";
     public static final String TABLE_NAME2 = "recipes_table";
     public static final String COL_A= "RECIPE_PREF";
     public static final String COL_B= "IMAGE";
+    public static final String TABLE_NAME3 = "ingredients_pref_table";
+    public static final String COL_X= "INGREDIENT_PREF";
+
 
 
 
@@ -40,8 +43,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_A + " TEXT PRIMARY KEY, "
                 + COL_B + " STRING);";
 
+        String s3 = "Create table "
+                + TABLE_NAME3 + " ( "
+                + COL_X + " TEXT PRIMARY KEY);";
+
         db.execSQL(s1);
         db.execSQL(s2);
+        db.execSQL(s3);
 
     }
 
@@ -49,6 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME1);
         db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME2);
+        db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME3);
         onCreate(db);
 
 
@@ -61,6 +70,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_2, 1);
 
         long result = db.insert(TABLE_NAME1, null, contentValues);
+        if (result == -1)
+            return false;
+        else
+            return true;
+
+    }
+
+    public boolean insertDataIngredientPREF(String ingr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_X, ingr);
+
+        long result = db.insert(TABLE_NAME3, null, contentValues);
         if (result == -1)
             return false;
         else
@@ -98,6 +120,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getAllDataIngredientsPREF(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from " +TABLE_NAME3, null);
+        return res;
+    }
+
+
     public boolean findIngredient(String test){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor ing = db.rawQuery("select * from "+TABLE_NAME1+ " where "+COL_1+ " = '"+test+"'", null);
@@ -108,10 +137,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public boolean findIngredientPREF(String test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor ing = db.rawQuery("select * from "+TABLE_NAME3+ " where "+COL_X+ " = '"+test+"'", null);
+        if (ing.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+
 
     public Integer deleteDataIngredient(String test){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME1, "INGREDIENT_PREF = ?", new String[] {test});
+        return db.delete(TABLE_NAME1, "INGREDIENT = ?", new String[] {test});
+
+    }
+
+
+    public Integer deleteDataIngredientPREF(String test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_NAME3, "INGREDIENT_PREF = ?", new String[] {test});
 
     }
 
@@ -150,6 +196,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         c.close();
 
         return map;
+    }
+
+
+
+    public List<String> getDataInListIngredientPREF(){
+        List<String> list = new ArrayList<String>();
+        Cursor c = getReadableDatabase().rawQuery("Select * from " +TABLE_NAME3, null);
+
+        c.moveToFirst();
+
+        do{
+            if(c!=null && c.getCount()>0) {
+                String s1 = c.getString(c.getColumnIndex(COL_X));
+
+                list.add(s1);
+
+            }
+        }
+        while (c.moveToNext());
+        c.close();
+
+        return list;
     }
 
 }

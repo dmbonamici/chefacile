@@ -37,6 +37,14 @@
             android:layout_below="@+id/progressBar"
             android:layout_alignStart="@+id/action_abc" />
 
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SHOW2"
+            android:id="@+id/buttonShow2"
+            />
+
         <!--  <ImageButton
              android:id="@+id/buttonfilter"
              android:layout_width="wrap_content"
@@ -156,6 +164,8 @@
             android:layout_marginEnd="7dp"
             android:layout_marginBottom="12dp"
             android:layout_toStartOf="@+id/action_abc" />
+
+
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
