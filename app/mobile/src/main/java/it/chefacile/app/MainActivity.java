@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             "irish", "french", "italian", "mexican", "spanish", "middle Eastern", "jewish",
             "american", "cajun", "southern", "greek", "german", "nordic", "eastern European", "caribbean", "latin American"};
     private final String[] intolItems = {"Dairy", "Egg", "Gluten", "Peanut", "Sesame", "Seafood", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"};
-    private boolean[] dietBool = new boolean[8];
+    private int checkedDietBool = 0;
     private boolean[] intolBool = new boolean[11];
     private final String[] dietItems = {"None", "Pescetarian", "Lacto Vegetarian", "Ovo Vegeterian", "Vegan", "Paleo", "Primal", "Vegetarian"};
     private String cuisineString = ",";
@@ -146,11 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < 11; i++) {
             intolBool[i] = false;
-        }
-
-        dietBool[0] = true;
-        for (int i = 1; i < 8; i++) {
-            dietBool[i] = false;
         }
 
         mListView = (MaterialListView) findViewById(R.id.material_listview);
@@ -709,14 +704,14 @@ public class MainActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Select diet");
 
-        builder.setSingleChoiceItems(dietItems, 0, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(dietItems, checkedDietBool, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 if (i == 0)
                     dietString = "";
 
-                dietBool[i] = true;
+                checkedDietBool = i;
                 dietString = dietItems[i].trim().replaceAll(" ", "+");
                 Log.d("Diet", dietString);
             }
@@ -726,7 +721,5 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 
 }
