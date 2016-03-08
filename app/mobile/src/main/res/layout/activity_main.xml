@@ -37,15 +37,15 @@
             android:layout_below="@+id/progressBar"
             android:layout_alignStart="@+id/action_abc" />
 
-       <!--  <ImageButton
-            android:id="@+id/buttonfilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:src="@android:drawable/ic_menu_manage"
-            android:background="@color/toolbarTransparent"
-            android:onClick="buttonHandler"
-            /> -->
+        <!--  <ImageButton
+             android:id="@+id/buttonfilter"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="left"
+             android:src="@android:drawable/ic_menu_manage"
+             android:background="@color/toolbarTransparent"
+             android:onClick="buttonHandler"
+             /> -->
 
 
     </android.support.v7.widget.Toolbar>
@@ -120,42 +120,42 @@
             fab:ball_press_color="@color/white"
             fab:icon_release="@drawable/checkr"
             fab:icon_press="@drawable/cart"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="13dp"
             android:layout_alignBottom="@+id/action_abc"
-            android:layout_toEndOf="@+id/progressBar"
-            android:layout_marginStart="40dp" />
-
-        <ImageButton
-            android:id="@+id/btn_multi_choice_dialog"
-            android:text="Test"
-            android:textSize="18sp"
-            android:src="@drawable/cook12"
-            android:background="@color/toolbarTransparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/pin"
-            android:layout_centerHorizontal="true" />
+            android:layout_toEndOf="@+id/progressBar" />
 
         <ImageButton
             android:id="@+id/btn_diet"
-            android:text="Test"
-            android:textSize="18sp"
-            android:src="@drawable/diet"
-            android:background="@color/toolbarTransparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/btn_multi_choice_dialog"
-            android:layout_toEndOf="@+id/btn_multi_choice_dialog" />
+            android:background="@drawable/diet"
+            android:backgroundTintMode="@color/toolbarTransparent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="19dp"
+            android:layout_alignBottom="@+id/pin"
+            android:layout_marginBottom="12dp"
+            android:layout_toStartOf="@+id/btn_cuisine" />
+
+        <ImageButton
+            android:id="@+id/btn_cuisine"
+            android:background="@drawable/cook12"
+            android:backgroundTintMode="@color/toolbarTransparent"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignTop="@+id/btn_diet"
+            android:layout_marginBottom="13dp"
+            android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:id="@+id/btn_intoll"
-            android:text="Test"
-            android:textSize="18sp"
-            android:src="@drawable/intoll"
-            android:background="@color/toolbarTransparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/btn_multi_choice_dialog"
-            android:layout_toStartOf="@+id/btn_multi_choice_dialog" />
+            android:background="@drawable/intoll"
+            android:backgroundTintMode="@color/toolbarTransparent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@+id/btn_diet"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="12dp"
+            android:layout_toStartOf="@+id/action_abc" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

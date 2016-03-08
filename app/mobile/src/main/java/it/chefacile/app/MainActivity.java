@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private String dietString = ",";
     private String intolString = ",";
     private int clicks = 0;
-    private ImageButton multiChoiceDiaog;
+    private ImageButton buttoncuisine ;
     private ImageButton buttondiet;
     private ImageButton buttonintol;
     private AlertDialog alert;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Show = (Button) findViewById(R.id.buttonShow);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
-        multiChoiceDiaog = (ImageButton) findViewById(R.id.btn_multi_choice_dialog);
+        buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
         buttondiet = (ImageButton) findViewById(R.id.btn_diet);
         buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
 
@@ -157,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
-        multiChoiceDiaog.setOnClickListener(new View.OnClickListener() {
+        buttoncuisine.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showMultiChoiceDialog(v);
+                showMultiChoiceDialogCuisine(v);
             }
         });
 
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttondiet.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showSingleChoiceDialog(v);
+                showSingleChoiceDialogDiet(v);
             }
         });
 
@@ -644,8 +644,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void showMultiChoiceDialog(View view) {
-        builder = new AlertDialog.Builder(this);
+
+
+    private void showMultiChoiceDialogCuisine(View view) {
+        builder=new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Select cuisines");
 
@@ -654,11 +656,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
                 //Toast.makeText(getApplicationContext(),"You clicked "+ cuisineItems[i]+" "+b,Toast.LENGTH_SHORT).show();
                 cuisineBool[i] = b;
-                if (b) {
+                if(b) {
                     String s = cuisineItems[i].trim().replaceAll(" ", "+");
                     cuisineString += s + ",";
                     Log.d("CUISINE STRING", cuisineString);
-                } else {
+                }
+                else{
                     cuisineString = cuisineString.replaceAll(cuisineItems[i] + ",", ",");
                 }
             }
@@ -666,10 +669,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         builder.setCancelable(true);
-        AlertDialog dialog = builder.create();
+        AlertDialog dialog=builder.create();
         dialog.show();
 
     }
+
+
 
     private void showMultiChoiceDialogIntol(View view) {
         builder = new AlertDialog.Builder(this);
@@ -698,7 +703,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void showSingleChoiceDialog(View view) {
+
+    private void showSingleChoiceDialogDiet(View view) {
         builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Select diet");
@@ -706,12 +712,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(dietItems, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 if (i == 0)
                     dietString = "";
+
                 dietBool[i] = true;
                 dietString = dietItems[i].trim().replaceAll(" ", "+");
                 Log.d("Diet", dietString);
-                //Toast.makeText(getApplicationContext(), "You clicked "+dietItems[i], Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -719,6 +726,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
 
 }
