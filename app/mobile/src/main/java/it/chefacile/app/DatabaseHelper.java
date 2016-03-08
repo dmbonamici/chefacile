@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chefacile.db";
@@ -128,54 +130,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<String> insertIngredientInList(){
-        List<String> list = new ArrayList<String>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select " +COL_1+ " from " +TABLE_NAME1, null);
 
-        while(cursor!=null){
-            cursor.moveToNext();
-            list.add(cursor.toString());
-        }
+    public Map<String,Integer> getDataInMapIngredient(){
+        Map<String,Integer> map = new HashMap<String, Integer>();
+        Cursor c = getReadableDatabase().rawQuery("Select * from " +TABLE_NAME1,null);
 
-        return list;
-    }
+        c.moveToFirst();
 
+        do{
+            if(c!=null) {
+                String s1 = c.getString(c.getColumnIndex(COL_1));
+                int i1 = c.getInt(c.getColumnIndex(COL_2));
 
-    /*  public long insertTermList(String ing, int c) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues initialValues = new ContentValues();
-
-        initialValues.put(COL_1, ing);
-        initialValues.put(COL_2, c);
-
-        return db.insert(TABLE_NAME, null, initialValues);
-    }
-
-
-    public Cursor getTermValues(String test) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String from[] = { COL_1, COL_2 };
-        String where = COL_1 + "=?";
-        String[] whereArgs = new String[]{test+""};
-        Cursor cursor = db.query(TABLE_NAME, from, where, whereArgs, null, null, null, null);
-        return cursor;
-    }
-
-    private void getData(String test) {
-
-        Cursor c = getTermValues(test);
-
-        if(c != null)
-        {
-            while(c.moveToNext()){
-                String ingredients_pref  = c.getString(c.getColumnIndex(COL_1));
-                int count = c.getColumnIndex(COL_2);
-
+                map.put(s1, i1);
             }
         }
-    }*/
+        while (c.moveToNext());
+        c.close();
 
+        return map;
+    }
 
 }

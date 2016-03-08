@@ -32,6 +32,10 @@ import com.dexafree.materialList.card.OnActionClickListener;
 import com.dexafree.materialList.card.action.TextViewAction;
 import com.dexafree.materialList.view.MaterialListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.squareup.picasso.RequestCreator;
 
 import org.json.JSONArray;
@@ -46,7 +50,15 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -82,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     private String dietString = ",";
     private String intolString = ",";
     private int clicks = 0;
-    private ImageButton buttoncuisine ;
+    private ImageButton buttoncuisine;
     private ImageButton buttondiet;
     private ImageButton buttonintol;
     private AlertDialog alert;
@@ -91,6 +103,13 @@ public class MainActivity extends AppCompatActivity {
     private String urlFindByIngredient = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients?ingredients=";
     private String urlIngredientDetais = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/parseIngredients";
     private String urlSearchComplex = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex";
+    private Map<String, Integer> mapIngredients;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
 
     @Override
     protected void onResume() {
@@ -136,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
         for (int j = 0; j < cuisineItems.length; j++) {
             cuisineItems[j] = cuisineItems[j].substring(0, 1).toUpperCase() + cuisineItems[j].substring(1);
         }
-        java.util.Arrays.sort(cuisineItems);
+        Arrays.sort(cuisineItems);
 
         for (int i = 0; i < 24; i++) {
             cuisineBool[i] = false;
         }
 
-        java.util.Arrays.sort(intolItems);
+        Arrays.sort(intolItems);
 
         for (int i = 0; i < 11; i++) {
             intolBool[i] = false;
@@ -197,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 showMessage("Data", buffer.toString());
+
             }
         });
 
@@ -272,6 +292,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (chefacileDb.findIngredient(input))
                         chefacileDb.updateCount(input);
+                        mapIngredients = chefacileDb.getDataInMapIngredient();
+                        Map<String,Integer> map2;
+                        map2 = sortByValue(mapIngredients);
+                        Log.d("MAPPA ORDINATA: ", map2.toString());
+
                 }
 
                 if (editText.getText().toString().equals("")) {
@@ -308,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
         actionABC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ingredients.length() < 2){
+                if (ingredients.length() < 2) {
                     Snackbar.make(responseView, "Insert at least one ingredient", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
@@ -321,6 +346,9 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -332,6 +360,46 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(message);
         builder.show();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://it.chefacile.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://it.chefacile.app/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
 
@@ -392,8 +460,7 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 //progressBar.setVisibility(View.GONE);
 
-            }
-            else if (!response.toString().contains("usedIngredientCount")) {
+            } else if (!response.toString().contains("usedIngredientCount")) {
                 Snackbar.make(responseView, "No recipes for these parameters", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 progressDialog.dismiss();
@@ -576,6 +643,11 @@ public class MainActivity extends AppCompatActivity {
                                 public void onActionClicked(View view, Card card) {
 
                                     boolean isInserted = chefacileDb.insertDataIngredient(ingredient);
+                                    mapIngredients = chefacileDb.getDataInMapIngredient();
+                                    Log.d("MAPPA: ", mapIngredients.toString());
+                                    Map<String,Integer> mapSave;
+                                    mapSave = sortByValue(mapIngredients);
+                                    Log.d("MAPPA ORDINATA DOPO SAVE: ", mapSave.toString());
 
                                     if (isInserted == true)
                                         Toast.makeText(mContext, "Ingredient is added to favorited", Toast.LENGTH_LONG).show();
@@ -640,9 +712,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void showMultiChoiceDialogCuisine(View view) {
-        builder=new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Select cuisines");
 
@@ -651,12 +722,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
                 //Toast.makeText(getApplicationContext(),"You clicked "+ cuisineItems[i]+" "+b,Toast.LENGTH_SHORT).show();
                 cuisineBool[i] = b;
-                if(b) {
+                if (b) {
                     String s = cuisineItems[i].trim().replaceAll(" ", "+");
                     cuisineString += s + ",";
                     Log.d("CUISINE STRING", cuisineString);
-                }
-                else{
+                } else {
                     cuisineString = cuisineString.replaceAll(cuisineItems[i] + ",", ",");
                 }
             }
@@ -664,11 +734,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         builder.setCancelable(true);
-        AlertDialog dialog=builder.create();
+        AlertDialog dialog = builder.create();
         dialog.show();
 
     }
-
 
 
     private void showMultiChoiceDialogIntol(View view) {
@@ -722,4 +791,25 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-}
+
+    public Map<String, Integer> sortByValue(Map<String, Integer> map) {
+
+        List<Map.Entry<String, Integer>> list =
+                new LinkedList<>( map.entrySet() );
+        Collections.sort( list, new Comparator<Map.Entry<String, Integer>>()
+        {
+            @Override
+            public int compare( Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2 ) {
+                return -(o1.getValue()).compareTo( o2.getValue() );
+            }
+        } );
+
+        Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String,Integer> entry : list)
+        {
+            result.put( entry.getKey(), entry.getValue() );
+        }
+        return result;
+    }
+ }
+
