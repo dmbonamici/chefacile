@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chefacile.db";
     public static final String TABLE_NAME1 = "ingredients_table";
     public static final String COL_1= "INGREDIENT";
     public static final String COL_2= "COUNT";
+    public static final String COL_3= "ID";
     public static final String TABLE_NAME2 = "recipes_table";
     public static final String COL_A= "RECIPE_PREF";
     public static final String COL_B= "IMAGE";
@@ -36,7 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String s1 = "Create table "
                 + TABLE_NAME1 + " ( "
                 + COL_1 + " TEXT PRIMARY KEY, "
-                + COL_2 + " INTEGER);";
+                + COL_2 + " INTEGER, "
+                + COL_3 + " INTEGER);";
 
         String s2 = "Create table "
                 + TABLE_NAME2 + " ( "
@@ -66,8 +69,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean insertDataIngredient(String ingr) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        Cursor c = db.rawQuery("select " +COL_3+ " from " +TABLE_NAME1, null);
+        int n;
+
+        c.moveToFirst();
+
+        if(c.getCount()> 0) {
+            c.moveToLast();
+            n = c.getInt(c.getColumnIndex(COL_3)) + 1;
+
+        } else n= 1;
+
         contentValues.put(COL_1, ingr);
         contentValues.put(COL_2, 1);
+        contentValues.put(COL_3, n);
+
 
         long result = db.insert(TABLE_NAME1, null, contentValues);
         if (result == -1)
@@ -76,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
 
     }
+
 
     public boolean insertDataIngredientPREF(String ingr) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -218,6 +235,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         c.close();
 
         return list;
+    }
+
+
+   public boolean occursExceeded(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("select " +COL_3+ " from " +TABLE_NAME1, null);
+        int n=0;
+
+        c.moveToFirst();
+
+        if(c.getCount()>0) {
+            c.moveToLast();
+            n = c.getInt(c.getColumnIndex(COL_3));
+        }
+
+        if(n==5)
+            return true;
+
+        else return false;
+   }
+
+
+    public void deleteMinimum(String test){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if(occursExceeded()){
+
+            Cursor c = db.rawQuery("select * from " +TABLE_NAME1+ " where " +COL_2+ "= 1 ", null);
+
+            c.moveToFirst();
+
+            if(c.getCount()>0){
+
+                String ing = c.getString(c.getColumnIndex(COL_1));
+
+                deleteDataIngredient(test);
+                db.execSQL("UPDATE " +TABLE_NAME1+ " SET " +COL_1+ " = '"+test+"'  WHERE "+COL_1+ " = '"+ing+"'");
+
+            }
+        }
+
+    }
+
+
+    public void decrementedId(String test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c1 = db.rawQuery("select * from " +TABLE_NAME1, null);
+        Cursor c2 = db.rawQuery("select * from " +TABLE_NAME1+ " where " +COL_1+ " = '"+test+"'" , null);
+
+        c1.moveToPosition(c2.getCount());
+
+        do{
+            if(c1!=null && c1.getCount()>0) {
+                String ingr = c1.getString(c1.getColumnIndex(COL_1));
+
+                db.execSQL("UPDATE " +TABLE_NAME1+ " SET " +COL_3+ " = " +COL_3+ " -1 WHERE " +COL_1+ " = '"+ingr+"'");
+
+            }
+        }
+        while (c1.moveToNext());
+        c1.close();
+        c2.close();
     }
 
 }

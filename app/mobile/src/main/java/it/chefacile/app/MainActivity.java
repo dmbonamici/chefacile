@@ -209,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while (res.moveToNext()) {
                     buffer.append("INGREDIENT: " + res.getString(0) + "\n");
-                    buffer.append("COUNT: " + res.getString(1) + "\n\n");
+                    buffer.append("COUNT: " + res.getString(1) + "\n");
+                    buffer.append("ID: " + res.getString(2) + "\n\n");
 
                 }
 
@@ -317,16 +318,24 @@ public class MainActivity extends AppCompatActivity {
                            map2 = sortByValue(mapIngredients);
                            Log.d("MAPPA ORDINATA CAMBIANDO COUNT: ", map2.toString());
 
-                       } else{
-                           chefacileDb.insertDataIngredient(input);
-                           mapIngredients = chefacileDb.getDataInMapIngredient();
-                           Map<String,Integer> map3;
-                           map3 = sortByValue(mapIngredients);
-                           Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
+                       } else {
+                           if (chefacileDb.occursExceeded()) {
+                               chefacileDb.deleteMinimum(input);
+                               // chefacileDb.insertDataIngredient(input);
+                               mapIngredients = chefacileDb.getDataInMapIngredient();
+                               Map<String, Integer> map3;
+                               map3 = sortByValue(mapIngredients);
+                               Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
 
-
+                           }
+                           else{
+                               chefacileDb.insertDataIngredient(input);
+                               mapIngredients = chefacileDb.getDataInMapIngredient();
+                               Map<String, Integer> map3;
+                               map3 = sortByValue(mapIngredients);
+                               Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
+                           }
                        }
-
                    }
                 }
 
@@ -633,6 +642,7 @@ public class MainActivity extends AppCompatActivity {
                                     boolean isInserted = chefacileDb.insertDataIngredientPREF(ingredient);
                                     listIngredientsPREF = chefacileDb.getDataInListIngredientPREF();
                                     if(chefacileDb.findIngredient(ingredient))
+                                        chefacileDb.decrementedId(ingredient);
                                         chefacileDb.deleteDataIngredient(ingredient);
                                         mapIngredients.remove(ingredient);
 
