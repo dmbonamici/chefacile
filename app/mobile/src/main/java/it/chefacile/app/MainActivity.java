@@ -516,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -641,11 +641,16 @@ public class MainActivity extends AppCompatActivity {
 
                                     boolean isInserted = chefacileDb.insertDataIngredientPREF(ingredient);
                                     listIngredientsPREF = chefacileDb.getDataInListIngredientPREF();
-                                    if(chefacileDb.findIngredient(ingredient))
-                                        chefacileDb.decrementedId(ingredient);
-                                        chefacileDb.deleteDataIngredient(ingredient);
-                                        mapIngredients.remove(ingredient);
-
+                                    if(chefacileDb.findIngredient(ingredient)) {
+                                        if (!chefacileDb.verificedOnly()) {
+                                            chefacileDb.decrementedId(ingredient);
+                                            chefacileDb.deleteDataIngredient(ingredient);
+                                            mapIngredients.remove(ingredient);
+                                        } else {
+                                            chefacileDb.deleteDataIngredient(ingredient);
+                                            mapIngredients.remove(ingredient);
+                                        }
+                                    }
                                     Log.d("LISTA PREFERITI: ", listIngredientsPREF.toString());
                                     Log.d("MAPPA INGREDIENTI DOPO ELIMINAZIONE PER PREF:", mapIngredients.toString());
 

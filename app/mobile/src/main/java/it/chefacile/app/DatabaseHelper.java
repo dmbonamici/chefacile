@@ -299,4 +299,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         c2.close();
     }
 
+
+    public boolean verificedOnly(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c1 = db.rawQuery("select * from " +TABLE_NAME1, null);
+
+        if(c1.moveToNext())
+            return true;
+        else return false;
+    }
+
 }

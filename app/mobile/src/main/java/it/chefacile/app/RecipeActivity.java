@@ -322,7 +322,7 @@ public class RecipeActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
