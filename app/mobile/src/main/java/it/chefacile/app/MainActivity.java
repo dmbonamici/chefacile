@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     private String urlSearchComplex = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex";
     private Map<String, Integer> mapIngredients;
     private List<String> listIngredientsPREF;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -310,36 +311,35 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("INPUT: ", input);
 
 
-                   if(!chefacileDb.findIngredientPREF(input)) {
-                       if (chefacileDb.findIngredient(input)) {
-                           chefacileDb.updateCount(input);
-                           mapIngredients = chefacileDb.getDataInMapIngredient();
-                           Map<String, Integer> map2;
-                           map2 = sortByValue(mapIngredients);
-                           Log.d("MAPPA ORDINATA CAMBIANDO COUNT: ", map2.toString());
+                    if (!chefacileDb.findIngredientPREF(input)) {
+                        if (chefacileDb.findIngredient(input)) {
+                            chefacileDb.updateCount(input);
+                            mapIngredients = chefacileDb.getDataInMapIngredient();
+                            Map<String, Integer> map2;
+                            map2 = sortByValue(mapIngredients);
+                            Log.d("MAPPA ORDINATA CAMBIANDO COUNT: ", map2.toString());
 
-                       } else {
-                           if (chefacileDb.occursExceeded()) {
-                               chefacileDb.deleteMinimum(input);
-                               // chefacileDb.insertDataIngredient(input);
-                               mapIngredients = chefacileDb.getDataInMapIngredient();
-                               Map<String, Integer> map3;
-                               map3 = sortByValue(mapIngredients);
-                               Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
+                        } else {
+                            if (chefacileDb.occursExceeded()) {
+                                chefacileDb.deleteMinimum(input);
+                                // chefacileDb.insertDataIngredient(input);
+                                mapIngredients = chefacileDb.getDataInMapIngredient();
+                                Map<String, Integer> map3;
+                                map3 = sortByValue(mapIngredients);
+                                Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
 
-                           }
-                           else{
-                               chefacileDb.insertDataIngredient(input);
-                               mapIngredients = chefacileDb.getDataInMapIngredient();
-                               Map<String, Integer> map3;
-                               map3 = sortByValue(mapIngredients);
-                               Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
-                           }
-                       }
-                   }
+                            } else {
+                                chefacileDb.insertDataIngredient(input);
+                                mapIngredients = chefacileDb.getDataInMapIngredient();
+                                Map<String, Integer> map3;
+                                map3 = sortByValue(mapIngredients);
+                                Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
+                            }
+                        }
+                    }
                 }
 
-               if (editText.getText().toString().equals("")) {
+                if (editText.getText().toString().equals("")) {
                     ingredients += editText.getText().toString().trim() + "";
                     editText.getText().clear();
 
@@ -498,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             Log.d("Tect", responseView.getText().toString());
             String s = SentenceGenerator.generateTip();
-            progressDialog = progressDialog.show(MainActivity.this, "Loading", s, true);
+            progressDialog = ProgressDialog.show(MainActivity.this, "Loading", s, true);
             // responseView.setText("");
         }
 
@@ -516,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -638,31 +638,20 @@ public class MainActivity extends AppCompatActivity {
                             .setListener(new OnActionClickListener() {
                                 @Override
                                 public void onActionClicked(View view, Card card) {
+                                    final TextView tv = (TextView) findViewById(R.id.right_text_button);
+                                    boolean finalControl = true;
 
-                                    boolean isInserted = chefacileDb.insertDataIngredientPREF(ingredient);
-                                    listIngredientsPREF = chefacileDb.getDataInListIngredientPREF();
-                                    if(chefacileDb.findIngredient(ingredient)) {
-                                        if (!chefacileDb.verificedOnly()) {
-                                            chefacileDb.decrementedId(ingredient);
-                                            chefacileDb.deleteDataIngredient(ingredient);
-                                            mapIngredients.remove(ingredient);
-                                        } else {
-                                            chefacileDb.deleteDataIngredient(ingredient);
-                                            mapIngredients.remove(ingredient);
-                                        }
-                                    }
-                                    Log.d("LISTA PREFERITI: ", listIngredientsPREF.toString());
-                                    Log.d("MAPPA INGREDIENTI DOPO ELIMINAZIONE PER PREF:", mapIngredients.toString());
+                                    chefacileDb.insertDataIngredientPREF(ingredient);
+                                    chefacileDb.deleteDataIngredient(ingredient);
+                                    tv.setText("Unsave");
 
-                                    if (isInserted == true)
-                                        Toast.makeText(mContext, "Ingredient is added to favorited", Toast.LENGTH_LONG).show();
-                                    else
-                                        Toast.makeText(mContext, "Ingredient NOT ADDED!", Toast.LENGTH_LONG).show();
-                                    //card.dismiss();
+                                    checkButtonSave(tv, finalControl, ingredient);
                                 }
                             }));
 
             return provider.endConfig().build();
+
+
         } else {
             CardProvider provider = new Card.Builder(this)
                     .setTag("BASIC_IMAGE_BUTTON_CARD")
@@ -690,11 +679,28 @@ public class MainActivity extends AppCompatActivity {
                                     card.setDismissible(true);
                                     card.dismiss();
                                 }
+                            }))
+                    .addAction(R.id.right_text_button, new TextViewAction(this)
+                            .setText("Unsave")
+                            .setTextResourceColor(R.color.orange_button)
+                            .setListener(new OnActionClickListener() {
+                                @Override
+                                public void onActionClicked(View view, Card card) {
+                                    final TextView tv = (TextView) findViewById(R.id.right_text_button);
+                                    boolean finalControl = false;
+
+                                    chefacileDb.deleteDataIngredientPREF(ingredient);
+                                    chefacileDb.insertDataIngredient(ingredient);
+                                    tv.setText("Save");
+
+                                    checkButtonSave(tv, finalControl, ingredient);
+                                }
                             }));
 
             return provider.endConfig().build();
-        }
 
+
+        }
     }
 
     private void setBackground(ImageView iv) {
@@ -816,5 +822,47 @@ public class MainActivity extends AppCompatActivity {
         }
         return result;
     }
- }
+
+    public void checkButtonSave(final TextView tv, boolean checked, final String ingredient) {
+        boolean control = checked;
+        if (control) {
+            listIngredientsPREF = chefacileDb.getDataInListIngredientPREF();
+            if (chefacileDb.findIngredient(ingredient))
+                chefacileDb.decrementedId(ingredient);
+            chefacileDb.deleteDataIngredient(ingredient);
+            mapIngredients.remove(ingredient);
+
+            Log.d("LISTA PREFERITI: ", listIngredientsPREF.toString());
+            Log.d("DOPO ELIM PER PREF:", mapIngredients.toString());
+            tv.setText("Unsave");
+            Toast.makeText(mContext, "Ingredient added to favorites", Toast.LENGTH_LONG).show();
+            control = false;
+            final boolean finalControl = control;
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chefacileDb.deleteDataIngredientPREF(ingredient);
+                    chefacileDb.insertDataIngredient(ingredient);
+                    tv.setText("Save");
+                    checkButtonSave(tv, finalControl, ingredient);
+                }
+            });
+
+        } else {
+            tv.setText("Save");
+            Toast.makeText(mContext, "Ingredient removed from favorites", Toast.LENGTH_LONG).show();
+            control = true;
+            final boolean finalControl = control;
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chefacileDb.insertDataIngredientPREF(ingredient);
+                    chefacileDb.deleteDataIngredient(ingredient);
+                    tv.setText("Unsave");
+                    checkButtonSave(tv, finalControl, ingredient);
+                }
+            });
+        }
+    }
+}
 
