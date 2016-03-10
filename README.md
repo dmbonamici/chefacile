@@ -40,12 +40,12 @@ Milestone 2 - Release Candidate (February 19th)
 
 [APK](https://drive.google.com/file/d/0B0hoAFPxDfD8Ym5XeGlXa2x2WnM/view?usp=sharing)
 
-Milestone 3 - Final
+Milestone 3 - Public live BETA (March 18th) 
 ==============
 _Work in progress_
 
- - Local persistence implementation (favourite ingredients and recipes) 
- - Recommended recipes and ingredients based on user history
+ - Local persistence implementation (favourite ingredients) 
+ - Recommended and ingredients based on user history
  - New filter options
- - Cooking tools improvement (timers, gestures, ...)
+ - Cooking tools improvement (timers)
  - Social sharing
