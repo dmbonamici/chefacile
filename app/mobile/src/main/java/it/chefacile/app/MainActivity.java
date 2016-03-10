@@ -223,21 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
         Show2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Cursor res = chefacileDb.getAllDataIngredientsPREF();
-
-                if (res.getCount() == 0) {
-                    showMessage("Error", "Nothing found");
-                    return;
-                }
-
-                StringBuffer buffer = new StringBuffer();
-                while (res.moveToNext()) {
-                    buffer.append("INGREDIENT_PREF: " + res.getString(0) + "\n\n");
-
-                }
-
-                showMessage("Data", buffer.toString());
-
+                showSimpleListDialog(v);
             }
         });
 
@@ -527,6 +513,7 @@ public class MainActivity extends AppCompatActivity {
                         new OutputStreamWriter(os, "UTF-8"));
                 writer.write(query);
                 writer.flush();
+
                 writer.close();
                 os.close();
 
@@ -801,7 +788,46 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+    /*
+        private void showChoicePreferred(View view){
+            builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.logo);
+            builder.setTitle("Favourite ingredients");
+            final String[] items = (String[]) listIngredientsPREF.toArray();
 
+            builder.setItems(items, new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i){
+                    Toast.makeText(getApplicationContext(), "You clicked "+ items[i], Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setCancelable(true);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    */
+    private void showSimpleListDialog(View view) {
+        builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo);
+        builder.setTitle("Favourite ingredients");
+
+
+        final String[] items= chefacileDb.getDataInListIngredientPREF().toArray(new String[chefacileDb.getDataInListIngredientPREF().size()]);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                currentIngredient = items[i];
+                singleIngredient = currentIngredient;
+                new RetrieveIngredientTask().execute();
+                //TODO qui
+                ingredients += singleIngredient.toLowerCase().trim() + ",";
+                ingredients = ingredients.replaceAll(" ","+");
+            }
+        });
+        builder.setCancelable(true);
+        AlertDialog dialog=builder.create();
+        dialog.show();
+    }
 
     public Map<String, Integer> sortByValue(Map<String, Integer> map) {
 
@@ -835,7 +861,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("LISTA PREFERITI: ", listIngredientsPREF.toString());
             Log.d("DOPO ELIM PER PREF:", mapIngredients.toString());
             tv.setText("Unsave");
-            Toast.makeText(mContext, "Ingredient added to favorites", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Ingredient added to favourites", Toast.LENGTH_LONG).show();
             control = false;
             final boolean finalControl = control;
             tv.setOnClickListener(new View.OnClickListener() {
@@ -850,7 +876,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             tv.setText("Save");
-            Toast.makeText(mContext, "Ingredient removed from favorites", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Ingredient removed from favourites", Toast.LENGTH_LONG).show();
             control = true;
             final boolean finalControl = control;
             tv.setOnClickListener(new View.OnClickListener() {
