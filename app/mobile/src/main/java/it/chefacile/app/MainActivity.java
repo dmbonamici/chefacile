@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         buttondiet = (ImageButton) findViewById(R.id.btn_diet);
         buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
 
+
         for (int j = 0; j < cuisineItems.length; j++) {
             cuisineItems[j] = cuisineItems[j].substring(0, 1).toUpperCase() + cuisineItems[j].substring(1);
         }
