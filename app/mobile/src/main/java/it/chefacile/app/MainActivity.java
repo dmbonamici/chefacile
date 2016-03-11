@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,12 +46,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -71,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton TutorialButton;
     //private ImageButton FilterButton;
     private ImageButton AddButton;
-    private Button Show;
+    private ImageButton Show;
     private ImageButton Show2;
     private String ingredients = ",";
     private ArrayAdapter<String> adapter;
@@ -102,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
     private String urlSearchComplex = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex";
     private Map<String, Integer> mapIngredients;
     private List<String> listIngredientsPREF;
+    private String[] sugg;
+    private String[] suggOccurrences;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -136,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mContext = this;
         chefacileDb = new DatabaseHelper(this);
         // FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
@@ -144,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        Show = (Button) findViewById(R.id.buttonShow);
+        Show = (ImageButton) findViewById(R.id.buttonShow);
         Show2 = (ImageButton) findViewById(R.id.buttonShow2);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
         buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
@@ -189,6 +187,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+        chefacileDb.insertDataIngredient("Pasta");
+        chefacileDb.insertDataIngredient("Eggs");
+        chefacileDb.insertDataIngredient("Oil");
+        mapIngredients = chefacileDb.getDataInMapIngredient();
+
         TutorialButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, IntroScreenActivity.class));
@@ -200,30 +204,16 @@ public class MainActivity extends AppCompatActivity {
 
         Show.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Cursor res = chefacileDb.getAllDataIngredients();
-
-                if (res.getCount() == 0) {
-                    showMessage("Error", "Nothing found");
-                    return;
-                }
-
-                StringBuffer buffer = new StringBuffer();
-                while (res.moveToNext()) {
-                    buffer.append("INGREDIENT: " + res.getString(0) + "\n");
-                    buffer.append("COUNT: " + res.getString(1) + "\n");
-                    buffer.append("ID: " + res.getString(2) + "\n\n");
-
-                }
-
-                showMessage("Data", buffer.toString());
-
+                sugg = getSuggestion();
+                suggOccurrences = getCount();
+                showSimpleListDialogSuggestions(v);
             }
         });
 
 
         Show2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showSimpleListDialog(v);
+                showSimpleListDialogFav(v);
             }
         });
 
@@ -806,7 +796,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
     */
-    private void showSimpleListDialog(View view) {
+    private void showSimpleListDialogFav(View view) {
         builder=new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Favourite ingredients");
@@ -819,7 +809,6 @@ public class MainActivity extends AppCompatActivity {
                 currentIngredient = items[i];
                 singleIngredient = currentIngredient;
                 new RetrieveIngredientTask().execute();
-                //TODO qui
                 ingredients += singleIngredient.toLowerCase().trim() + ",";
                 ingredients = ingredients.replaceAll(" ","+");
             }
@@ -827,6 +816,32 @@ public class MainActivity extends AppCompatActivity {
         builder.setCancelable(true);
         AlertDialog dialog=builder.create();
         dialog.show();
+    }
+
+    private void showSimpleListDialogSuggestions(View view) {
+        builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo);
+        builder.setTitle("Maybe you already have");
+        if(sugg != null || sugg.length != 0) {
+            String[] res = new String[sugg.length];
+            for(int i =0; i<res.length; i++){
+                res[i] = sugg[i] + " (" + suggOccurrences[i] + ")";
+            }
+
+            builder.setItems(res, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    currentIngredient = sugg[i];
+                    singleIngredient = currentIngredient;
+                    new RetrieveIngredientTask().execute();
+                    ingredients += singleIngredient.toLowerCase().trim() + ",";
+                    ingredients = ingredients.replaceAll(" ", "+");
+                }
+            });
+            builder.setCancelable(true);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     public Map<String, Integer> sortByValue(Map<String, Integer> map) {
@@ -890,5 +905,64 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+    public String[] getSuggestion() {
+        int i = 0;
+        Map<String, Integer> map;
+        map = chefacileDb.getDataInMapIngredient();
+        map = sortByValue(map);
+        Log.d("MAPPA METODO:", map.toString());
+
+        String[] array = new String[map.size()];
+
+        if (map != null || !map.isEmpty()) {
+
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                array[i] = entry.getKey();
+                i++;
+
+            }
+
+            String[] res = new String[3];
+
+            for(int j=0; j<3; j++){
+                res[j] = array[j];
+            }
+
+            return res;
+
+        } else return null;
+
+    }
+
+    public String[] getCount() {
+        int i = 0;
+        Map<String, Integer> map;
+        map = chefacileDb.getDataInMapIngredient();
+        map = sortByValue(map);
+        Log.d("MAPPA METODO:", map.toString());
+
+        String[] array = new String[map.size()];
+
+        if (map != null || !map.isEmpty()) {
+
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                array[i] = String.valueOf(entry.getValue());
+                i++;
+
+            }
+
+            String[] res = new String[3];
+
+            for(int j=0; j<3; j++){
+                res[j] = array[j];
+            }
+
+            return res;
+
+        } else return null;
+
+    }
+
 }
 

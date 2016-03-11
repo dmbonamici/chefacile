@@ -37,15 +37,17 @@
             android:id="@+id/buttonShow2"
             />
 
-        <Button
+        <ImageButton
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/wand"
+            android:paddingLeft="60dp"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_gravity="left"
+            android:layout_marginLeft="30dp"
             android:text="SHOW"
-            android:id="@+id/buttonShow"
-            android:layout_below="@+id/progressBar"
-            android:layout_alignStart="@+id/action_abc" />
+            android:id="@+id/buttonShow"/>
 
 
 
@@ -140,7 +142,7 @@
         <ImageButton
             android:id="@+id/btn_diet"
             android:background="@drawable/diet"
-            android:backgroundTintMode="@color/toolbarTransparent"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginEnd="19dp"
@@ -151,7 +153,7 @@
         <ImageButton
             android:id="@+id/btn_cuisine"
             android:background="@drawable/cook12"
-            android:backgroundTintMode="@color/toolbarTransparent"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:layout_alignTop="@+id/btn_diet"
@@ -161,7 +163,7 @@
         <ImageButton
             android:id="@+id/btn_intoll"
             android:background="@drawable/intoll"
-            android:backgroundTintMode="@color/toolbarTransparent"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignTop="@+id/btn_diet"
