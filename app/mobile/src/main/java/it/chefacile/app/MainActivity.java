@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     //private ImageButton FilterButton;
     private ImageButton AddButton;
     private Button Show;
-    private Button Show2;
+    private ImageButton Show2;
     private String ingredients = ",";
     private ArrayAdapter<String> adapter;
     private String currentIngredient = "";
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Show = (Button) findViewById(R.id.buttonShow);
-        Show2 = (Button) findViewById(R.id.buttonShow2);
+        Show2 = (ImageButton) findViewById(R.id.buttonShow2);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
         buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
         buttondiet = (ImageButton) findViewById(R.id.btn_diet);

@@ -27,6 +27,16 @@
             android:onClick="buttonHandler"
             android:foregroundGravity="right" />
 
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:background="@drawable/favorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="SHOW2"
+            android:id="@+id/buttonShow2"
+            />
+
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
@@ -37,13 +47,7 @@
             android:layout_below="@+id/progressBar"
             android:layout_alignStart="@+id/action_abc" />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SHOW2"
-            android:id="@+id/buttonShow2"
-            />
+
 
         <!--  <ImageButton
              android:id="@+id/buttonfilter"
