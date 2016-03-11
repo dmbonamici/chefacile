@@ -109,12 +109,14 @@ public class RecipeActivity extends AppCompatActivity {
             for(int i = 0; i < object.getJSONArray("extendedIngredients").length(); i++){
                 ingre = (JSONObject) object.getJSONArray("extendedIngredients").get(i);
                 ingredi = ingre.getString("originalString");
-                this.recipeIngredients[i] = ingredi;
+                this.recipeIngredients[i] = ingredi.trim();
                 Log.d("ING", recipeIngredients[i]);
             }
-           stringIngredients = java.util.Arrays.toString(recipeIngredients);
+            stringIngredients = java.util.Arrays.toString(recipeIngredients);
 
-            stringIngredients = stringIngredients.replaceAll(",","\n");
+            Log.d("STRING INGREDIENTS",stringIngredients);
+
+            stringIngredients = stringIngredients.replaceAll(", ","\n");
             stringIngredients = stringIngredients.replaceAll("\\[","");
             stringIngredients = stringIngredients.replaceAll("]","");
 
@@ -198,7 +200,7 @@ public class RecipeActivity extends AppCompatActivity {
                 //.setDismissible()
                 .withProvider(new CardProvider<>())
                 .setLayout(R.layout.recipe_card_layout)
-                .setTitle("Ingredients: \n\n" + stringIngredients);
+                .setTitle("Ingredients: \n\n" + stringIngredients.trim());
 
 
         return provider.endConfig().build();
@@ -322,7 +324,7 @@ public class RecipeActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
