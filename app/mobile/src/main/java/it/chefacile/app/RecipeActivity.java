@@ -322,7 +322,7 @@ public class RecipeActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -348,8 +348,21 @@ public class RecipeActivity extends AppCompatActivity {
             Log.d("RESPONSEJSON", responseJSON);
             try {
                 JSONObject object = (JSONObject) new JSONTokener(responseJSON).nextValue();
-                Log.d("proce before", procedure);
+
                 procedure = object.get("text").toString();
+
+                Log.d("proce before", procedure);
+
+                procedure = procedure.replaceAll("</li>", "\n\n");
+
+                procedure = procedure.replaceAll("<li>", "");
+                procedure = procedure.replaceAll("<ol>", "");
+                procedure = procedure.replaceAll("</ol>", "").trim();
+                //procedure = Jsoup.parse(procedure).toString();
+                //procedure = Jsoup.clean(procedure, Whitelist.simpleText());
+
+
+
                 Log.d("proce after", procedure);
                 fillArray(procedure);
             } catch (JSONException e) {

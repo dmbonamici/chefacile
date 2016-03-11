@@ -405,8 +405,8 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 // URL urlSpoo = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/searchComplex?cuisine=american&includeIngredients=apples%2Cflour%2Csugar%2Cchicken&limitLicense=false&number=5&offset=0&query=apples%2Cflour%2Csugar&ranking=1");
-                URL urlSpoo = new URL(urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=false" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
-                Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=false" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
+                URL urlSpoo = new URL(urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=true" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
+                Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=true" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
                 urlConnection.setRequestProperty("KEY","KEY");
