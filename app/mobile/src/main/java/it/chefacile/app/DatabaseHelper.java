@@ -300,13 +300,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean verificedOnly(){
+    public int getNumberIngredients() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c1 = db.rawQuery("select * from " +TABLE_NAME1, null);
+        Cursor c1 = db.rawQuery("select * from " + TABLE_NAME1, null);
+        int n = 0;
 
-        if(c1.moveToNext())
-            return true;
-        else return false;
+        if (c1 != null) {
+
+            while (c1.moveToNext()) {
+                n++;
+            }
+        }
+        return n;
     }
 
 }

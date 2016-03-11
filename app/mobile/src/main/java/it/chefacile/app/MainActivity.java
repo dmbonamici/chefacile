@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                             mapIngredients = chefacileDb.getDataInMapIngredient();
                             Map<String, Integer> map2;
                             map2 = sortByValue(mapIngredients);
-                            Log.d("MAPPA ORDINATA CAMBIANDO COUNT: ", map2.toString());
+                            Log.d("MAPPACOUNT: ", map2.toString());
 
                         } else {
                             if (chefacileDb.occursExceeded()) {
@@ -302,14 +302,14 @@ public class MainActivity extends AppCompatActivity {
                                 mapIngredients = chefacileDb.getDataInMapIngredient();
                                 Map<String, Integer> map3;
                                 map3 = sortByValue(mapIngredients);
-                                Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
+                                Log.d("MAPPAINGREDIENTE: ", map3.toString());
 
                             } else {
                                 chefacileDb.insertDataIngredient(input);
                                 mapIngredients = chefacileDb.getDataInMapIngredient();
                                 Map<String, Integer> map3;
                                 map3 = sortByValue(mapIngredients);
-                                Log.d("MAPPA ORDINATA, NUOVO INGREDIENTE: ", map3.toString());
+                                Log.d("MAPPAINGREDIENTE: ", map3.toString());
                             }
                         }
                     }
@@ -619,9 +619,26 @@ public class MainActivity extends AppCompatActivity {
                                     boolean finalControl = true;
 
                                     chefacileDb.insertDataIngredientPREF(ingredient);
-                                    chefacileDb.deleteDataIngredient(ingredient);
-                                    tv.setText("Unsave");
 
+                                    if(chefacileDb.getNumberIngredients() > 3)
+                                        chefacileDb.deleteDataIngredient(ingredient);
+
+                                    else{
+                                        String n = addRandomIngredient();
+
+                                            if(n.equals(ingredient)) {
+
+                                                while (n.equals(ingredient) && chefacileDb.findIngredient(n)) {
+                                                    n = addRandomIngredient();
+                                                }
+                                            }
+
+                                        chefacileDb.insertDataIngredient(n);
+                                        chefacileDb.deleteDataIngredient(ingredient);
+
+                                    }
+
+                                    tv.setText("Unsave");
                                     checkButtonSave(tv, finalControl, ingredient);
                                 }
                             }));
@@ -870,7 +887,24 @@ public class MainActivity extends AppCompatActivity {
             listIngredientsPREF = chefacileDb.getDataInListIngredientPREF();
             if (chefacileDb.findIngredient(ingredient))
                 chefacileDb.decrementedId(ingredient);
-            chefacileDb.deleteDataIngredient(ingredient);
+
+            if(chefacileDb.getNumberIngredients() > 3)
+                chefacileDb.deleteDataIngredient(ingredient);
+
+            else{
+                String n = addRandomIngredient();
+
+                if(n.equals(ingredient)) {
+
+                    while (n.equals(ingredient) && chefacileDb.findIngredient(n)) {
+                        n = addRandomIngredient();
+                    }
+                }
+
+                chefacileDb.insertDataIngredient(n);
+                chefacileDb.deleteDataIngredient(ingredient);
+
+            }
             mapIngredients.remove(ingredient);
 
             Log.d("LISTA PREFERITI: ", listIngredientsPREF.toString());
@@ -962,6 +996,30 @@ public class MainActivity extends AppCompatActivity {
 
         } else return null;
 
+    }
+
+
+    public String addRandomIngredient(){
+        int n = (int) (Math.random() * 15);
+        switch (n){
+            case 0: return "Chicken";
+            case 1: return "Apple";
+            case 2: return "Milk";
+            case 3: return "Tomato";
+            case 4: return "Potato";
+            case 5: return "Pepperoni";
+            case 6: return "Wine";
+            case 7: return "Orange";
+            case 8: return "Lemon";
+            case 9: return "Mozzarella";
+            case 10: return "Bacon";
+            case 11: return "Chili";
+            case 12: return "Bbq";
+            case 13: return "Ketchup";
+            case 14: return "Mint";
+            case 15: return "Pepper";
+            default: return "Water";
+        }
     }
 
 }
