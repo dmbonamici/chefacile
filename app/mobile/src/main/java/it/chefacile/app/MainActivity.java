@@ -149,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         buttondiet = (ImageButton) findViewById(R.id.btn_diet);
         buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
 
+        startDatabase(chefacileDb);
+
 
         for (int j = 0; j < cuisineItems.length; j++) {
             cuisineItems[j] = cuisineItems[j].substring(0, 1).toUpperCase() + cuisineItems[j].substring(1);
@@ -187,12 +189,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        chefacileDb.insertDataIngredient("Pasta");
-        chefacileDb.insertDataIngredient("Eggs");
-        chefacileDb.insertDataIngredient("Oil");
-        mapIngredients = chefacileDb.getDataInMapIngredient();
 
         TutorialButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -621,22 +617,36 @@ public class MainActivity extends AppCompatActivity {
 
                                     chefacileDb.insertDataIngredientPREF(ingredient);
 
-                                    if(chefacileDb.getNumberIngredients() > 3)
+                                    if (chefacileDb.getNumberIngredients() > 3) {
                                         chefacileDb.deleteDataIngredient(ingredient);
+                                        mapIngredients = chefacileDb.getDataInMapIngredient();
+                                        mapIngredients = sortByValue(mapIngredients);
+                                        Log.d("MapVerifica:", mapIngredients.toString());
 
-                                    else{
+                                    } else if(chefacileDb.getNumberIngredients() == 3) {
                                         String n = addRandomIngredient();
 
-                                            if(n.equals(ingredient)) {
+                                        if (!n.equals(ingredient)) {
 
-                                                while (n.equals(ingredient) && chefacileDb.findIngredient(n)) {
-                                                    n = addRandomIngredient();
-                                                }
+                                            chefacileDb.deleteDataIngredient(ingredient);
+                                            chefacileDb.insertDataIngredient(n);
+                                            mapIngredients = chefacileDb.getDataInMapIngredient();
+                                            mapIngredients = sortByValue(mapIngredients);
+                                            Log.d("MapVerificaNOWhile:", mapIngredients.toString());
+
+                                        } else {
+
+                                            while (n.equals(ingredient) || chefacileDb.findIngredient(n)) {
+                                                n = addRandomIngredient();
                                             }
 
-                                        chefacileDb.insertDataIngredient(n);
-                                        chefacileDb.deleteDataIngredient(ingredient);
+                                            chefacileDb.deleteDataIngredient(ingredient);
+                                            chefacileDb.insertDataIngredient(n);
+                                            mapIngredients = chefacileDb.getDataInMapIngredient();
+                                            mapIngredients = sortByValue(mapIngredients);
+                                            Log.d("MapVerificaWhile:", mapIngredients.toString());
 
+                                        }
                                     }
 
                                     tv.setText("Unsave");
@@ -796,6 +806,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     /*
         private void showChoicePreferred(View view){
             builder = new AlertDialog.Builder(this);
@@ -815,12 +826,12 @@ public class MainActivity extends AppCompatActivity {
         }
     */
     private void showSimpleListDialogFav(View view) {
-        builder=new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Favourite ingredients");
 
 
-        final String[] items= chefacileDb.getDataInListIngredientPREF().toArray(new String[chefacileDb.getDataInListIngredientPREF().size()]);
+        final String[] items = chefacileDb.getDataInListIngredientPREF().toArray(new String[chefacileDb.getDataInListIngredientPREF().size()]);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -828,21 +839,21 @@ public class MainActivity extends AppCompatActivity {
                 singleIngredient = currentIngredient;
                 new RetrieveIngredientTask().execute();
                 ingredients += singleIngredient.toLowerCase().trim() + ",";
-                ingredients = ingredients.replaceAll(" ","+");
+                ingredients = ingredients.replaceAll(" ", "+");
             }
         });
         builder.setCancelable(true);
-        AlertDialog dialog=builder.create();
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void showSimpleListDialogSuggestions(View view) {
-        builder=new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Maybe you already have");
-        if(sugg != null || sugg.length != 0) {
+        if (sugg != null || sugg.length != 0) {
             String[] res = new String[sugg.length];
-            for(int i =0; i<res.length; i++){
+            for (int i = 0; i < res.length; i++) {
                 res[i] = sugg[i] + " (" + suggOccurrences[i] + ")";
             }
 
@@ -851,6 +862,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     currentIngredient = sugg[i];
                     singleIngredient = currentIngredient;
+                    chefacileDb.updateCount(singleIngredient);
                     new RetrieveIngredientTask().execute();
                     ingredients += singleIngredient.toLowerCase().trim() + ",";
                     ingredients = ingredients.replaceAll(" ", "+");
@@ -865,19 +877,17 @@ public class MainActivity extends AppCompatActivity {
     public Map<String, Integer> sortByValue(Map<String, Integer> map) {
 
         List<Map.Entry<String, Integer>> list =
-                new LinkedList<>( map.entrySet() );
-        Collections.sort( list, new Comparator<Map.Entry<String, Integer>>()
-        {
+                new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
             @Override
-            public int compare( Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2 ) {
-                return -(o1.getValue()).compareTo( o2.getValue() );
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return -(o1.getValue()).compareTo(o2.getValue());
             }
-        } );
+        });
 
         Map<String, Integer> result = new LinkedHashMap<String, Integer>();
-        for (Map.Entry<String,Integer> entry : list)
-        {
-            result.put( entry.getKey(), entry.getValue() );
+        for (Map.Entry<String, Integer> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
         }
         return result;
     }
@@ -889,24 +899,37 @@ public class MainActivity extends AppCompatActivity {
             if (chefacileDb.findIngredient(ingredient))
                 chefacileDb.decrementedId(ingredient);
 
-            if(chefacileDb.getNumberIngredients() > 3)
+            if (chefacileDb.getNumberIngredients() > 3) {
                 chefacileDb.deleteDataIngredient(ingredient);
+                mapIngredients = chefacileDb.getDataInMapIngredient();
+                mapIngredients = sortByValue(mapIngredients);
+                Log.d("MapVerifica:", mapIngredients.toString());
 
-            else{
+            } else if(chefacileDb.getNumberIngredients() == 3) {
                 String n = addRandomIngredient();
 
-                if(n.equals(ingredient)) {
+                if (!n.equals(ingredient)) {
 
-                    while (n.equals(ingredient) && chefacileDb.findIngredient(n)) {
+                    chefacileDb.deleteDataIngredient(ingredient);
+                    chefacileDb.insertDataIngredient(n);
+                    mapIngredients = chefacileDb.getDataInMapIngredient();
+                    mapIngredients = sortByValue(mapIngredients);
+                    Log.d("MapVerificaNOWhile:", mapIngredients.toString());
+
+                } else {
+
+                    while (n.equals(ingredient) || chefacileDb.findIngredient(n)) {
                         n = addRandomIngredient();
                     }
+
+                    chefacileDb.deleteDataIngredient(ingredient);
+                    chefacileDb.insertDataIngredient(n);
+                    mapIngredients = chefacileDb.getDataInMapIngredient();
+                    mapIngredients = sortByValue(mapIngredients);
+                    Log.d("MapVerificaWhile:", mapIngredients.toString());
+
                 }
-
-                chefacileDb.insertDataIngredient(n);
-                chefacileDb.deleteDataIngredient(ingredient);
-
             }
-            mapIngredients.remove(ingredient);
 
             Log.d("LISTA PREFERITI: ", listIngredientsPREF.toString());
             Log.d("DOPO ELIM PER PREF:", mapIngredients.toString());
@@ -960,7 +983,7 @@ public class MainActivity extends AppCompatActivity {
 
             String[] res = new String[3];
 
-            for(int j=0; j<3; j++){
+            for (int j = 0; j < 3; j++) {
                 res[j] = array[j];
             }
 
@@ -989,7 +1012,7 @@ public class MainActivity extends AppCompatActivity {
 
             String[] res = new String[3];
 
-            for(int j=0; j<3; j++){
+            for (int j = 0; j < 3; j++) {
                 res[j] = array[j];
             }
 
@@ -1000,28 +1023,73 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String addRandomIngredient(){
+    public String addRandomIngredient() {
         int n = (int) (Math.random() * 15);
-        switch (n){
-            case 0: return "Chicken";
-            case 1: return "Apple";
-            case 2: return "Milk";
-            case 3: return "Tomato";
-            case 4: return "Potato";
-            case 5: return "Pepperoni";
-            case 6: return "Wine";
-            case 7: return "Orange";
-            case 8: return "Lemon";
-            case 9: return "Mozzarella";
-            case 10: return "Bacon";
-            case 11: return "Chili";
-            case 12: return "Bbq";
-            case 13: return "Ketchup";
-            case 14: return "Mint";
-            case 15: return "Pepper";
-            default: return "Water";
+        switch (n) {
+            case 0:
+                return "Chicken";
+            case 1:
+                return "Apple";
+            case 2:
+                return "Milk";
+            case 3:
+                return "Tomato";
+            case 4:
+                return "Potato";
+            case 5:
+                return "Pepperoni";
+            case 6:
+                return "Wine";
+            case 7:
+                return "Orange";
+            case 8:
+                return "Lemon";
+            case 9:
+                return "Mozzarella";
+            case 10:
+                return "Bacon";
+            case 11:
+                return "Chili";
+            case 12:
+                return "Bbq";
+            case 13:
+                return "Ketchup";
+            case 14:
+                return "Mint";
+            case 15:
+                return "Pepper";
+            default:
+                return "Water";
         }
     }
+
+    public void startDatabase(DatabaseHelper db) {
+
+        db.insertDataIngredient("Pasta");
+        db.insertDataIngredient("Eggs");
+        db.insertDataIngredient("Oil");
+
+        if (db.findIngredientPREF("Pasta")) {
+            String n1 = addRandomIngredient();
+            db.deleteDataIngredient("Pasta");
+            db.insertDataIngredient(n1);
+        }
+
+        if (db.findIngredientPREF("Eggs")) {
+            String n2 = addRandomIngredient();
+            db.deleteDataIngredient("Eggs");
+            db.insertDataIngredient(n2);
+        }
+
+        if (db.findIngredientPREF("Oil")) {
+            String n3 = addRandomIngredient();
+            db.deleteDataIngredient("Oil");
+            db.insertDataIngredient(n3);
+        }
+
+        mapIngredients=db.getDataInMapIngredient();
+    }
+
 
 }
 
