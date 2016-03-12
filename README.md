@@ -42,10 +42,10 @@ Milestone 2 - Release Candidate (February 19th)
 
 Milestone 3 - Public live BETA (March 18th) 
 ==============
-_Work in progress..._
+_Work in progress_
 
  - Local persistence implementation (favourite ingredients) 
- - Recommendation intelligence of ingredients based on user history
+ - Recommended ingredients based on user history
  - New filter options
  - Cooking tools improvement (timers)
  - Social sharing
