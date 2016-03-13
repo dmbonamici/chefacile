@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> listIngredientsPREF;
     private String[] sugg;
     private String[] suggOccurrences;
+    private List<String> searchedIngredients = new ArrayList<String>();
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -282,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
                     String s2 = editText.getText().toString().substring(1);
                     input = s1 + s2;
                     Log.d("INPUT: ", input);
+                    searchedIngredients.add(input);
+                    Log.d("SEARCHED INGR LIST",searchedIngredients.toString());
 
 
                     if (!chefacileDb.findIngredientPREF(input)) {
@@ -396,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=true" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
 
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -440,6 +443,7 @@ public class MainActivity extends AppCompatActivity {
                 // responseView.setText(response);
                 Intent myIntent1 = new Intent(MainActivity.this, ResultsActivity.class);
                 myIntent1.putExtra("mytext", response);
+                myIntent1.putExtra("searchedIngredients", searchedIngredients.toString());
                 startActivity(myIntent1);
                 responseView.setText(null);
                 ingredients = "";
@@ -489,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -601,6 +605,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     Toast.makeText(mContext, "Ingredient deleted", Toast.LENGTH_SHORT).show();
                                     ingredients = ingredients.replaceAll("," + ingredient.trim().toLowerCase() + ",", ",");
+                                    searchedIngredients.remove(ingredient);
                                     Log.d("ingredients_card", ingredients);
                                     card.setDismissible(true);
                                     card.dismiss();
@@ -839,6 +844,8 @@ public class MainActivity extends AppCompatActivity {
                 singleIngredient = currentIngredient;
                 new RetrieveIngredientTask().execute();
                 ingredients += singleIngredient.toLowerCase().trim() + ",";
+                searchedIngredients.add(singleIngredient);
+                Log.d("SEARCHED ING", searchedIngredients.toString());
                 ingredients = ingredients.replaceAll(" ", "+");
             }
         });
@@ -865,6 +872,8 @@ public class MainActivity extends AppCompatActivity {
                     chefacileDb.updateCount(singleIngredient);
                     new RetrieveIngredientTask().execute();
                     ingredients += singleIngredient.toLowerCase().trim() + ",";
+                    searchedIngredients.add(singleIngredient);
+                    Log.d("SEARCHED ING",searchedIngredients.toString());
                     ingredients = ingredients.replaceAll(" ", "+");
                 }
             });

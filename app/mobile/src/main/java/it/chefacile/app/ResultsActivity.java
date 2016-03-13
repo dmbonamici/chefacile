@@ -44,8 +44,9 @@ public class ResultsActivity extends AppCompatActivity {
     private MaterialListView mListView;
     private JSONArray retrievedRecipes = null;
     private String recipeId;
-    String recipesString;
-    TextView responseView;
+    private String recipesString;
+    private TextView responseView;
+    private String searchedIngredients;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +56,9 @@ public class ResultsActivity extends AppCompatActivity {
         Log.d("ON CREATE TEST", "ON CREATE TEST");
 
         this.recipesString = getIntent().getStringExtra("mytext");
+        this.searchedIngredients = getIntent().getStringExtra("searchedIngredients");
         Log.d("RECIPESTRING", recipesString);
+        Log.d("SEARCHED INGR RESULT", searchedIngredients);
         try {
             //retrievedRecipes = (JSONArray) new JSONTokener(recipesString).nextValue();
             JSONObject JSONob = (JSONObject) new JSONTokener(recipesString).nextValue();
@@ -259,7 +262,7 @@ public class ResultsActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/"+ idrecipe +"/information");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -292,6 +295,7 @@ public class ResultsActivity extends AppCompatActivity {
                 Intent myIntent1 = new Intent(ResultsActivity.this, RecipeActivity.class);
                 myIntent1.putExtra("recipeId", response);
                 myIntent1.putExtra("recipesString", recipesString);
+                myIntent1.putExtra("searchedIngredients", searchedIngredients);
                 startActivity(myIntent1);
             }
             //  check this.exception

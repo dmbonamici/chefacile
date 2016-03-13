@@ -1,7 +1,13 @@
 package it.chefacile.app;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -11,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +67,8 @@ public class RecipeActivity extends AppCompatActivity {
     private String proc;
     private String responseJSON = "";
     private String procedure = "Loading";
+    private String searchedIngredients;
+    private String sharedText;
 
     private Context mContext;
     private MaterialListView mListView;
@@ -73,6 +82,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         this.recipeString = getIntent().getStringExtra("recipeId");
         this.recipeListString = getIntent().getStringExtra("recipesString");
+        this.searchedIngredients = getIntent().getStringExtra("searchedIngredients");
         Log.d("RECIPEID FROM RECIPEACT", recipeString);
 
         Log.d("RECIPE STRING", recipeString);
@@ -148,14 +158,21 @@ public class RecipeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
-                myIntent.putExtra("recipeId", recipeString);
-                myIntent.putExtra("recipesString", recipeListString);
-                startActivity(myIntent);
+                //Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
+                //myIntent.putExtra("recipeId", recipeString);
+                //myIntent.putExtra("recipesString", recipeListString);
+                //startActivity(myIntent);
+                /*
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("plain/text");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!");
+                startActivity(Intent.createChooser(sharingIntent,"Share using"));*/
+                onShareClick(view);
 
             }
 
         });
+        this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
     }
 
     private void fillArray(String proc) throws JSONException {
@@ -324,7 +341,7 @@ public class RecipeActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -388,6 +405,91 @@ public class RecipeActivity extends AppCompatActivity {
 //            }*/
 
         }
+    }
+
+    public void onClickWhatsApp(View view) {
+
+        PackageManager pm=getPackageManager();
+        try {
+
+            Intent waIntent = new Intent(Intent.ACTION_SEND);
+            waIntent.setType("text/plain");
+            String text = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
+
+            PackageInfo info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+            //Check if package exists or not. If not then code
+            //in catch block will be called
+            waIntent.setPackage("com.whatsapp");
+            waIntent.setPackage("com.facebook.katana");
+
+            waIntent.putExtra(Intent.EXTRA_TEXT, text);
+            startActivity(Intent.createChooser(waIntent, "Share with"));
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(this, "WhatsApp not Installed", Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+    }
+
+    public void onShareClick(View v) {
+        Resources resources = getResources();
+
+        Intent emailIntent = new Intent();
+        emailIntent.setAction(Intent.ACTION_SEND);
+        // Native email client doesn't currently support HTML, but it doesn't hurt to try in case they fix it
+        emailIntent.putExtra(Intent.EXTRA_TEXT, sharedText);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, sharedText);
+        emailIntent.setType("message/rfc822");
+
+        PackageManager pm = getPackageManager();
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+
+
+        Intent openInChooser = Intent.createChooser(emailIntent, sharedText);
+
+        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
+        List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
+        for (int i = 0; i < resInfo.size(); i++) {
+            // Extract the label, append it, and repackage it in a LabeledIntent
+            ResolveInfo ri = resInfo.get(i);
+            String packageName = ri.activityInfo.packageName;
+            if(packageName.contains("android.email")) {
+                emailIntent.setPackage(packageName);
+            } else if(packageName.contains("twitter") || packageName.contains(("whatsapp")) || packageName.contains("facebook") || packageName.contains("mms") || packageName.contains("android.gm")) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                if(packageName.contains("twitter")) {
+                    intent.putExtra(Intent.EXTRA_TEXT, sharedText);
+                } else if(packageName.contains("facebook")) {
+                    // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves. Pre-filling these fields erodes the authenticity of the user voice."
+                    // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they want to share. We can also make a custom landing page, and the link
+                    // will show the <meta content ="..."> text from that page with our link in Facebook.
+                    intent.putExtra(Intent.EXTRA_TEXT, sharedText);
+                } else if(packageName.contains("mms")) {
+                    intent.putExtra(Intent.EXTRA_TEXT, sharedText);
+                } else if(packageName.contains("android.gm")) { // If Gmail shows up twice, try removing this else-if clause and the reference to "android.gm" above
+                    intent.putExtra(Intent.EXTRA_TEXT, sharedText);
+                    intent.putExtra(Intent.EXTRA_SUBJECT, sharedText);
+                    intent.setType("message/rfc822");
+
+                }
+                else  if(packageName.contains("whatsapp")){
+                    intent.putExtra(Intent.EXTRA_TEXT, sharedText);
+                }
+
+                intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
+            }
+        }
+
+        // convert intentList to array
+        LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
+
+        openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+        startActivity(openInChooser);
     }
 
 
