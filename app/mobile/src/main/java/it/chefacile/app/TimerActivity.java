@@ -22,6 +22,7 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
     private CircleTimerView mTimer;
     private String recipeString;
     private String recipeListString;
+    private String searchedIngredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,6 +35,7 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
         this.recipeString = getIntent().getStringExtra("recipeId");
         Log.d("RECIPEID FROM RECIPEACT", recipeString);
         this.recipeListString = getIntent().getStringExtra("recipesString");
+        this.searchedIngredients = getIntent().getStringExtra("searchedIngredients");
 
     }
 
@@ -59,6 +61,7 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
                 Log.d("RECIPES", recipeString);
                 intent.putExtra("recipeId", recipeString);
                 intent.putExtra("recipesString", recipeListString);
+                intent.putExtra("searchedIngredients", searchedIngredients);
                 Log.d("RECIPELIST", recipeListString);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

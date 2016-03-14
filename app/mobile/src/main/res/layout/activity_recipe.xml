@@ -37,7 +37,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                />
+
+            <ImageButton
+                android:id="@+id/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:src="@drawable/abc_ic_menu_share_mtrl_alpha"
+                android:background="@color/toolbarTransparent"
+                android:onClick="buttonHandler"
+                android:foregroundGravity="right" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

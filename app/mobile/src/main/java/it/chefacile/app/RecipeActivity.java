@@ -21,6 +21,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -152,8 +153,28 @@ public class RecipeActivity extends AppCompatActivity {
         ImageView toolbarImage = (ImageView) findViewById(R.id.image_stretch_detail);
         picassoLoader(this, toolbarImage, recipeImage);
 
+        ImageButton share = (ImageButton) findViewById(R.id.share);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
+                myIntent.putExtra("recipeId", recipeString);
+                myIntent.putExtra("recipesString", recipeListString);
+                myIntent.putExtra("searchedIngredients", searchedIngredients);
+                startActivity(myIntent);
+
+
+
+
+            }
+
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
@@ -167,6 +188,8 @@ public class RecipeActivity extends AppCompatActivity {
                 sharingIntent.setType("plain/text");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!");
                 startActivity(Intent.createChooser(sharingIntent,"Share using"));*/
+
+
                 onShareClick(view);
 
             }
@@ -255,6 +278,7 @@ public class RecipeActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ResultsActivity.class);
                 Log.d("RECIPES", recipeListString);
                 intent.putExtra("mytext", recipeListString);
+                intent.putExtra("searchedIngredients", searchedIngredients);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
@@ -407,30 +431,6 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickWhatsApp(View view) {
-
-        PackageManager pm=getPackageManager();
-        try {
-
-            Intent waIntent = new Intent(Intent.ACTION_SEND);
-            waIntent.setType("text/plain");
-            String text = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
-
-            PackageInfo info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
-            //Check if package exists or not. If not then code
-            //in catch block will be called
-            waIntent.setPackage("com.whatsapp");
-            waIntent.setPackage("com.facebook.katana");
-
-            waIntent.putExtra(Intent.EXTRA_TEXT, text);
-            startActivity(Intent.createChooser(waIntent, "Share with"));
-
-        } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(this, "WhatsApp not Installed", Toast.LENGTH_SHORT)
-                    .show();
-        }
-
-    }
 
     public void onShareClick(View v) {
         Resources resources = getResources();

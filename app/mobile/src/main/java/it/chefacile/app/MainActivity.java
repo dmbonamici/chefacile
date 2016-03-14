@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -493,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -758,6 +759,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+
     }
 
 
@@ -804,11 +806,12 @@ public class MainActivity extends AppCompatActivity {
                 checkedDietBool = i;
                 dietString = dietItems[i].trim().replaceAll(" ", "+");
                 Log.d("Diet", dietString);
+                dialogInterface.dismiss();
             }
         });
 
         builder.setCancelable(true);
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
     }
 
@@ -875,6 +878,8 @@ public class MainActivity extends AppCompatActivity {
                     searchedIngredients.add(singleIngredient);
                     Log.d("SEARCHED ING",searchedIngredients.toString());
                     ingredients = ingredients.replaceAll(" ", "+");
+
+
                 }
             });
             builder.setCancelable(true);
