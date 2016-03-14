@@ -31,6 +31,8 @@ import com.dexafree.materialList.card.OnActionClickListener;
 import com.dexafree.materialList.card.action.TextViewAction;
 import com.dexafree.materialList.view.MaterialListView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.picasso.RequestCreator;
 
 import org.json.JSONArray;
@@ -52,6 +54,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static com.getbase.floatingactionbutton.FloatingActionButton.*;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -145,12 +149,81 @@ public class MainActivity extends AppCompatActivity {
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        Show = (ImageButton) findViewById(R.id.buttonShow);
-        Show2 = (ImageButton) findViewById(R.id.buttonShow2);
+        //Show = (ImageButton) findViewById(R.id.buttonShow);
+        //Show2 = (ImageButton) findViewById(R.id.buttonShow2);
         materialAnimatedSwitch = (MaterialAnimatedSwitch) findViewById(R.id.pin);
-        buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
-        buttondiet = (ImageButton) findViewById(R.id.btn_diet);
-        buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
+        //buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
+        //buttondiet = (ImageButton) findViewById(R.id.btn_diet);
+        //buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
+
+        ImageView icon = new ImageView(this); // Create an icon
+        icon.setImageDrawable(getResources().getDrawable(R.drawable.logo));
+
+        com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this)
+                .setPosition(6)
+                .setContentView(icon)
+                .build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        // repeat many times:
+        ImageView dietIcon = new ImageView(this);
+        dietIcon.setImageDrawable(getResources().getDrawable(R.drawable.diet));
+        SubActionButton button1 = itemBuilder.setContentView(dietIcon).build();
+        button1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showSingleChoiceDialogDiet(v);
+            }
+        });
+
+        ImageView intolIcon = new ImageView(this);
+        intolIcon.setImageDrawable(getResources().getDrawable(R.drawable.intoll));
+        SubActionButton button2 = itemBuilder.setContentView(intolIcon).build();
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showMultiChoiceDialogIntol(v);
+            }
+        });
+
+        ImageView cuisineIcon = new ImageView(this);
+        cuisineIcon.setImageDrawable(getResources().getDrawable(R.drawable.cook12));
+        SubActionButton button3 = itemBuilder.setContentView(cuisineIcon).build();
+        button3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showMultiChoiceDialogCuisine(v);
+            }
+        });
+
+        ImageView favouriteIcon = new ImageView(this);
+        favouriteIcon.setImageDrawable(getResources().getDrawable(R.drawable.favorite));
+        SubActionButton button4 = itemBuilder.setContentView(favouriteIcon).build();
+        button4.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showSimpleListDialogFav(v);
+            }
+        });
+
+        ImageView wandIcon = new ImageView(this);
+        wandIcon.setImageDrawable(getResources().getDrawable(R.drawable.wand));
+        SubActionButton button5 = itemBuilder.setContentView(wandIcon).build();
+        button5.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sugg = getSuggestion();
+                suggOccurrences = getCount();
+                showSimpleListDialogSuggestions(v);
+            }
+        });
+
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .setStartAngle(360)
+                .setEndAngle(270)
+                .addSubActionView(button1)
+                .addSubActionView(button2)
+                .addSubActionView(button3)
+                .addSubActionView(button4)
+                .addSubActionView(button5)
+                .attachTo(actionButton)
+                .build();
 
         startDatabase(chefacileDb);
 
@@ -174,46 +247,11 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
-        buttoncuisine.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showMultiChoiceDialogCuisine(v);
-            }
-        });
-
-        buttonintol.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showMultiChoiceDialogIntol(v);
-            }
-        });
-
-        buttondiet.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showSingleChoiceDialogDiet(v);
-            }
-        });
-
-
         TutorialButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, IntroScreenActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
-            }
-        });
-
-
-        Show.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sugg = getSuggestion();
-                suggOccurrences = getCount();
-                showSimpleListDialogSuggestions(v);
-            }
-        });
-
-
-        Show2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showSimpleListDialogFav(v);
             }
         });
 

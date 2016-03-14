@@ -96,7 +96,7 @@
             android:id="@+id/material_listview"
             android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/progressBar"
-            android:layout_below="@+id/btn_cuisine" />
+            android:layout_below="@+id/pin" />
 
 
 
@@ -114,37 +114,9 @@
             android:layout_alignTop="@+id/scrollView"
             android:layout_toEndOf="@+id/progressBar" />
 
-        <ImageButton
-            android:id="@+id/btn_diet"
-            android:background="@drawable/diet"
-            android:backgroundTint="@color/colorPrimary"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="19dp"
-            android:layout_alignBottom="@+id/pin"
-            android:layout_marginBottom="12dp"
-            android:layout_toStartOf="@+id/btn_cuisine" />
 
-        <ImageButton
-            android:id="@+id/btn_cuisine"
-            android:background="@drawable/cook12"
-            android:backgroundTint="@color/colorPrimary"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_alignTop="@+id/btn_diet"
-            android:layout_marginBottom="13dp"
-            android:layout_centerHorizontal="true" />
 
-        <ImageButton
-            android:id="@+id/btn_intoll"
-            android:background="@drawable/intoll"
-            android:backgroundTint="@color/colorPrimary"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignTop="@+id/btn_diet"
-            android:layout_marginEnd="7dp"
-            android:layout_marginBottom="12dp"
-            android:layout_toStartOf="@+id/action_abc" />
+
 
 
     </RelativeLayout>
