@@ -31,18 +31,27 @@
         android:hint="What's in your fridge?"
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="69dp" />
+        android:layout_marginTop="69dp"
+        />
     <ImageButton
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Add"
-        android:src = "@drawable/addpluslg"
-        android:background="@color/toolbarTransparent"
-        android:onClick="buttonHandler"
-        android:layout_alignBottom="@+id/ingredientText"
-        android:layout_alignEnd="@+id/ingredientText"
-        android:layout_marginBottom="8dp" />
-    />
+        style="?android:attr/buttonStyleSmall"
+        android:background="@drawable/favorite"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="SHOW2"
+        android:id="@+id/buttonShow2"
+        android:layout_alignTop="@+id/ingredientText"
+        android:layout_toStartOf="@+id/buttonShow" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/wand"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="SHOW"
+        android:id="@+id/buttonShow"
+        android:layout_alignTop="@+id/ingredientText"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

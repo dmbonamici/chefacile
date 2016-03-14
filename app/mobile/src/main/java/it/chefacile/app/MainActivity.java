@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onResume() {
+   /* protected void onResume() {
         super.onResume();
         TextWatcher tw = new TextWatcher() {
             @Override
@@ -127,10 +128,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         editText.addTextChangedListener(tw);
-    }
+    }*/
 
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         chefacileDb = new DatabaseHelper(this);
         // FilterButton = (ImageButton) findViewById(R.id.buttonfilter);
         TutorialButton = (ImageButton) findViewById(R.id.button);
-        AddButton = (ImageButton) findViewById(R.id.button2);
+      //  AddButton = (ImageButton) findViewById(R.id.button2);
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -272,9 +273,79 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        checkFieldsForEmptyValues();
+        //checkFieldsForEmptyValues();
 
-        AddButton.setOnClickListener(new View.OnClickListener() {
+        editText.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            if (!(editText.getText().toString().trim().equals(""))) {
+
+                                String input;
+                                String s1 = editText.getText().toString().substring(0, 1).toUpperCase();
+                                String s2 = editText.getText().toString().substring(1);
+                                input = s1 + s2;
+                                Log.d("INPUT: ", input);
+                                searchedIngredients.add(input);
+                                Log.d("SEARCHED INGR LIST",searchedIngredients.toString());
+
+
+                                if (!chefacileDb.findIngredientPREF(input)) {
+                                    if (chefacileDb.findIngredient(input)) {
+                                        chefacileDb.updateCount(input);
+                                        mapIngredients = chefacileDb.getDataInMapIngredient();
+                                        Map<String, Integer> map2;
+                                        map2 = sortByValue(mapIngredients);
+                                        Log.d("MAPPACOUNT: ", map2.toString());
+
+                                    } else {
+                                        if (chefacileDb.occursExceeded()) {
+                                            chefacileDb.deleteMinimum(input);
+                                            // chefacileDb.insertDataIngredient(input);
+                                            mapIngredients = chefacileDb.getDataInMapIngredient();
+                                            Map<String, Integer> map3;
+                                            map3 = sortByValue(mapIngredients);
+                                            Log.d("MAPPAINGREDIENTE: ", map3.toString());
+
+                                        } else {
+                                            chefacileDb.insertDataIngredient(input);
+                                            mapIngredients = chefacileDb.getDataInMapIngredient();
+                                            Map<String, Integer> map3;
+                                            map3 = sortByValue(mapIngredients);
+                                            Log.d("MAPPAINGREDIENTE: ", map3.toString());
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (editText.getText().toString().trim().equals("")) {
+                               ingredients += editText.getText().toString().trim() + "";
+                                editText.getText().clear();
+
+                            } else {
+                                ingredients += editText.getText().toString().replaceAll(" ", "+").trim().toLowerCase() + ",";
+                                singleIngredient = editText.getText().toString().trim().toLowerCase();
+                                currentIngredient = singleIngredient;
+                                new RetrieveIngredientTask().execute();
+
+                                //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
+                            }
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+
+      /*  AddButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 if (!(editText.getText().toString().trim().equals(""))) {
@@ -333,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                 //ingredients += editText.getText().toString().trim() + ",";
             }
 
-        });
+        });*/
 
       /*  try {
             fillArray();
@@ -400,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=true" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
 
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -494,7 +565,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -718,7 +789,7 @@ public class MainActivity extends AppCompatActivity {
         iv.setImageResource(R.drawable.egg);
     }
 
-    private void checkFieldsForEmptyValues() {
+    /*private void checkFieldsForEmptyValues() {
         ImageButton b = (ImageButton) findViewById(R.id.button2);
 
         String s1 = editText.getText().toString();
@@ -731,7 +802,7 @@ public class MainActivity extends AppCompatActivity {
             b.setEnabled(false);
         }
 
-    }
+    }*/
 
 
     private void showMultiChoiceDialogCuisine(View view) {

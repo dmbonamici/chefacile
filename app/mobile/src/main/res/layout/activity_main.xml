@@ -27,29 +27,6 @@
             android:onClick="buttonHandler"
             android:foregroundGravity="right" />
 
-        <ImageButton
-            style="?android:attr/buttonStyleSmall"
-            android:background="@drawable/favorite"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="SHOW2"
-            android:id="@+id/buttonShow2"
-            />
-
-        <ImageButton
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/wand"
-            android:paddingLeft="60dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:layout_gravity="left"
-            android:layout_marginLeft="30dp"
-            android:text="SHOW"
-            android:id="@+id/buttonShow"/>
-
-
 
         <!--  <ImageButton
              android:id="@+id/buttonfilter"
@@ -111,16 +88,15 @@
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="@dimen/fab_margin" />
+            android:layout_alignParentEnd="true" />
 
         <com.dexafree.materialList.view.MaterialListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/material_listview"
+            android:layout_alignParentBottom="true"
             android:layout_toEndOf="@+id/progressBar"
-            android:layout_alignTop="@+id/scrollView"
-            android:layout_above="@+id/action_abc" />
+            android:layout_below="@+id/btn_cuisine" />
 
 
 
@@ -135,8 +111,7 @@
             fab:icon_release="@drawable/checkr"
             fab:icon_press="@drawable/cart"
             android:layout_marginLeft="15dp"
-            android:layout_marginBottom="13dp"
-            android:layout_alignBottom="@+id/action_abc"
+            android:layout_alignTop="@+id/scrollView"
             android:layout_toEndOf="@+id/progressBar" />
 
         <ImageButton
