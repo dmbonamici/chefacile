@@ -301,6 +301,16 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
             case R.id.share:
 
                 onShareClick();
+                return true;
+
+            case R.id.timer:
+
+                Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
+                myIntent.putExtra("recipeId", recipeString);
+                myIntent.putExtra("recipesString", recipeListString);
+                myIntent.putExtra("searchedIngredients", searchedIngredients);
+                startActivity(myIntent);
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
