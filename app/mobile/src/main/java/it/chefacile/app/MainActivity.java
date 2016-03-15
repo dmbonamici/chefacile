@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] sugg;
     private String[] suggOccurrences;
     private List<String> searchedIngredients = new ArrayList<String>();
-    private Button Mostra;
+    //private Button Mostra;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         //buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
         //buttondiet = (ImageButton) findViewById(R.id.btn_diet);
         //buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
-        Mostra = (Button) findViewById(R.id.btn_mostra);
+        //Mostra = (Button) findViewById(R.id.btn_mostra);
 
 
         ImageView icon = new ImageView(this); // Create an icon
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Mostra.setOnClickListener(
+       /* Mostra.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                         showMessage("Data", buffer.toString());
                     }
                 }
-        );
+        );*/
 
 
 
