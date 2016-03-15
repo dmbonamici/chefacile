@@ -91,6 +91,7 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
 
         Toast.makeText(this, "Timer finished", Toast.LENGTH_LONG).show();
         playAlertSound(R.raw.beep);
+
     }
 
     @Override
@@ -123,7 +124,7 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-            mp.release();
+            mp.stop();
         }
         });
     }
