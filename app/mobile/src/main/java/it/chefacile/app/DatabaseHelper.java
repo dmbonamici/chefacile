@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "chefacile.db";
@@ -19,10 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_1= "INGREDIENT";
     public static final String COL_2= "COUNT";
     public static final String COL_3= "ID";
-    //public static final String TABLE_NAME2 = "recipes_table";
-    //public static final String COL_A= "RECIPE_PREF";
-    //public static final String COL_B= "IMAGE";
-    public static final String TABLE_NAME3 = "ingredients_pref_table";
+    public static final String TABLE_NAME2 = "ingredients_pref_table";
     public static final String COL_X= "INGREDIENT_PREF";
 
 
@@ -41,26 +37,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_2 + " INTEGER, "
                 + COL_3 + " INTEGER);";
 
-      /*  String s2 = "Create table "
+        String s2 = "Create table "
                 + TABLE_NAME2 + " ( "
-                + COL_A + " TEXT PRIMARY KEY, "
-                + COL_B + " STRING);";*/
-
-        String s3 = "Create table "
-                + TABLE_NAME3 + " ( "
                 + COL_X + " TEXT PRIMARY KEY);";
 
         db.execSQL(s1);
-       // db.execSQL(s2);
-        db.execSQL(s3);
+        db.execSQL(s2);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME1);
-       // db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME2);
-        db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME3);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2);
         onCreate(db);
 
 
@@ -99,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_X, ingr);
 
-        long result = db.insert(TABLE_NAME3, null, contentValues);
+        long result = db.insert(TABLE_NAME2, null, contentValues);
         if (result == -1)
             return false;
         else
@@ -130,16 +119,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-   /* public Cursor getAllDataRecipes(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from " +TABLE_NAME2, null);
-        return res;
-    }*/
-
 
     public Cursor getAllDataIngredientsPREF(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from " +TABLE_NAME3, null);
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME2, null);
         return res;
     }
 
@@ -156,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean findIngredientPREF(String test){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor ing = db.rawQuery("select * from "+TABLE_NAME3+ " where "+COL_X+ " = '"+test+"'", null);
+        Cursor ing = db.rawQuery("select * from "+ TABLE_NAME2 + " where "+COL_X+ " = '"+test+"'", null);
         if (ing.getCount() > 0)
             return true;
         else
@@ -174,16 +157,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Integer deleteDataIngredientPREF(String test){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME3, "INGREDIENT_PREF = ?", new String[] {test});
+        return db.delete(TABLE_NAME2, "INGREDIENT_PREF = ?", new String[] {test});
 
     }
 
-
-   /* public Integer deleteDataRecipe(String test){
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME2, "INGREDIENT_PREF = ?", new String[] {test});
-
-    }*/
 
 
     public void updateCount(String test) {
@@ -219,7 +196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<String> getDataInListIngredientPREF(){
         List<String> list = new ArrayList<String>();
-        Cursor c = getReadableDatabase().rawQuery("Select * from " +TABLE_NAME3, null);
+        Cursor c = getReadableDatabase().rawQuery("Select * from " + TABLE_NAME2, null);
 
         c.moveToFirst();
 
