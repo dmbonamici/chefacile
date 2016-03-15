@@ -603,7 +603,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)

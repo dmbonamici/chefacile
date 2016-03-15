@@ -88,6 +88,8 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
     private String searchedIngredients;
     private String sharedText;
     private TextView maintitle;
+    private TextView recipeText;
+    private String resultingRecipe = "";
 
     private Context mContext;
     private MaterialListView mListView;
@@ -106,7 +108,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
         this.maintitle = (TextView) findViewById(R.id.maintitle);
-
+        this.recipeText = (TextView) findViewById(R.id.recipeText);
 
         this.recipeString = getIntent().getStringExtra("recipeId");
         this.recipeListString = getIntent().getStringExtra("recipesString");
@@ -136,10 +138,18 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
             this.totalTime = object.getString("readyInMinutes");
             Log.d("TIME", object.getString("readyInMinutes"));
 
+            //resultingRecipe += "Time: " + totalTime + " minutes\n\n";
+
 
             this.recipeServings = object.getString("servings");
             Log.d("SERVINGS", String.valueOf(recipeServings));
 
+            //resultingRecipe += "Servings: " + recipeServings + "\n\n";
+            //resultingRecipe += Html.fromHtml("<b>Servings:</b> " + recipeServings + "\n\n");
+            recipeText.setText(Html.fromHtml("<b>" + "Servings" + "</b>" +  "<br />" +
+                    "<small>" + recipeServings + "</small>" + "<br />" + "\n\n" +
+                    "<b>" + "Time" + "</b>" +  "<br />" +
+                    "<small>" + totalTime + " minutes </small>"));
 
 
             this.recipeIngredients = new String[object.getJSONArray("extendedIngredients").length()];
@@ -155,9 +165,21 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
             Log.d("STRING INGREDIENTS",stringIngredients);
 
-            stringIngredients = stringIngredients.replaceAll(", ","\n");
+            stringIngredients = stringIngredients.replaceAll(", ","<br />");
             stringIngredients = stringIngredients.replaceAll("\\[","");
             stringIngredients = stringIngredients.replaceAll("]","");
+
+            resultingRecipe += "Ingredients:\n" + stringIngredients + "\n\n";
+
+
+            recipeText.setText(Html.fromHtml("<b> <big>" + "Servings" + "</big></b>" +  "<br />" +
+                    recipeServings + "<br /> <br />" +
+                    "<b><big>" + "Time" + "</big></b>" +  "<br />" +
+                    totalTime + " minutes <br /> <br />" +
+                    "<b><big>" + "Ingredients" + "</big></b>" +  "<br />" +
+                    stringIngredients + "<br />"
+
+            ));
 
 
             this.recipeURL = object.getString("sourceUrl");
@@ -395,7 +417,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -426,13 +448,11 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
                 Log.d("proce before", procedure);
 
-                procedure = procedure.replaceAll("</li>", "\n\n");
+                procedure = procedure.replaceAll("</li>", "<br /> <br />");
 
                 procedure = procedure.replaceAll("<li>", "");
                 procedure = procedure.replaceAll("<ol>", "");
                 procedure = procedure.replaceAll("</ol>", "").trim();
-                //procedure = Jsoup.parse(procedure).toString();
-                //procedure = Jsoup.clean(procedure, Whitelist.simpleText());
 
 
 
@@ -441,6 +461,21 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            resultingRecipe += "Procedure: \n\n" + procedure;
+            resultingRecipe = resultingRecipe.trim();
+
+            recipeText.setText(Html.fromHtml("<b> <big>" + "Servings" + "</big></b>" +  "<br />" +
+                    recipeServings + "<br /> <br />" +
+                    "<b><big>" + "Time" + "</big></b>" +  "<br />" +
+                    totalTime + " minutes <br /> <br />" +
+                    "<b><big>" + "Ingredients" + "</big></b>" +  "<br />" +
+                    stringIngredients + "<br /> <br />" +
+                    "<b> <big>" + "Procedure" + "</big></b>" +  "<br />" +
+                    procedure
+
+            ));
+            //recipeText.setText(resultingRecipe);
 
             //  check this.exception
             //  do something with the feed
