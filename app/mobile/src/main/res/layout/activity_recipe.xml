@@ -122,33 +122,23 @@
                 android:gravity="right"
                 >
 
+                <Space
+                    android:layout_width="@dimen/image_final_width"
+                    android:layout_height="@dimen/image_final_width"
+                    />
                 <TextView
                     android:id="@+id/main.textview.title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="2dp"
                     android:text="@string/quila_name2"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     />
 
-                <Space
-                    android:layout_width="@dimen/image_final_width"
-                    android:layout_height="@dimen/image_final_width"
-                    />
 
 
-                <ImageButton
-                    android:id="@+id/share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/abc_ic_menu_share_mtrl_alpha"
-                    android:background="@color/toolbarTransparent"
-
-                    />
 
             </LinearLayout>
         </android.support.v7.widget.Toolbar>

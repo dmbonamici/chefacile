@@ -181,7 +181,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         ImageView toolbarImage = (ImageView) findViewById(R.id.main_imageview_placeholder);
         picassoLoader(this, toolbarImage, recipeImage);
 
-       ImageButton share = (ImageButton) findViewById(R.id.share);
+      // ImageButton share = (ImageButton) findViewById(R.id.share);
 
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +201,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
         });*/
 
-        share.setOnClickListener(new View.OnClickListener() {
+      /*  share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -210,7 +210,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
             }
 
-        });
+        });*/
         this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
     }
 
@@ -298,6 +298,10 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
+            case R.id.share:
+
+                onShareClick();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -448,7 +452,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
     }
 
 
-    public void onShareClick(View v) {
+    public void onShareClick() {
         Resources resources = getResources();
 
         Intent emailIntent = new Intent();
@@ -515,11 +519,11 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         mAppBarLayout   = (AppBarLayout) findViewById(R.id.main_appbar);
     }
 
-  /*  @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_recipe, menu);
         return true;
-    }*/
+    }
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
@@ -572,6 +576,8 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
     }
+
+
 
     /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();

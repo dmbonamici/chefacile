@@ -69,9 +69,7 @@ public class TimerActivity extends ActionBarActivity implements CircleTimerView.
             default:
 
                 //noinspection SimplifiableIfStatement
-                if (id == R.id.action_settings) {
-                    return true;
-                }
+
 
                 return super.onOptionsItemSelected(item);
         }
