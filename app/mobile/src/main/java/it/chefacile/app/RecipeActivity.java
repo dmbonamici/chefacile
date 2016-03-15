@@ -13,16 +13,20 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +58,19 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+
+    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
+    private LinearLayout mTitleContainer;
+    private TextView mTitle;
+    private AppBarLayout mAppBarLayout;
+    private Toolbar mToolbar;
 
     private String recipeString;
     private String recipeListString;
@@ -74,11 +90,18 @@ public class RecipeActivity extends AppCompatActivity {
     private Context mContext;
     private MaterialListView mListView;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         mContext = this;
+
+        bindActivity();
+
+        mAppBarLayout.addOnOffsetChangedListener(this);
+
+        mToolbar.inflateMenu(R.menu.menu_main);
+        startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
 
         this.recipeString = getIntent().getStringExtra("recipeId");
@@ -88,7 +111,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         Log.d("RECIPE STRING", recipeString);
 
-        mListView = (MaterialListView) findViewById(R.id.material_listview1);
+       // mListView = (MaterialListView) findViewById(R.id.material_listview1);
         // mListView.setItemAnimator(new SlideInLeftAnimator());
         //  mListView.getItemAnimator().setAddDuration(300);
         //  mListView.getItemAnimator().setRemoveDuration(300);
@@ -98,8 +121,8 @@ public class RecipeActivity extends AppCompatActivity {
         try {
             object = (JSONObject) new JSONTokener(recipeString).nextValue();
             this.recipeTitle = object.getString("title");
-            Log.d("title", recipeTitle);
-            setTitle(recipeTitle);
+            mTitle.setText("");
+
 
             this.recipeImage = object.get("image").toString();
             //retrievedRecipes.getJSONObject(position).get("image").toString();
@@ -146,21 +169,20 @@ public class RecipeActivity extends AppCompatActivity {
 
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        ImageView toolbarImage = (ImageView) findViewById(R.id.image_stretch_detail);
+        ImageView toolbarImage = (ImageView) findViewById(R.id.main_imageview_placeholder);
         picassoLoader(this, toolbarImage, recipeImage);
 
-        ImageButton share = (ImageButton) findViewById(R.id.share);
+       /* ImageButton share = (ImageButton) findViewById(R.id.share);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+
                 Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
                 myIntent.putExtra("recipeId", recipeString);
                 myIntent.putExtra("recipesString", recipeListString);
@@ -177,17 +199,6 @@ public class RecipeActivity extends AppCompatActivity {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Cooking tools..very soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                //Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
-                //myIntent.putExtra("recipeId", recipeString);
-                //myIntent.putExtra("recipesString", recipeListString);
-                //startActivity(myIntent);
-                /*
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("plain/text");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!");
-                startActivity(Intent.createChooser(sharingIntent,"Share using"));*/
 
 
                 onShareClick(view);
@@ -195,7 +206,7 @@ public class RecipeActivity extends AppCompatActivity {
             }
 
         });
-        this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
+        this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;*/
     }
 
     private void fillArray(String proc) throws JSONException {
@@ -365,7 +376,7 @@ public class RecipeActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY", "KEY");
+                urlConnection.setRequestProperty("KEY","KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -407,7 +418,7 @@ public class RecipeActivity extends AppCompatActivity {
 
 
                 Log.d("proce after", procedure);
-                fillArray(procedure);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -492,6 +503,70 @@ public class RecipeActivity extends AppCompatActivity {
         startActivity(openInChooser);
     }
 
+    private void bindActivity() {
+        mToolbar        = (Toolbar) findViewById(R.id.main_toolbar);
+        mTitle          = (TextView) findViewById(R.id.main_textview_title);
+        mTitleContainer = (LinearLayout) findViewById(R.id.main_linearlayout_title);
+        mAppBarLayout   = (AppBarLayout) findViewById(R.id.main_appbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+        handleAlphaOnTitle(percentage);
+        handleToolbarTitleVisibility(percentage);
+    }
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if(mIsTheTitleContainerVisible) {
+                startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
+    }
 
     /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();
