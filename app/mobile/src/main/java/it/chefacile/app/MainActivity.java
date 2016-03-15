@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] sugg;
     private String[] suggOccurrences;
     private List<String> searchedIngredients = new ArrayList<String>();
+    private Button Mostra;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -156,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
         //buttoncuisine = (ImageButton) findViewById(R.id.btn_cuisine);
         //buttondiet = (ImageButton) findViewById(R.id.btn_diet);
         //buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
+        Mostra = (Button) findViewById(R.id.btn_mostra);
+
 
         ImageView icon = new ImageView(this); // Create an icon
         icon.setImageDrawable(getResources().getDrawable(R.drawable.logo));
@@ -214,6 +219,31 @@ public class MainActivity extends AppCompatActivity {
                 showSimpleListDialogSuggestions(v);
             }
         });
+
+
+        Mostra.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Cursor res = chefacileDb.getAllDataIngredients();
+                        if(res.getCount() == 0){
+                            showMessage("Error","Nothing found");
+                            return;
+                        }
+
+                        StringBuffer buffer = new StringBuffer();
+                        while(res.moveToNext()){
+                            buffer.append("ingredient: " +res.getString(0)+"\n");
+                            buffer.append("count: " +res.getInt(1)+"\n");
+                            buffer.append("id: " +res.getInt(2)+"\n\n");
+                        }
+
+                        showMessage("Data", buffer.toString());
+                    }
+                }
+        );
+
+
 
 
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
@@ -346,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     } else {
                                         if (chefacileDb.occursExceeded()) {
-                                            chefacileDb.deleteMinimum(input);
+                                            //chefacileDb.deleteMinimum(input);
                                             // chefacileDb.insertDataIngredient(input);
                                             mapIngredients = chefacileDb.getDataInMapIngredient();
                                             Map<String, Integer> map3;
@@ -1021,8 +1051,8 @@ public class MainActivity extends AppCompatActivity {
         boolean control = checked;
         if (control) {
             listIngredientsPREF = chefacileDb.getDataInListIngredientPREF();
-            if (chefacileDb.findIngredient(ingredient))
-                chefacileDb.decrementedId(ingredient);
+           /* if (chefacileDb.findIngredient(ingredient))
+                chefacileDb.decrementedId(ingredient);*/
 
             if (chefacileDb.getNumberIngredients() > 3) {
                 chefacileDb.deleteDataIngredient(ingredient);
@@ -1189,32 +1219,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startDatabase(DatabaseHelper db) {
+        Cursor res = chefacileDb.getAllDataIngredients();
 
-        db.insertDataIngredient("Pasta");
-        db.insertDataIngredient("Eggs");
-        db.insertDataIngredient("Oil");
+        if (res.getCount() == 0) {
 
-        if (db.findIngredientPREF("Pasta")) {
-            String n1 = addRandomIngredient();
-            db.deleteDataIngredient("Pasta");
-            db.insertDataIngredient(n1);
+            db.insertDataIngredient( "Pasta" );
+            db.insertDataIngredient( "Eggs" );
+            db.insertDataIngredient( "Oil" );
+
+            if (db.findIngredientPREF( "Pasta" )) {
+                String n1 = addRandomIngredient();
+                db.deleteDataIngredient( "Pasta" );
+                db.insertDataIngredient( n1 );
+            }
+
+            if (db.findIngredientPREF( "Eggs" )) {
+                String n2 = addRandomIngredient();
+                db.deleteDataIngredient( "Eggs" );
+                db.insertDataIngredient( n2 );
+            }
+
+            if (db.findIngredientPREF( "Oil" )) {
+                String n3 = addRandomIngredient();
+                db.deleteDataIngredient( "Oil" );
+                db.insertDataIngredient( n3 );
+            }
+
+            mapIngredients = db.getDataInMapIngredient();
         }
-
-        if (db.findIngredientPREF("Eggs")) {
-            String n2 = addRandomIngredient();
-            db.deleteDataIngredient("Eggs");
-            db.insertDataIngredient(n2);
-        }
-
-        if (db.findIngredientPREF("Oil")) {
-            String n3 = addRandomIngredient();
-            db.deleteDataIngredient("Oil");
-            db.insertDataIngredient(n3);
-        }
-
-        mapIngredients=db.getDataInMapIngredient();
     }
-
 
 }
 

@@ -234,7 +234,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    }
 
 
-    public void deleteMinimum(String test){
+   /* public void deleteMinimum(String test){
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(occursExceeded()){
@@ -253,10 +253,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-    }
+    }*/
 
 
-    public void decrementedId(String test){
+    /*public void decrementedId(String test){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c1 = db.rawQuery("select * from " +TABLE_NAME1, null);
         Cursor c2 = db.rawQuery("select * from " +TABLE_NAME1+ " where " +COL_1+ " = '"+test+"'" , null);
@@ -274,15 +274,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (c1.moveToNext());
         c1.close();
         c2.close();
-    }
+    }*/
 
 
     public int getNumberIngredients() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c1 = db.rawQuery("select * from " + TABLE_NAME1, null);
-        int n = 0;
+        Cursor c1 = db.rawQuery("select * from " + TABLE_NAME1, null);;
+        int n=0;
 
         if (c1 != null) {
+            n=1;
 
             while (c1.moveToNext()) {
                 n++;
@@ -290,6 +291,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return n;
     }
-
 
 }
