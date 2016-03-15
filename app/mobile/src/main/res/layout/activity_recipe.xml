@@ -41,7 +41,7 @@
                 <FrameLayout
                     android:id="@+id/main.framelayout.title"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="150dp"
                     android:layout_gravity="bottom|center_horizontal"
                     android:background="@color/colorPrimary"
                     android:orientation="vertical"
@@ -66,16 +66,10 @@
                             android:text="@string/quila_name"
                             android:textColor="@android:color/white"
                             android:textSize="30sp"
+                            android:id="@+id/maintitle"
                             />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/quila_tagline"
-                            android:textColor="@android:color/white"
-                            />
+
 
                     </LinearLayout>
                 </FrameLayout>
@@ -125,12 +119,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+                android:gravity="right"
                 >
-
-                <Space
-                    android:layout_width="@dimen/image_final_width"
-                    android:layout_height="@dimen/image_final_width"
-                    />
 
                 <TextView
                     android:id="@+id/main.textview.title"
@@ -141,6 +131,23 @@
                     android:text="@string/quila_name2"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
+                    />
+
+                <Space
+                    android:layout_width="@dimen/image_final_width"
+                    android:layout_height="@dimen/image_final_width"
+                    />
+
+
+                <ImageButton
+                    android:id="@+id/share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/abc_ic_menu_share_mtrl_alpha"
+                    android:background="@color/toolbarTransparent"
+
                     />
 
             </LinearLayout>

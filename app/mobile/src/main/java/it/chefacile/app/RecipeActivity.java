@@ -47,6 +47,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,6 +87,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
     private String procedure = "Loading";
     private String searchedIngredients;
     private String sharedText;
+    private TextView maintitle;
 
     private Context mContext;
     private MaterialListView mListView;
@@ -102,6 +104,8 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
         mToolbar.inflateMenu(R.menu.menu_main);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+
+        this.maintitle = (TextView) findViewById(R.id.maintitle);
 
 
         this.recipeString = getIntent().getStringExtra("recipeId");
@@ -121,7 +125,8 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         try {
             object = (JSONObject) new JSONTokener(recipeString).nextValue();
             this.recipeTitle = object.getString("title");
-            mTitle.setText("");
+            maintitle.setText(recipeTitle);
+            mTitle.setText(recipeTitle);
 
 
             this.recipeImage = object.get("image").toString();
@@ -176,9 +181,9 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         ImageView toolbarImage = (ImageView) findViewById(R.id.main_imageview_placeholder);
         picassoLoader(this, toolbarImage, recipeImage);
 
-       /* ImageButton share = (ImageButton) findViewById(R.id.share);
+       ImageButton share = (ImageButton) findViewById(R.id.share);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,7 +199,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
             }
 
-        });
+        });*/
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +211,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
             }
 
         });
-        this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;*/
+        this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
     }
 
     private void fillArray(String proc) throws JSONException {
@@ -376,7 +381,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=true&url=" + recipeURL);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("KEY", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -510,11 +515,11 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         mAppBarLayout   = (AppBarLayout) findViewById(R.id.main_appbar);
     }
 
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    }*/
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
