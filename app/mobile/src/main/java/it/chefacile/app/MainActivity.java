@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
-                .setStartAngle(360)
+                .setStartAngle(90)
                 .setEndAngle(270)
                 .addSubActionView(button1)
                 .addSubActionView(button2)
