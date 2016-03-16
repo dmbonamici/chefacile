@@ -507,17 +507,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void showMessage(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-
-    }
-
-
     class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
         private Exception exception;
@@ -570,15 +559,13 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 //progressBar.setVisibility(View.GONE);
             } else if (response.toString().trim().equals("[]") || response.toString().trim().equals("")) {
-                Snackbar.make(responseView, "No recipes for these parameters", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showErrorMessage();
                 progressDialog.dismiss();
-                //progressBar.setVisibility(View.GONE);
 
             } else if (!response.toString().contains("usedIngredientCount")) {
-                Snackbar.make(responseView, "No recipes for these parameters", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showErrorMessage();
                 progressDialog.dismiss();
+
             } else {
                 progressDialog.dismiss();
                 //progressBar.setVisibility(View.GONE);
@@ -953,6 +940,20 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setCancelable(true);
         final AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
+
+    private void showErrorMessage() {
+        builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.logo);
+        builder.setTitle("Error");
+        builder.setMessage("No recipe has been found with these specifications.");
+
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
