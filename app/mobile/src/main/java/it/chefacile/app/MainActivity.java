@@ -950,7 +950,41 @@ public class MainActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Error");
-        builder.setMessage("No recipe has been found with these specifications.");
+
+        if((ingredients.length()!=1 && ingredients.length()!= 0 && !ingredients.matches("[a-z]")) && (dietString.length()!=0 && dietString.length()!=1) && (intolString.length()!=0 && intolString.length()!=1)) {
+
+            builder.setMessage( "No recipe has been found with... \n\n" +
+                    "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
+                    "Diet: " + dietString.toString() + "\n" +
+                    "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
+        }
+
+        else if((ingredients.length() == 1 || ingredients.length() == 0 || ingredients.matches("[a-z]")) && (dietString.length()!=0  && dietString.length()!=1) && (intolString.length()!=1 && intolString.length()!=0)) {
+
+            builder.setMessage( "No recipe has been found with... \n\n" +
+                    "Diet: " + dietString.toString() + "\n" +
+                    "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
+        }
+
+        else if((ingredients.length()!=1 && ingredients.length()!=0 && !ingredients.matches("[a-z]")) && (dietString.equals("None")) && (intolString.length()!=0 || intolString.length()!=1)) {
+
+            builder.setMessage( "No recipe has been found with... \n\n" +
+                    "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
+                    "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
+        }
+
+        else if((ingredients.length()!= 0 && ingredients.length()!=1 && !ingredients.matches("[a-z]")) && (dietString.length()!=0  && dietString.length()!=1) && (intolString.length()==1 || intolString.length()==0)) {
+
+            builder.setMessage( "No recipe has been found with... \n\n" +
+                    "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
+                    "Diet: " + dietString.toString() + "\n\n");
+        }
+
+        else if((ingredients.length()!=1 && ingredients.length()!=0 && !ingredients.matches("[a-z]")) && (dietString.equals("None")) && (intolString.length()==0 && intolString.length()==1)) {
+
+            builder.setMessage( "No recipe has been found with... \n\n" +
+                    "Ingredients: " + ingredients.substring(1, ingredients.length() -1).toString() + "\n\n");
+        }
 
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
