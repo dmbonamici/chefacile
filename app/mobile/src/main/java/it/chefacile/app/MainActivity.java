@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         //buttondiet = (ImageButton) findViewById(R.id.btn_diet);
         //buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
         //Mostra = (Button) findViewById(R.id.btn_mostra);
+
 
 
         ImageView icon = new ImageView(this); // Create an icon
@@ -595,6 +597,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
     }
 
     class RetrieveIngredientTask extends AsyncTask<Void, Void, String> {
@@ -709,6 +713,7 @@ public class MainActivity extends AppCompatActivity {
     private Card generateNewCard(final String ingredient) {
         mListView.smoothScrollToPosition(0);
         Log.d("IMGURL", currentImageUrl);
+        Log.d("VERIFICA:",deleteCommas(",,,Ciao,"));
 
         if (!chefacileDb.findIngredientPREF(ingredient.trim().replaceAll(",", ""))) {
 
@@ -951,36 +956,36 @@ public class MainActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Error");
 
-        if((ingredients.length()!=1 && ingredients.length()!= 0 && !ingredients.matches("[a-z]")) && (dietString.length()!=0 && dietString.length()!=1) && (intolString.length()!=0 && intolString.length()!=1)) {
+        if((ingredients.length()!= 0 && !occursOnlyCommas(ingredients)) && (!dietString.replaceAll(",","").equals("None") && !dietString.replaceAll(",","").equals("")) && (intolString.length()!=0 && !occursOnlyCommas(intolString))) {
 
             builder.setMessage( "No recipe has been found with... \n\n" +
                     "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
-                    "Diet: " + dietString.toString() + "\n" +
+                    "Diet: " + dietString.toString().replaceAll(",","") + "\n" +
                     "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
         }
 
-        else if((ingredients.length() == 1 || ingredients.length() == 0 || ingredients.matches("[a-z]")) && (dietString.length()!=0  && dietString.length()!=1) && (intolString.length()!=1 && intolString.length()!=0)) {
+        else if((ingredients.length() == 0 || occursOnlyCommas(ingredients)) && (!dietString.replaceAll(",","").equals("None") && !dietString.replaceAll(",","").equals("")) && (!occursOnlyCommas(intolString) && intolString.length()!=0)) {
 
             builder.setMessage( "No recipe has been found with... \n\n" +
-                    "Diet: " + dietString.toString() + "\n" +
+                    "Diet: " + dietString.toString().replaceAll(",","") + "\n" +
                     "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
         }
 
-        else if((ingredients.length()!=1 && ingredients.length()!=0 && !ingredients.matches("[a-z]")) && (dietString.equals("None")) && (intolString.length()!=0 || intolString.length()!=1)) {
-
-            builder.setMessage( "No recipe has been found with... \n\n" +
-                    "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
-                    "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
-        }
-
-        else if((ingredients.length()!= 0 && ingredients.length()!=1 && !ingredients.matches("[a-z]")) && (dietString.length()!=0  && dietString.length()!=1) && (intolString.length()==1 || intolString.length()==0)) {
+        else if((ingredients.length()!=0 && !occursOnlyCommas(ingredients)) && (dietString.replaceAll(",","").equals("None") || dietString.replaceAll(",","").equals("")) && (intolString.length()!=0 || !occursOnlyCommas(intolString))) {
 
             builder.setMessage( "No recipe has been found with... \n\n" +
                     "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
-                    "Diet: " + dietString.toString() + "\n\n");
+                    "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
         }
 
-        else if((ingredients.length()!=1 && ingredients.length()!=0 && !ingredients.matches("[a-z]")) && (dietString.equals("None")) && (intolString.length()==0 && intolString.length()==1)) {
+        else if((ingredients.length()!= 0 && ingredients.length()!=1 && !occursOnlyCommas(ingredients)) && (!dietString.replaceAll(",","").equals("None") && !dietString.replaceAll(",","").equals("")) && (intolString.length()==0 || occursOnlyCommas(intolString))) {
+
+            builder.setMessage( "No recipe has been found with... \n\n" +
+                    "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
+                    "Diet: " + dietString.toString().replaceAll(",","") + "\n\n");
+        }
+
+        else if((ingredients.length()!=0 && !occursOnlyCommas(ingredients)) && (dietString.replaceAll(",","").equals("None") || dietString.replaceAll(",","").equals("")) && (occursOnlyCommas(intolString) && intolString.length()==0)) {
 
             builder.setMessage( "No recipe has been found with... \n\n" +
                     "Ingredients: " + ingredients.substring(1, ingredients.length() -1).toString() + "\n\n");
@@ -1283,6 +1288,40 @@ public class MainActivity extends AppCompatActivity {
             mapIngredients = db.getDataInMapIngredient();
         }
     }
+
+
+    public boolean occursOnlyCommas(String s) {
+        char[] charArray = s.toCharArray();
+        boolean b = true;
+
+        for (char c : charArray) {
+            if (c == ',') {
+                b = true;
+
+            } else return false;
+
+        }
+        return b;
+    }
+
+
+    public String deleteCommas(String s) {
+        char[] charArray = s.toCharArray();
+        boolean b = true;
+        String test="";
+
+        for (char c : charArray) {
+            if (c == ',') {
+                c = ' ';
+            } else
+                test= String.copyValueOf(charArray);
+                return test;
+
+        }
+        test = String.copyValueOf(charArray);
+        return test;
+    }
+
 
 }
 
