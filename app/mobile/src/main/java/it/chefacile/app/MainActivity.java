@@ -713,7 +713,7 @@ public class MainActivity extends AppCompatActivity {
     private Card generateNewCard(final String ingredient) {
         mListView.smoothScrollToPosition(0);
         Log.d("IMGURL", currentImageUrl);
-        Log.d("VERIFICA:",deleteCommas(",,,Ciao,"));
+        //Log.d("VERIFICA:",deleteCommas(",,,Ciao,"));
 
         if (!chefacileDb.findIngredientPREF(ingredient.trim().replaceAll(",", ""))) {
 
