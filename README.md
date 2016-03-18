@@ -42,7 +42,6 @@ Milestone 2 - Release Candidate (February 19th)
 
 Milestone 3 - Public live BETA (March 18th) 
 ==============
-_Work in progress_
 
  - Local persistence implementation (favourite ingredients) 
  - Recommended ingredients based on user history
