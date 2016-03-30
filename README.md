@@ -52,6 +52,8 @@ Milestone 3 - Public live BETA (March 18th)
 
 [Milestone 3 Presentation](https://drive.google.com/file/d/0B0hoAFPxDfD8RldsZWt1a2EzRzg/view?usp=sharing)
 
+[Our pitch](https://www.youtube.com/watch?v=Kl2reRAsWlU)
+
 [Video Demo](https://www.youtube.com/watch?v=a9iO1zWWwfs&feature=youtu.be)
 
 [Pilot beta users](https://docs.google.com/document/d/1vogxguGMd6vkbzM4r5ZfRb7fLjayfuDzq50VtQWUICM/edit?usp=sharing)
