@@ -96,6 +96,15 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(@NonNull Card card, int position) {
                 Log.d("CARD_TYPE", "" + card.getTag());
+                if (card.getTag().equals("WELCOME_CARD"));
+                else {
+                    try {
+                        recipeId = retrievedRecipes.getJSONObject(position - 1).get("id").toString();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    new RetrieveFeedTask().execute();
+                }
             }
             @Override
             public void onItemLongClick(@NonNull Card card, int position) {
@@ -114,17 +123,17 @@ public class ResultsActivity extends AppCompatActivity {
     private Card getWelcomeCard() {
         final CardProvider provider = new Card.Builder(this)
                 .setTag("WELCOME_CARD")
-                .setDismissible()
+                //.setDismissible()
                 .withProvider(new CardProvider())
-                .setLayout(R.layout.material_welcome_card_layout)
+                .setLayout(R.layout.welcome_card)
                 .setTitle("The best for you")
                 .setTitleColor(Color.WHITE)
                 .setDescription("Find what you like")
                 .setDescriptionColor(Color.WHITE)
                 .setSubtitle("Here you can find all the recipes that you can cook")
                 .setSubtitleColor(Color.WHITE)
-                .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark))
-                .addAction(R.id.ok_button, new WelcomeButtonAction(this)
+                .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+             /*  .addAction(R.id.ok_button, new WelcomeButtonAction(this)
                         .setText("Okay!")
                         .setTextColor(Color.WHITE)
                         .setListener(new OnActionClickListener() {
@@ -133,7 +142,7 @@ public class ResultsActivity extends AppCompatActivity {
                                 Toast.makeText(mContext, "Let's start!", Toast.LENGTH_SHORT).show();
                                 card.dismiss();
                             }
-                        }));
+                        }));*/
         return provider.endConfig().build();
     }
     private Card getRandomCard(final int position) throws JSONException {
@@ -148,6 +157,7 @@ public class ResultsActivity extends AppCompatActivity {
         //JSONObject img = retrievedRecipes.getJSONObject(position).getJSONObject("imageUrlsBySize");
         if(!retrievedRecipes.getJSONObject(position).has("image")){
             imageURL = "http://i.imgur.com/exqW1px.png";
+
         }
         else {
             imageURL = retrievedRecipes.getJSONObject(position).get("image").toString();
@@ -201,7 +211,7 @@ public class ResultsActivity extends AppCompatActivity {
                         requestCreator.fit().centerCrop() ;
                     }
                 })
-                .addAction(R.id.left_text_button, new TextViewAction(this)
+              /* .addAction(R.id.material_listview, new TextViewAction(this)
                         .setText("Open")
                         .setTextResourceColor(R.color.black_button)
                         .setListener(new OnActionClickListener() {
@@ -213,7 +223,7 @@ public class ResultsActivity extends AppCompatActivity {
                                 myIntent.putExtra("recipeId", recipeId);
                                 startActivityForResult(myIntent, 0);*/
                                 //mListView.getAdapter().add(generateNewCard());
-                                try {
+                             /*   try {
                                     recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -221,7 +231,7 @@ public class ResultsActivity extends AppCompatActivity {
                                 new RetrieveFeedTask().execute();
                                 Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
                             }
-                        }))
+                        }))*/
               /*  .addAction(R.id.right_text_button, new TextViewAction(this)
                         .setText("right button")
                         .setTextResourceColor(R.color.accent_material_dark)
@@ -262,7 +272,7 @@ public class ResultsActivity extends AppCompatActivity {
                 URL url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/"+ idrecipe +"/information");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("X-Mashape-Key", "KEY");
                 Log.d("URLCONNECTION", url.toString());
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

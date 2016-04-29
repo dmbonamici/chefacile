@@ -19,6 +19,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -110,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
     private String[] sugg;
     private String[] suggOccurrences;
     private List<String> searchedIngredients = new ArrayList<String>();
+
     //private Button Mostra;
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -162,12 +168,18 @@ public class MainActivity extends AppCompatActivity {
         //buttonintol = (ImageButton) findViewById(R.id.btn_intoll);
         //Mostra = (Button) findViewById(R.id.btn_mostra);
 
+        final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+        animation.setDuration(1000); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(5); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE);
+
 
 
         ImageView icon = new ImageView(this); // Create an icon
         icon.setImageDrawable(getResources().getDrawable(R.drawable.logo));
 
-        com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this)
+        final com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton actionButton = new com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.Builder(this)
                 .setPosition(com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton.POSITION_RIGHT_CENTER
                 )
                 .setContentView(icon)
@@ -222,6 +234,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final FloatingActionButton actionABC = (FloatingActionButton) findViewById(R.id.action_abc);
+
+        actionABC.bringToFront();
+        actionABC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ingredients.length() < 2) {
+                    Snackbar.make(responseView, "Insert at least one ingredient", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    new RetrieveFeedTask().execute();
+                }
+            }
+
+            // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
+            //         .setAction("Action", null).show();
+
+        });
 
        /* Mostra.setOnClickListener(
                 new View.OnClickListener() {
@@ -363,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
                                 String s1 = editText.getText().toString().substring(0, 1).toUpperCase();
                                 String s2 = editText.getText().toString().substring(1);
                                 input = s1 + s2;
+
                                 Log.d("INPUT: ", input);
                                 searchedIngredients.add(input);
                                 Log.d("SEARCHED INGR LIST",searchedIngredients.toString());
@@ -408,6 +439,15 @@ public class MainActivity extends AppCompatActivity {
 
                                 //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
                             }
+
+                            InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                            in.hideSoftInputFromWindow(editText
+                                            .getApplicationWindowToken(),
+                                    InputMethodManager.HIDE_NOT_ALWAYS);
+
+                            actionABC.startAnimation(animation);
+
                             return true;
                         default:
                             break;
@@ -488,23 +528,7 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.ingredientText);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        final FloatingActionButton actionABC = (FloatingActionButton) findViewById(R.id.action_abc);
-        actionABC.bringToFront();
-        actionABC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ingredients.length() < 2) {
-                    Snackbar.make(responseView, "Insert at least one ingredient", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    new RetrieveFeedTask().execute();
-                }
-            }
 
-            // Snackbar.make(view, "Non disponibile, mangia l'aria", Snackbar.LENGTH_LONG)
-            //         .setAction("Action", null).show();
-
-        });
 
     }
 
@@ -532,7 +556,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("URL SPOO", urlSearchComplex + "?cuisine=" + cuisineString + "&diet=" + dietString + "&includeIngredients=" + ingredients + "&intolerances=" + intolString + "&limitLicense=true" + "&query=" + "recipe" + "&number=20&ranking=" + String.valueOf(ranking));
                 HttpURLConnection urlConnection = (HttpURLConnection) urlSpoo.openConnection();
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("X-Mashape-Key", "KEY");
 
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -626,7 +650,7 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 //TODO: Changing key values
-                urlConnection.setRequestProperty("KEY","KEY");
+                urlConnection.setRequestProperty("X-Mashape-Key", "KEY");
                 urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("ingredientList", currentIngredient)
@@ -887,8 +911,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        builder.setCancelable(true);
+        builder.setPositiveButton("Okay", null);
+        builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -916,8 +940,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        builder.setCancelable(true);
+        builder.setPositiveButton("Okay", null);
+        builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -956,6 +980,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.logo);
         builder.setTitle("Error");
 
+       // builder.setMessage("No recipe has been found "+"\n"+"with these parameters");
+
         if((ingredients.length()!= 0 && !occursOnlyCommas(ingredients)) && (!dietString.replaceAll(",","").equals("None") && !dietString.replaceAll(",","").equals("")) && (intolString.length()!=0 && !occursOnlyCommas(intolString))) {
 
             builder.setMessage( "No recipe has been found with... \n\n" +
@@ -971,26 +997,29 @@ public class MainActivity extends AppCompatActivity {
                     "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
         }
 
-        else if((ingredients.length()!=0 && !occursOnlyCommas(ingredients)) && (dietString.replaceAll(",","").equals("None") || dietString.replaceAll(",","").equals("")) && (intolString.length()!=0 || !occursOnlyCommas(intolString))) {
+
+
+        else if((ingredients.length()!= 0 && ingredients.length()!=1 && !occursOnlyCommas(ingredients)) && (!intolString.replaceAll(",","").equals("None") && !intolString.replaceAll(",","").equals("")) && (dietString.length()==0 || occursOnlyCommas(dietString))) {
+
 
             builder.setMessage( "No recipe has been found with... \n\n" +
                     "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
-                    "Intol: " + intolString.substring( 1, intolString.length() - 1 ).toString() + "\n\n" );
+                    "Intolerances: " + intolString.substring( 1, intolString.length() - 1 ).toString().replaceAll("\\+", " ") + "\n\n" );
         }
 
         else if((ingredients.length()!= 0 && ingredients.length()!=1 && !occursOnlyCommas(ingredients)) && (!dietString.replaceAll(",","").equals("None") && !dietString.replaceAll(",","").equals("")) && (intolString.length()==0 || occursOnlyCommas(intolString))) {
 
             builder.setMessage( "No recipe has been found with... \n\n" +
                     "Ingredients: " + ingredients.substring( 1, ingredients.length() - 1 ).toString() + "\n" +
-                    "Diet: " + dietString.toString().replaceAll(",","") + "\n\n");
+                    "Diet: " + dietString.toString().replaceAll(",","").replaceAll("\\+", " ") + "\n\n");
         }
 
-        else if((ingredients.length()!=0 && !occursOnlyCommas(ingredients)) && (dietString.replaceAll(",","").equals("None") || dietString.replaceAll(",","").equals("")) && (occursOnlyCommas(intolString) && intolString.length()==0)) {
-
+        else{
             builder.setMessage( "No recipe has been found with... \n\n" +
-                    "Ingredients: " + ingredients.substring(1, ingredients.length() -1).toString() + "\n\n");
+                    "Ingredients: " + ingredients.substring(1, ingredients.length() -1).toString().replaceAll("\\+", " ") + "\n\n");
         }
 
+        builder.setPositiveButton("Okay", null);
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -1045,7 +1074,7 @@ public class MainActivity extends AppCompatActivity {
         if (sugg != null || sugg.length != 0) {
             String[] res = new String[sugg.length];
             for (int i = 0; i < res.length; i++) {
-                res[i] = sugg[i] + " (" + suggOccurrences[i] + ")";
+                res[i] = sugg[i];
             }
 
             builder.setItems(res, new DialogInterface.OnClickListener() {
