@@ -62,7 +62,15 @@ Milestone 3 - Public live BETA (March 18th)
 
 [APK](https://drive.google.com/file/d/0B0hoAFPxDfD8Vlo5Q2MtRlVfclU/view?usp=sharing)
 
-Final Submission
+Final Submission (April 30th)
 ==============
 
-*work in progress*
+[Business & technical presentation](https://drive.google.com/open?id=0B9evljug-_nSTkdOd1NKTHBwNG8)
+
+[Video Demo](https://youtu.be/6tAEGLn5skc)
+
+[How to install APK file](https://docs.google.com/document/d/1EpddWhj_oxli7d4z6F_LENTE5ODiDaLthk1a3vVGGGo/edit?usp=sharing)
+
+[APK](https://drive.google.com/open?id=0B0hoAFPxDfD8dm9kTTRNekh0RTA)
+
+
