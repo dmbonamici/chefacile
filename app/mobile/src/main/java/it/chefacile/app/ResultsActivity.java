@@ -261,6 +261,7 @@ public class ResultsActivity extends AppCompatActivity {
         private Exception exception;
 
         protected void onPreExecute() {
+            Toast.makeText(mContext, "Caricamento..", Toast.LENGTH_SHORT).show();
 
         }
 
