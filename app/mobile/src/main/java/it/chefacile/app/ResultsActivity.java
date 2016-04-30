@@ -222,10 +222,12 @@ public class ResultsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-      Log.d("PREMUTO", "SI");
+      Log.d("PREMUTO RESULT", "SI");
         Intent intent = new Intent(ResultsActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+
+
 
     }
 }
