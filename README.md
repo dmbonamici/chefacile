@@ -71,6 +71,6 @@ Final Submission (April 30th)
 
 [How to install APK file](https://docs.google.com/document/d/1EpddWhj_oxli7d4z6F_LENTE5ODiDaLthk1a3vVGGGo/edit?usp=sharing)
 
-[APK](https://drive.google.com/open?id=0B0hoAFPxDfD8dm9kTTRNekh0RTA)
+[APK](https://drive.google.com/open?id=0B0hoAFPxDfD8UkFVVHhJS1d0UHc)
 
 
