@@ -65,7 +65,7 @@ Milestone 3 - Public live BETA (March 18th)
 Final Submission (April 30th)
 ==============
 
-[Documentation]
+~~Documentation~~
 
 [Business & technical presentation](https://drive.google.com/open?id=0B9evljug-_nSTkdOd1NKTHBwNG8)
 
