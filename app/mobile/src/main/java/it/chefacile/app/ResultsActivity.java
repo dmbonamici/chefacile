@@ -64,33 +64,19 @@ public class ResultsActivity extends AppCompatActivity {
             JSONObject JSONob = (JSONObject) new JSONTokener(recipesString).nextValue();
             Log.d("JSONOB MOMENT", JSONob.toString());
             retrievedRecipes = JSONob.getJSONArray("results");
-           // retrievedRecipes = object.getJSONArray(recipesString);
-            //Log.d("JSONObject TEST", retrievedRecipes.toString());
-            //String recipeList = object.getString("requestId");
-            //int likelihood = object.getInt("likelihood");
-            //JSONArray photos = object.getJSONArray("photos");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         // Bind the MaterialListView to a variable
         mListView = (MaterialListView) findViewById(R.id.material_listview);
-        // mListView.setItemAnimator(new SlideInLeftAnimator());
-        //  mListView.getItemAnimator().setAddDuration(300);
-        //  mListView.getItemAnimator().setRemoveDuration(300);
-        // Fill the array withProvider mock content
+
         try {
             fillArray();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        // Set the dismiss listener
-        /* mListView.setOnDismissCallback(new OnDismissCallback() {
-            @Override
-            public void onDismiss(@NonNull Card card, int position) {
-                // Show a toast
-                Toast.makeText(mContext, "You have dismissed a " + card.getTag(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
+
         // Add the ItemTouchListener
         mListView.addOnItemTouchListener(new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -133,16 +119,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .setSubtitle("Here you can find all the recipes that you can cook")
                 .setSubtitleColor(Color.WHITE)
                 .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-             /*  .addAction(R.id.ok_button, new WelcomeButtonAction(this)
-                        .setText("Okay!")
-                        .setTextColor(Color.WHITE)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
-                                Toast.makeText(mContext, "Let's start!", Toast.LENGTH_SHORT).show();
-                                card.dismiss();
-                            }
-                        }));*/
+
         return provider.endConfig().build();
     }
     private Card getRandomCard(final int position) throws JSONException {
@@ -164,39 +141,7 @@ public class ResultsActivity extends AppCompatActivity {
         }
         //String totalTime = retrievedRecipes.getJSONObject(position).get("readyInMinutes").toString();
         recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
-        //String smallImageURL = retrievedRecipes.getJSONObject(position).get("smallImageUrls").toString();
-             /*   final CardProvider provider1 = new Card.Builder(this)
-                        .setTag("BIG_IMAGE_BUTTONS_CARD")
-                        //.setDismissible()
-                        .withProvider(new CardProvider())
-                        .setLayout(R.layout.material_image_with_buttons_card)
-                        .setTitle(title)
-                        .setTitleColor(Color.WHITE)
-                        .setDescription(description)
-                        .setDrawable("http://www.viaggiareusa.it/wp-content/uploads/2015/02/Roasted-thanksgiving-day-turkey-642x336.jpg")
-                        .addAction(R.id.left_text_button, new TextViewAction(this)
-                                .setText("Open")
-                                .setTextResourceColor(R.color.black_button)
-                                .setListener(new OnActionClickListener() {
-                                    @Override
-                                    public void onActionClicked(View view, Card card) {
-                                        //Log.d("ADDING", "CARD");
-                                        Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
-                                        startActivityForResult(myIntent, 0);
-                                        //mListView.getAdapter().add(generateNewCard());
-                                        Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
-                                    }
-                                }))
-                        .addAction(R.id.right_text_button, new TextViewAction(this)
-                                .setText("right button")
-                                .setTextResourceColor(R.color.accent_material_dark)
-                                .setListener(new OnActionClickListener() {
-                                    @Override
-                                    public void onActionClicked(View view, Card card) {
-                                        Toast.makeText(mContext, "You have pressed the right button", Toast.LENGTH_SHORT).show();
-                                    }
-                                }));
-                return provider1.endConfig().build();*/
+
         final CardProvider provider = new Card.Builder(this)
                 .setTag("BASIC_IMAGE_BUTTON_CARD")
                 .withProvider(new CardProvider<>())
@@ -210,50 +155,10 @@ public class ResultsActivity extends AppCompatActivity {
                     public void onImageConfigure(@NonNull RequestCreator requestCreator) {
                         requestCreator.fit().centerCrop() ;
                     }
-                })
-              /* .addAction(R.id.material_listview, new TextViewAction(this)
-                        .setText("Open")
-                        .setTextResourceColor(R.color.black_button)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
-                                //Log.d("ADDING", "CARD");
-                                /*Intent myIntent = new Intent(view.getContext(), RecipeActivity.class);
-                                Log.d("RESULT ACT RECIPE ID", recipeId);
-                                myIntent.putExtra("recipeId", recipeId);
-                                startActivityForResult(myIntent, 0);*/
-                                //mListView.getAdapter().add(generateNewCard());
-                             /*   try {
-                                    recipeId = retrievedRecipes.getJSONObject(position).get("id").toString();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                new RetrieveFeedTask().execute();
-                                Toast.makeText(mContext, "Open", Toast.LENGTH_SHORT).show();
-                            }
-                        }))*/
-              /*  .addAction(R.id.right_text_button, new TextViewAction(this)
-                        .setText("right button")
-                        .setTextResourceColor(R.color.accent_material_dark)
-                        .setListener(new OnActionClickListener() {
-                            @Override
-                            public void onActionClicked(View view, Card card) {
-                                Toast.makeText(mContext, "You have pressed the right button", Toast.LENGTH_SHORT).show();
-                            }
-                        }))*/;
+                });
+
         return provider.endConfig().build();
     }
-    /*private Card generateNewCard() {
-        return new Card.Builder(this)
-                .setTag("BASIC_IMAGE_BUTTONS_CARD")
-                .withProvider(new CardProvider())
-                .setLayout(R.layout.material_basic_image_buttons_card_layout)
-                .setTitle("I'm new")
-                .setDescription("I've been generated on runtime!")
-                .setDrawable(R.drawable.chefacile)
-                .endConfig()
-                .build();
-    }*/
 
 
     class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
@@ -261,7 +166,7 @@ public class ResultsActivity extends AppCompatActivity {
         private Exception exception;
 
         protected void onPreExecute() {
-            Toast.makeText(mContext, "Caricamento..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Loading..", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -309,22 +214,18 @@ public class ResultsActivity extends AppCompatActivity {
                 myIntent1.putExtra("searchedIngredients", searchedIngredients);
                 startActivity(myIntent1);
             }
-            //  check this.exception
-            //  do something with the feed
 
-//            try {
-//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-//                String requestID = object.getString("requestId");
-//                int likelihood = object.getInt("likelihood");
-//                JSONArray photos = object.getJSONArray("photos");
-//                .
-//                .
-//                .
-//                .
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }*/
 
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+      Log.d("PREMUTO", "SI");
+        Intent intent = new Intent(ResultsActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 }

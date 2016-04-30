@@ -115,35 +115,6 @@ public class MainActivity extends AppCompatActivity {
     private String[] suggOccurrences;
     private List<String> searchedIngredients = new ArrayList<String>();
 
-    //private Button Mostra;
-
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-
-
-    @Override
-   /* protected void onResume() {
-        super.onResume();
-        TextWatcher tw = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                checkFieldsForEmptyValues();
-            }
-        };
-
-        editText.addTextChangedListener(tw);
-    }*/
 
 
 
@@ -253,27 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-       /* Mostra.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Cursor res = chefacileDb.getAllDataIngredients();
-                        if(res.getCount() == 0){
-                            showMessage("Error","Nothing found");
-                            return;
-                        }
 
-                        StringBuffer buffer = new StringBuffer();
-                        while(res.moveToNext()){
-                            buffer.append("ingredient: " +res.getString(0)+"\n");
-                            buffer.append("count: " +res.getInt(1)+"\n");
-                            buffer.append("id: " +res.getInt(2)+"\n\n");
-                        }
-
-                        showMessage("Data", buffer.toString());
-                    }
-                }
-        );*/
 
 
 
@@ -350,32 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
         final CharSequence[] items = {"Maximize used ingredients", "Minimize missing ingredients"};
 
-      /*  AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Filter mode");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                if(items[item].toString().trim().equals("Maximize used ingredients")){
-                    ranking = 1;
-                }
-                else{
-                    ranking = 2;
-                }
-                Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-                Log.d("ranking", String.valueOf(ranking));
-            }
-        });
-        alert = builder.create();
 
-
-        FilterButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                alert.show();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-            }
-        });*/
-
-        //checkFieldsForEmptyValues();
 
         editText.setOnKeyListener(new View.OnKeyListener()
         {
@@ -457,72 +383,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-      /*  AddButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-                if (!(editText.getText().toString().trim().equals(""))) {
-
-                    String input;
-                    String s1 = editText.getText().toString().substring(0, 1).toUpperCase();
-                    String s2 = editText.getText().toString().substring(1);
-                    input = s1 + s2;
-                    Log.d("INPUT: ", input);
-                    searchedIngredients.add(input);
-                    Log.d("SEARCHED INGR LIST",searchedIngredients.toString());
-
-
-                    if (!chefacileDb.findIngredientPREF(input)) {
-                        if (chefacileDb.findIngredient(input)) {
-                            chefacileDb.updateCount(input);
-                            mapIngredients = chefacileDb.getDataInMapIngredient();
-                            Map<String, Integer> map2;
-                            map2 = sortByValue(mapIngredients);
-                            Log.d("MAPPACOUNT: ", map2.toString());
-
-                        } else {
-                            if (chefacileDb.occursExceeded()) {
-                                chefacileDb.deleteMinimum(input);
-                                // chefacileDb.insertDataIngredient(input);
-                                mapIngredients = chefacileDb.getDataInMapIngredient();
-                                Map<String, Integer> map3;
-                                map3 = sortByValue(mapIngredients);
-                                Log.d("MAPPAINGREDIENTE: ", map3.toString());
-
-                            } else {
-                                chefacileDb.insertDataIngredient(input);
-                                mapIngredients = chefacileDb.getDataInMapIngredient();
-                                Map<String, Integer> map3;
-                                map3 = sortByValue(mapIngredients);
-                                Log.d("MAPPAINGREDIENTE: ", map3.toString());
-                            }
-                        }
-                    }
-                }
-
-                if (editText.getText().toString().equals("")) {
-                    ingredients += editText.getText().toString().trim() + "";
-                    editText.getText().clear();
-
-                } else {
-                    ingredients += editText.getText().toString().replaceAll(" ", "+").trim().toLowerCase() + ",";
-                    singleIngredient = editText.getText().toString().trim().toLowerCase();
-                    currentIngredient = singleIngredient;
-                    new RetrieveIngredientTask().execute();
-
-                    //adapter.add(singleIngredient.substring(0,1).toUpperCase() + singleIngredient.substring(1));
-                }
-                //responseView.setText(ingredients);
-
-                //ingredients += editText.getText().toString().trim() + ",";
-            }
-
-        });*/
-
-      /*  try {
-            fillArray();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
 
         responseView = (TextView) findViewById(R.id.responseView);
         editText = (EditText) findViewById(R.id.ingredientText);
@@ -602,22 +463,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent1);
                 responseView.setText(null);
                 ingredients = "";
-            }
-            //  check this.exception
-            //  do something with the feed
 
-//            try {
-//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-//                String requestID = object.getString("requestId");
-//                int likelihood = object.getInt("likelihood");
-//                JSONArray photos = object.getJSONArray("photos");
-//                .
-//                .
-//                .
-//                .
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
+            }
+
         }
 
 
@@ -1025,24 +873,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    /*
-        private void showChoicePreferred(View view){
-            builder = new AlertDialog.Builder(this);
-            builder.setIcon(R.drawable.logo);
-            builder.setTitle("Favourite ingredients");
-            final String[] items = (String[]) listIngredientsPREF.toArray();
 
-            builder.setItems(items, new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i){
-                    Toast.makeText(getApplicationContext(), "You clicked "+ items[i], Toast.LENGTH_SHORT).show();
-                }
-            });
-            builder.setCancelable(true);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-    */
     private void showSimpleListDialogFav(View view) {
         builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.logo);

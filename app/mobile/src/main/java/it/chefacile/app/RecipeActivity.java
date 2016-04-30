@@ -218,36 +218,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         ImageView toolbarImage = (ImageView) findViewById(R.id.main_imageview_placeholder);
         picassoLoader(this, toolbarImage, recipeImage);
 
-      // ImageButton share = (ImageButton) findViewById(R.id.share);
 
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent myIntent = new Intent(RecipeActivity.this, TimerActivity.class);
-                myIntent.putExtra("recipeId", recipeString);
-                myIntent.putExtra("recipesString", recipeListString);
-                myIntent.putExtra("searchedIngredients", searchedIngredients);
-                startActivity(myIntent);
-
-
-
-
-            }
-
-        });*/
-
-      /*  share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                onShareClick(view);
-
-            }
-
-        });*/
         this.sharedText = "Having " + searchedIngredients + " in my fridge, using chefacile, I found this great recipe!\n" + this.recipeURL;
     }
 
@@ -354,66 +325,6 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
         }
     }
 
-   /*  private class ParseURL extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            StringBuffer buffer = new StringBuffer();
-            String clean = null;
-            try {
-                Log.d("JSwa", "Connecting to ["+strings[0]+"]");
-                Document doc  = Jsoup.connect(strings[0]).get();
-                Log.d("JSwa", "Connected to ["+strings[0]+"]");
-                //Instructions to deselect dome div
-                //doc.select("div").remove();
-                // Get document (HTML page) title
-                String title = doc.title();
-                Log.d("JSwA", "Title ["+title+"]");
-                Elements instructions = doc.select("div.recipeInstructions");
-                instructions.html();
-
-                buffer.append(instructions);
-               // buffer.append("Title: " + title + "\r\n");
-                Log.d("BEFORE", instructions.toString());
-                clean = Jsoup.clean(instructions.html(), Whitelist.simpleText());
-                Log.d("AFTER", clean);
-
-                // Get meta info
-//                Elements metaElems = doc.select("meta");
-//                buffer.append("META DATA\r\n");
-//                for (Element metaElem : metaElems) {
-//                    String name = metaElem.attr("name");
-//                    String content = metaElem.attr("content");
-//                    buffer.append("name ["+name+"] - content ["+content+"] \r\n");
-//                }
-
-
-            }
-            catch(Throwable t) {
-                t.printStackTrace();
-            }
-            return "Procedure: \n\n" + clean.replaceAll("\\.","\\.\n\n");
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-
-            super.onPostExecute(s);
-            Log.d("INSTRUCTIONS", s);
-            proc = s;
-            try {
-                fillArray(proc);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    } */
 
 
     class RetrieveInstructionTask extends AsyncTask<Void, Void, String> {
@@ -490,23 +401,7 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
                     procedure
 
             ));
-            //recipeText.setText(resultingRecipe);
 
-            //  check this.exception
-            //  do something with the feed
-
-//            try {
-//                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
-//                String requestID = object.getString("requestId");
-//                int likelihood = object.getInt("likelihood");
-//                JSONArray photos = object.getJSONArray("photos");
-//                .
-//                .
-//                .
-//                .
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }*/
 
         }
     }
@@ -639,16 +534,6 @@ public class RecipeActivity extends AppCompatActivity implements AppBarLayout.On
 
 
 
-    /*public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = recipeURL;
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
-        }
-    }*/
+
 
 }
